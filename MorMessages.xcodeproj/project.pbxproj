@@ -15,6 +15,15 @@
 		4E913C891C4CC4360057D44A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E913C871C4CC4360057D44A /* LaunchScreen.storyboard */; };
 		4E913C941C4CC4360057D44A /* MorMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C931C4CC4360057D44A /* MorMessagesTests.swift */; };
 		4E913C9F1C4CC4360057D44A /* MorMessagesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C9E1C4CC4360057D44A /* MorMessagesUITests.swift */; };
+		4E913CAD1C4CC4BD0057D44A /* ForumServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CAC1C4CC4BD0057D44A /* ForumServiceTests.swift */; };
+		4E913CB01C4CC55C0057D44A /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CAF1C4CC55C0057D44A /* WebClient.swift */; };
+		4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CB11C4CC58D0057D44A /* Logger.swift */; };
+		4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CB41C4CC6340057D44A /* ForumService.swift */; };
+		4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CB71C4CC6730057D44A /* CoreDataStackManager.swift */; };
+		4E913CC81C4CCD5B0057D44A /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CC41C4CCD5B0057D44A /* Message+CoreDataProperties.swift */; };
+		4E913CC91C4CCD5B0057D44A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CC51C4CCD5B0057D44A /* Message.swift */; };
+		4E913CCA1C4CCD5B0057D44A /* Forum+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CC61C4CCD5B0057D44A /* Forum+CoreDataProperties.swift */; };
+		4E913CCB1C4CCD5B0057D44A /* Forum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CC71C4CCD5B0057D44A /* Forum.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +58,15 @@
 		4E913C9A1C4CC4360057D44A /* MorMessagesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MorMessagesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E913C9E1C4CC4360057D44A /* MorMessagesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorMessagesUITests.swift; sourceTree = "<group>"; };
 		4E913CA01C4CC4360057D44A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4E913CAC1C4CC4BD0057D44A /* ForumServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumServiceTests.swift; sourceTree = "<group>"; };
+		4E913CAF1C4CC55C0057D44A /* WebClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebClient.swift; sourceTree = "<group>"; };
+		4E913CB11C4CC58D0057D44A /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		4E913CB41C4CC6340057D44A /* ForumService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumService.swift; sourceTree = "<group>"; };
+		4E913CB71C4CC6730057D44A /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
+		4E913CC41C4CCD5B0057D44A /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4E913CC51C4CCD5B0057D44A /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		4E913CC61C4CCD5B0057D44A /* Forum+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Forum+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4E913CC71C4CCD5B0057D44A /* Forum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forum.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +117,10 @@
 		4E913C7A1C4CC4360057D44A /* MorMessages */ = {
 			isa = PBXGroup;
 			children = (
+				4E913CB91C4CC8990057D44A /* Model */,
+				4E913CB61C4CC6620057D44A /* Persistence */,
+				4E913CB31C4CC5C80057D44A /* Internet */,
+				4E913CAE1C4CC5400057D44A /* Public */,
 				4E913C7B1C4CC4360057D44A /* AppDelegate.swift */,
 				4E913C7D1C4CC4360057D44A /* ViewController.swift */,
 				4E913C7F1C4CC4360057D44A /* Main.storyboard */,
@@ -115,6 +137,7 @@
 			children = (
 				4E913C931C4CC4360057D44A /* MorMessagesTests.swift */,
 				4E913C951C4CC4360057D44A /* Info.plist */,
+				4E913CAC1C4CC4BD0057D44A /* ForumServiceTests.swift */,
 			);
 			path = MorMessagesTests;
 			sourceTree = "<group>";
@@ -126,6 +149,42 @@
 				4E913CA01C4CC4360057D44A /* Info.plist */,
 			);
 			path = MorMessagesUITests;
+			sourceTree = "<group>";
+		};
+		4E913CAE1C4CC5400057D44A /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				4E913CAF1C4CC55C0057D44A /* WebClient.swift */,
+				4E913CB11C4CC58D0057D44A /* Logger.swift */,
+			);
+			name = Public;
+			sourceTree = "<group>";
+		};
+		4E913CB31C4CC5C80057D44A /* Internet */ = {
+			isa = PBXGroup;
+			children = (
+				4E913CB41C4CC6340057D44A /* ForumService.swift */,
+			);
+			name = Internet;
+			sourceTree = "<group>";
+		};
+		4E913CB61C4CC6620057D44A /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				4E913CB71C4CC6730057D44A /* CoreDataStackManager.swift */,
+			);
+			name = Persistence;
+			sourceTree = "<group>";
+		};
+		4E913CB91C4CC8990057D44A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4E913CC41C4CCD5B0057D44A /* Message+CoreDataProperties.swift */,
+				4E913CC51C4CCD5B0057D44A /* Message.swift */,
+				4E913CC61C4CCD5B0057D44A /* Forum+CoreDataProperties.swift */,
+				4E913CC71C4CCD5B0057D44A /* Forum.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,9 +318,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */,
+				4E913CCA1C4CCD5B0057D44A /* Forum+CoreDataProperties.swift in Sources */,
 				4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */,
 				4E913C7E1C4CC4360057D44A /* ViewController.swift in Sources */,
+				4E913CC91C4CCD5B0057D44A /* Message.swift in Sources */,
+				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
+				4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */,
 				4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */,
+				4E913CC81C4CCD5B0057D44A /* Message+CoreDataProperties.swift in Sources */,
+				4E913CB01C4CC55C0057D44A /* WebClient.swift in Sources */,
+				4E913CCB1C4CCD5B0057D44A /* Forum.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E913C941C4CC4360057D44A /* MorMessagesTests.swift in Sources */,
+				4E913CAD1C4CC4BD0057D44A /* ForumServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
