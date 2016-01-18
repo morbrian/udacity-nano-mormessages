@@ -11,16 +11,23 @@ import CoreData
 
 
 class Forum: NSManagedObject {
+    
+    class func produceVerifiedForumWithState(state: [String:AnyObject]) -> Forum? {
+        let forum = produceForumWithState(state)
+        return (forum.id < 0) ? nil : forum
+    }
 
-    func applyState(data: [String:AnyObject]) {
-        id = data[ForumService.ForumJsonKey.Id] as? Int64 ?? -1
-        createdTime = data[ForumService.ForumJsonKey.CreatedTime] as? NSTimeInterval ?? NSTimeInterval()
-        modifiedTime = data[ForumService.ForumJsonKey.ModifiedTime] as? NSTimeInterval ?? NSTimeInterval()
-        createdBy = data[ForumService.ForumJsonKey.CreatedBy] as? String
-        modifiedBy = data[ForumService.ForumJsonKey.ModifiedBy] as? String
-        title = data[ForumService.ForumJsonKey.Title] as? String
-        desc = data[ForumService.ForumJsonKey.Description] as? String
-        imageUrl = data[ForumService.ForumJsonKey.ImageUrl] as? String
+    class func produceForumWithState(state: [String:AnyObject]) -> Forum {
+        let forum = Forum()
+        forum.id = state[ForumService.ForumJsonKey.Id] as? Int64 ?? -1
+        forum.createdTime = DateToolkit.timeIntervalFromAnyObject(state[ForumService.ForumJsonKey.CreatedTime]) ?? NSTimeInterval()
+        forum.modifiedTime = DateToolkit.timeIntervalFromAnyObject(state[ForumService.ForumJsonKey.ModifiedTime]) ?? NSTimeInterval()
+        forum.createdBy = state[ForumService.ForumJsonKey.CreatedBy] as? String
+        forum.modifiedBy = state[ForumService.ForumJsonKey.ModifiedBy] as? String
+        forum.title = state[ForumService.ForumJsonKey.Title] as? String
+        forum.desc = state[ForumService.ForumJsonKey.Description] as? String
+        forum.imageUrl = state[ForumService.ForumJsonKey.ImageUrl] as? String
+        return forum
     }
 
 }

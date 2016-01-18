@@ -9,10 +9,7 @@
 import XCTest
 @testable import MorMessages
 
-class ForumServiceTests: XCTestCase {
-    
-    static let Username = "sampleuser"
-    static let Password = "changeme"
+class ForumServiceAuthenticationTests: ForumServiceTestBase {
     
     override func setUp() {
         super.setUp()
@@ -53,48 +50,12 @@ class ForumServiceTests: XCTestCase {
         let expectation = expectationWithDescription("final whoami request")
         service.whoami() {
             identity, error in
-            XCTAssertNotEqual(ForumServiceTests.Username, identity, "removed username")
+            XCTAssertNotEqual(self.Username, identity, "removed username")
             XCTAssertNil(error, "error should be nil")
             expectation.fulfill()
         }
         justWait()
     }
     
-    func justWait() {
-        waitForExpectationsWithTimeout(5) { error in
-            XCTAssertNil(error, "Whoami Error")
-        }
-    }
-    
-    func doLogin(expectation: XCTestExpectation) {
-        let service = ForumService.sharedInstance()
-        service.login(username: ForumServiceTests.Username, password: ForumServiceTests.Password) {
-            identity, error in
-            XCTAssertNotNil(identity, "identity should not be nil")
-            XCTAssertNil(error, "error should be nil")
-            XCTAssertEqual(ForumServiceTests.Username, identity, "correct username")
-            expectation.fulfill()
-        }
-    }
-    
-    func doWhoami(expectation: XCTestExpectation) {
-        let service = ForumService.sharedInstance()
-        service.whoami() {
-            identity, error in
-            XCTAssertNotNil(identity, "identity should not be nil")
-            XCTAssertNil(error, "error should be nil")
-            XCTAssertEqual(ForumServiceTests.Username, identity, "correct username")
-            expectation.fulfill()
-        }
-    }
-    
-    func doLogout(expectation: XCTestExpectation) {
-        let service = ForumService.sharedInstance()
-        service.logout() {
-            error in
-            XCTAssertNil(error, "error should be nil")
-            expectation.fulfill()
-        }
-    }
 }
 

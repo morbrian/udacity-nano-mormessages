@@ -10,22 +10,6 @@ import Foundation
 
 class ForumService {
     
-    struct DateFormat {
-        static let ISO8601 = "yyyy-MM-dd'T'HH:mm:ss.SZZZZZ"
-    }
-    
-    struct Locale {
-        static let EN_US_POSIX = "en_US_POSIX"
-    }
-    
-    static var DateFormatter: NSDateFormatter {
-        let dateFormatter = NSDateFormatter()
-        let enUSPosixLocale = NSLocale(localeIdentifier: ForumService.Locale.EN_US_POSIX)
-        dateFormatter.locale = enUSPosixLocale
-        dateFormatter.dateFormat = ForumService.DateFormat.ISO8601
-        return dateFormatter
-    }
-    
     private var webClient: WebClient!
     
     // singleton instance
@@ -105,14 +89,40 @@ class ForumService {
         }
     }
     
-    private func dateFromString(string: String?) -> NSDate? {
-        let dateFormatter = ForumService.DateFormatter
-        if let string = string {
-            return dateFormatter.dateFromString(string)
-        } else {
-            return nil
+    func listForums(completionHandler: (forums: [Forum]?, error: String?) -> Void) {
+        if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
+            forUrlString: ForumService.ForumAction.ForumUrl,
+            includeHeaders: ForumService.StandardHeaders) {
+                webClient.executeRequest(request) {
+                    jsonData, error in
+                    Logger.info("DATA: \(jsonData)")
+                    if let jsonArray = jsonData as? [AnyObject] {
+                        // parse each forum and produce an array of only valid Forum objects
+                        let forums = jsonArray.map(self.parseForumFromJsonData).filter({$0 != nil}).map({$0!})
+                        completionHandler(forums: forums, error: nil)
+                    } else {
+                        completionHandler(forums: nil, error: "invalid server response")
+                    }
+                }
         }
     }
+    
+    func parseForumFromJsonData(jsonData: AnyObject) -> Forum? {
+        
+        return nil
+    }
+    
+    
+//    List<ForumEntity> forumList();
+//    ForumEntity getForumById(Long forumId);
+//    ForumEntity modifyForum(ForumEntity forum);
+//    ForumEntity createForum(ForumEntity forum);
+//    void deleteForum(Long forumId);
+//    MessageEntity getMessageById(Long messageId);
+//    List<MessageEntity> messageList(Long forumId);
+//    List<MessageEntity> messageListFilteredById(Long forumId, Long lowId, Long highId);
+//    MessageEntity postMessageToForum(MessageEntity message, Long forumId);
+ 
 }
 
 // MARK: - Constants
