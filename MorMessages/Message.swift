@@ -2,7 +2,7 @@
 //  Message.swift
 //  MorMessages
 //
-//  Created by Brian Moriarty on 1/17/16.
+//  Created by Brian Moriarty on 1/18/16.
 //  Copyright © 2016 Brian Moriarty. All rights reserved.
 //
 
@@ -11,15 +11,27 @@ import CoreData
 
 
 class Message: NSManagedObject {
-
-    func applyState(data: [String:AnyObject]) {
-        id = data[ForumService.ForumJsonKey.Id] as? Int64 ?? -1
-        createdTime = data[ForumService.ForumJsonKey.CreatedTime] as? NSTimeInterval ?? NSTimeInterval()
-        modifiedTime = data[ForumService.ForumJsonKey.ModifiedTime] as? NSTimeInterval ?? NSTimeInterval()
-        createdBy = data[ForumService.ForumJsonKey.CreatedBy] as? String
-        modifiedBy = data[ForumService.ForumJsonKey.ModifiedBy] as? String
-        imageUrl = data[ForumService.ForumJsonKey.ImageUrl] as? String
-        text = data[ForumService.ForumJsonKey.Text] as? String
+    // common
+    @NSManaged var createdBy: String?
+    @NSManaged var createdTime: NSTimeInterval
+    @NSManaged var id: Int64
+    @NSManaged var modifiedBy: String?
+    @NSManaged var modifiedTime: NSTimeInterval
+    // message
+    @NSManaged var text: String?
+    @NSManaged var imageUrl: String?
+    @NSManaged var forum: Forum?
+    
+    func applyState(state: [String:AnyObject]) {
+        //  common
+        id = state[ForumService.ForumJsonKey.Id] as? Int64 ?? -1
+        createdTime = DateToolkit.timeIntervalFromAnyObject(state[ForumService.ForumJsonKey.CreatedTime]) ?? NSTimeInterval()
+        modifiedTime = DateToolkit.timeIntervalFromAnyObject(state[ForumService.ForumJsonKey.ModifiedTime]) ?? NSTimeInterval()
+        createdBy = state[ForumService.ForumJsonKey.CreatedBy] as? String
+        modifiedBy = state[ForumService.ForumJsonKey.ModifiedBy] as? String
+        // message
+        text = state[ForumService.ForumJsonKey.Text] as? String
+        imageUrl = state[ForumService.ForumJsonKey.ImageUrl] as? String
     }
 
 }

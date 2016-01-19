@@ -14,6 +14,18 @@ class ForumServiceTestBase: XCTestCase {
     let Username = "sampleuser"
     let Password = "changeme"
     
+    let sampleForums: [Forum] = [] //[ForumServiceAuthenticationTests.randomSampleForum()]
+
+    class func randomSampleForum() -> Forum {
+        let state: [String:AnyObject] = [
+            ForumService.ForumJsonKey.Title : "title-\(NSUUID().UUIDString)",
+            ForumService.ForumJsonKey.Description : "description-\(NSUUID().UUIDString)",
+            ForumService.ForumJsonKey.ImageUrl : "imageUrl-\(NSUUID().UUIDString)"
+        ]
+        
+        return Forum.produceWithState(state)!
+    }
+    
     func justWait() {
         waitForExpectationsWithTimeout(5) { error in
             XCTAssertNil(error, "Whoami Error")

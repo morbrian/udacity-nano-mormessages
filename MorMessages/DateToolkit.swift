@@ -40,6 +40,14 @@ struct DateToolkit {
         return dateFromString(anyObject as? String)?.timeIntervalSince1970
     }
     
+    static func stringFromTimeInterval(timeInterval: NSTimeInterval?) -> String {
+        if timeInterval == nil || timeInterval == NSTimeInterval() {
+            return ""
+        }
+        let dateFormatter = DateToolkit.DateFormatter
+        return dateFormatter.stringFromDate(NSDate(timeIntervalSince1970: timeInterval!))
+    }
+    
     
     
 }

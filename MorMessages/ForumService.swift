@@ -89,6 +89,27 @@ class ForumService {
         }
     }
     
+    func createForum(forum: Forum, completionHandler: (forum: Forum?, error: String?) -> Void) {
+        if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
+            forUrlString: ForumService.ForumAction.ForumUrl,
+            includeHeaders: ForumService.StandardHeaders,
+            withBody: forum.jsonData()) {
+                webClient.executeRequest(request) {
+                    jsonData, error in
+                    Logger.info("DATA: \(jsonData)")
+                    
+                    if error != nil {
+                        completionHandler(forum: nil, error: "failed to create forum on server")
+                    } else if let jsonData = jsonData as? [String:AnyObject],
+                        forum = Forum.produceWithState(jsonData) {
+                        completionHandler(forum: forum, error: nil)
+                    } else {
+                        completionHandler(forum: nil, error: "server responded with invalid data")
+                    }
+                }
+        }
+    }
+    
     func listForums(completionHandler: (forums: [Forum]?, error: String?) -> Void) {
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.ForumUrl,
@@ -96,9 +117,9 @@ class ForumService {
                 webClient.executeRequest(request) {
                     jsonData, error in
                     Logger.info("DATA: \(jsonData)")
-                    if let jsonArray = jsonData as? [AnyObject] {
+                    if let jsonArray = jsonData as? [[String:AnyObject]] {
                         // parse each forum and produce an array of only valid Forum objects
-                        let forums = jsonArray.map(self.parseForumFromJsonData).filter({$0 != nil}).map({$0!})
+                        let forums = jsonArray.map(Forum.produceWithState).filter({$0 != nil}).map({$0!})
                         completionHandler(forums: forums, error: nil)
                     } else {
                         completionHandler(forums: nil, error: "invalid server response")
@@ -107,21 +128,15 @@ class ForumService {
         }
     }
     
-    func parseForumFromJsonData(jsonData: AnyObject) -> Forum? {
-        
-        return nil
-    }
     
+    //    List<MessageEntity> messageListFilteredById(Long forumId, Long lowId, Long highId);
+    //    MessageEntity postMessageToForum(MessageEntity message, Long forumId);
     
-//    List<ForumEntity> forumList();
 //    ForumEntity getForumById(Long forumId);
 //    ForumEntity modifyForum(ForumEntity forum);
-//    ForumEntity createForum(ForumEntity forum);
 //    void deleteForum(Long forumId);
 //    MessageEntity getMessageById(Long messageId);
 //    List<MessageEntity> messageList(Long forumId);
-//    List<MessageEntity> messageListFilteredById(Long forumId, Long lowId, Long highId);
-//    MessageEntity postMessageToForum(MessageEntity message, Long forumId);
  
 }
 
