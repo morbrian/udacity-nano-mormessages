@@ -183,6 +183,7 @@ extension ForumService {
         static let CreatedBy = "createdBy"
         static let ModifiedTime = "modifiedTime"
         static let ModifiedBy = "modifiedBy"
+        static let Uuid = "uuid"
     }
     
     struct ForumJsonValue {

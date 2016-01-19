@@ -19,5 +19,6 @@ extension BaseEntity {
     @NSManaged var id: Int64
     @NSManaged var modifiedBy: String?
     @NSManaged var modifiedTime: NSTimeInterval
+    @NSManaged var uuid: String?
 
 }

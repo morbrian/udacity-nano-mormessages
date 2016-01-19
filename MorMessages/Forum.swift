@@ -14,30 +14,12 @@ class Forum: BaseEntity {
     
     static let EntityName = "Forum"
     
-    class func findExistingWithTitle(title: AnyObject?) -> Forum? {
-        if let title = title as? String {
-            let titlePredicate = NSPredicate(format: "title = %@", title)
-            let results = fetchEntity(EntityName, usingPredicate: titlePredicate) as! [Forum]
-            
-            return (results.count > 0) ? results[0] : nil
-        } else {
-            return nil
-        }
+    class func findExistingWithUuid(uuid: AnyObject?) -> Forum? {
+        return BaseEntity.findExistingEntity(EntityName, withUuid: uuid) as? Forum
     }
     
     class func produceWithState(state: [String:AnyObject]?) -> Forum? {
-        if let state = state {
-            if let forum = findExistingWithTitle(state[ForumService.ForumJsonKey.Title]) {
-                forum.applyState(state)
-                return forum
-            } else if state[ForumService.ForumJsonKey.Title] != nil {
-                return createEntity(EntityName, withState: state) as? Forum
-            } else {
-                return nil
-            }
-        } else {
-            return nil
-        }
+        return BaseEntity.produceEntity(EntityName, withState: state) as? Forum
     }
     
     override func fieldPairArray() -> [String] {

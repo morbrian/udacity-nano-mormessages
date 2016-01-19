@@ -22,7 +22,6 @@ class ForumServiceTestBase: XCTestCase {
             ForumService.ForumJsonKey.Description : "description-\(NSUUID().UUIDString)",
             ForumService.ForumJsonKey.ImageUrl : "imageUrl-\(NSUUID().UUIDString)"
         ]
-        
         return Forum.produceWithState(state)!
     }
     

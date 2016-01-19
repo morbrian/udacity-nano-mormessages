@@ -6,6 +6,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="-1" indexed="YES" syncable="YES"/>
         <attribute name="modifiedBy" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifiedTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
     <entity name="Forum" representedClassName=".Forum" parentEntity="BaseEntity" syncable="YES">
         <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
@@ -21,6 +22,6 @@
     <elements>
         <element name="Forum" positionX="-54" positionY="-9" width="128" height="105"/>
         <element name="Message" positionX="-36" positionY="72" width="128" height="90"/>
-        <element name="BaseEntity" positionX="-9" positionY="135" width="128" height="120"/>
+        <element name="BaseEntity" positionX="-9" positionY="135" width="128" height="135"/>
     </elements>
 </model>
