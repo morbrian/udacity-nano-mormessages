@@ -22,8 +22,12 @@
 		4E913CCD1C4D5BCD0057D44A /* ForumServiceTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CCC1C4D5BCD0057D44A /* ForumServiceTestBase.swift */; };
 		4E913CCF1C4D5ECF0057D44A /* ForumServiceApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CCE1C4D5ECF0057D44A /* ForumServiceApiTests.swift */; };
 		4E913CD21C4D6FAE0057D44A /* DateToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CD11C4D6FAE0057D44A /* DateToolkit.swift */; };
-		4E913CDE1C4D74140057D44A /* Forum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CD81C4D74140057D44A /* Forum.swift */; };
-		4E913CE01C4D74140057D44A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CDA1C4D74140057D44A /* Message.swift */; };
+		4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE31C4DCCA00057D44A /* Forum+CoreDataProperties.swift */; };
+		4E913CEA1C4DCCA00057D44A /* Forum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE41C4DCCA00057D44A /* Forum.swift */; };
+		4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE51C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift */; };
+		4E913CEC1C4DCCA00057D44A /* BaseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE61C4DCCA00057D44A /* BaseEntity.swift */; };
+		4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE71C4DCCA00057D44A /* Message+CoreDataProperties.swift */; };
+		4E913CEE1C4DCCA00057D44A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE81C4DCCA00057D44A /* Message.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,8 +69,12 @@
 		4E913CCC1C4D5BCD0057D44A /* ForumServiceTestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumServiceTestBase.swift; sourceTree = "<group>"; };
 		4E913CCE1C4D5ECF0057D44A /* ForumServiceApiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumServiceApiTests.swift; sourceTree = "<group>"; };
 		4E913CD11C4D6FAE0057D44A /* DateToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateToolkit.swift; sourceTree = "<group>"; };
-		4E913CD81C4D74140057D44A /* Forum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forum.swift; sourceTree = "<group>"; };
-		4E913CDA1C4D74140057D44A /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		4E913CE31C4DCCA00057D44A /* Forum+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Forum+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4E913CE41C4DCCA00057D44A /* Forum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forum.swift; sourceTree = "<group>"; };
+		4E913CE51C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BaseEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4E913CE61C4DCCA00057D44A /* BaseEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntity.swift; sourceTree = "<group>"; };
+		4E913CE71C4DCCA00057D44A /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4E913CE81C4DCCA00057D44A /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,8 +189,12 @@
 		4E913CB91C4CC8990057D44A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4E913CD81C4D74140057D44A /* Forum.swift */,
-				4E913CDA1C4D74140057D44A /* Message.swift */,
+				4E913CE31C4DCCA00057D44A /* Forum+CoreDataProperties.swift */,
+				4E913CE41C4DCCA00057D44A /* Forum.swift */,
+				4E913CE51C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift */,
+				4E913CE61C4DCCA00057D44A /* BaseEntity.swift */,
+				4E913CE71C4DCCA00057D44A /* Message+CoreDataProperties.swift */,
+				4E913CE81C4DCCA00057D44A /* Message.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -327,15 +339,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E913CD21C4D6FAE0057D44A /* DateToolkit.swift in Sources */,
+				4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */,
+				4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */,
 				4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */,
 				4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */,
 				4E913C7E1C4CC4360057D44A /* ViewController.swift in Sources */,
+				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
+				4E913CEC1C4DCCA00057D44A /* BaseEntity.swift in Sources */,
 				4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */,
 				4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */,
-				4E913CE01C4D74140057D44A /* Message.swift in Sources */,
 				4E913CB01C4CC55C0057D44A /* WebClient.swift in Sources */,
-				4E913CDE1C4D74140057D44A /* Forum.swift in Sources */,
+				4E913CEA1C4DCCA00057D44A /* Forum.swift in Sources */,
+				4E913CEE1C4DCCA00057D44A /* Message.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
