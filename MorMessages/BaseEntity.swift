@@ -51,10 +51,22 @@ class BaseEntity: NSManagedObject {
         }
     }
     
+    class func findExistingEntity(entityName: String, withId id: AnyObject?) -> BaseEntity? {
+        if let id = id as? NSNumber {
+            let uuidPredicate = NSPredicate(format: "id = %@", id)
+            let results = fetchEntity(entityName, usingPredicate: uuidPredicate)
+            
+            return (results.count > 0) ? results[0] : nil
+        } else {
+            return nil
+        }
+    }
+    
     class func produceEntity(entityName: String, withState state: [String:AnyObject]?) -> BaseEntity? {
         if let state = state {
             if let entity = findExistingEntity(entityName, withUuid: state[ForumService.ForumJsonKey.Uuid]) {
                 entity.applyState(state)
+                CoreDataStackManager.sharedInstance().saveContext()
                 return entity
             } else {
                 return createEntity(entityName, withState: state)
@@ -66,9 +78,9 @@ class BaseEntity: NSManagedObject {
     
     func applyState(state: [String:AnyObject]) {
         //  common
-        id = state[ForumService.ForumJsonKey.Id] as? Int64 ?? -1
-        createdTime = DateToolkit.timeIntervalFromAnyObject(state[ForumService.ForumJsonKey.CreatedTime]) ?? NSTimeInterval()
-        modifiedTime = DateToolkit.timeIntervalFromAnyObject(state[ForumService.ForumJsonKey.ModifiedTime]) ?? NSTimeInterval()
+        id = state[ForumService.ForumJsonKey.Id] as? NSNumber
+        createdTime = state[ForumService.ForumJsonKey.CreatedTime] as? NSDate
+        modifiedTime = state[ForumService.ForumJsonKey.ModifiedTime] as? NSDate
         createdBy = state[ForumService.ForumJsonKey.CreatedBy] as? String
         modifiedBy = state[ForumService.ForumJsonKey.ModifiedBy] as? String
         uuid = state[ForumService.ForumJsonKey.Uuid] as? String
@@ -76,9 +88,9 @@ class BaseEntity: NSManagedObject {
     
     func fieldPairArray() -> [String] {
         return [
-            (id == -1) ? nil : stringForSingleKey(ForumService.ForumJsonKey.Id, andValue: NSNumber(longLong: id)),
-            stringForSingleKey(ForumService.ForumJsonKey.CreatedTime, andValue: DateToolkit.stringFromTimeInterval(createdTime)),
-            stringForSingleKey(ForumService.ForumJsonKey.ModifiedTime, andValue: DateToolkit.stringFromTimeInterval(modifiedTime)),
+            stringForSingleKey(ForumService.ForumJsonKey.Id, andValue: id),
+            stringForSingleKey(ForumService.ForumJsonKey.CreatedTime, andValue: createdTime),
+            stringForSingleKey(ForumService.ForumJsonKey.ModifiedTime, andValue: modifiedTime),
             stringForSingleKey(ForumService.ForumJsonKey.CreatedBy, andValue: createdBy),
             stringForSingleKey(ForumService.ForumJsonKey.ModifiedBy, andValue: modifiedBy),
             stringForSingleKey(ForumService.ForumJsonKey.Uuid, andValue: uuid)
@@ -105,7 +117,6 @@ class BaseEntity: NSManagedObject {
             first = false
         }
         jsonString += "}"
-        Logger.info("JSON STRING: \(jsonString)")
         return (jsonString as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
     }
 

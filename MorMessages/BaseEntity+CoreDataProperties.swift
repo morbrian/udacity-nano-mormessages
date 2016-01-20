@@ -2,7 +2,7 @@
 //  BaseEntity+CoreDataProperties.swift
 //  MorMessages
 //
-//  Created by Brian Moriarty on 1/18/16.
+//  Created by Brian Moriarty on 1/19/16.
 //  Copyright © 2016 Brian Moriarty. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -15,10 +15,10 @@ import CoreData
 extension BaseEntity {
 
     @NSManaged var createdBy: String?
-    @NSManaged var createdTime: NSTimeInterval
-    @NSManaged var id: Int64
+    @NSManaged var createdTime: NSDate?
+    @NSManaged var id: NSNumber?
     @NSManaged var modifiedBy: String?
-    @NSManaged var modifiedTime: NSTimeInterval
+    @NSManaged var modifiedTime: NSDate?
     @NSManaged var uuid: String?
 
 }

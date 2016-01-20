@@ -25,6 +25,16 @@ class ForumServiceTestBase: XCTestCase {
         return Forum.produceWithState(state)!
     }
     
+    class func randomSampleMessage(forum: Forum) -> Message {
+        let state: [String:AnyObject] = [
+            ForumService.ForumJsonKey.Text : "text-\(NSUUID().UUIDString)",
+            ForumService.ForumJsonKey.ImageUrl : "imageUrl-\(NSUUID().UUIDString)"
+        ]
+        let message = Message.produceWithState(state)!
+        message.forum = forum
+        return message
+    }
+    
     func justWait() {
         waitForExpectationsWithTimeout(5) { error in
             XCTAssertNil(error, "Whoami Error")

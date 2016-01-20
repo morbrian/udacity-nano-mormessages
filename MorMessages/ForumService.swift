@@ -96,17 +96,17 @@ class ForumService {
             withBody: forum.jsonData()) {
                 webClient.executeRequest(request) {
                     jsonData, error in
-                    Logger.info("DATA: \(jsonData)")
-                    
-                    if error != nil {
-                        completionHandler(forum: nil, error: "failed to create forum on server")
-                    } else if let jsonData = jsonData as? [String:AnyObject],
-                        forum = Forum.produceWithState(jsonData) {
-                        completionHandler(forum: forum, error: nil)
-                    } else {
-                        completionHandler(forum: nil, error: "server responded with invalid data")
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if error != nil {
+                            completionHandler(forum: nil, error: "failed to create forum on server")
+                        } else if let jsonData = jsonData as? [String:AnyObject],
+                            let newForum = Forum.produceWithState(jsonData) {
+                            completionHandler(forum: newForum, error: nil)
+                        } else {
+                            completionHandler(forum: nil, error: "server responded with invalid data")
+                        }
                     }
-                }
+            }
         }
     }
     
@@ -116,21 +116,66 @@ class ForumService {
             includeHeaders: ForumService.StandardHeaders) {
                 webClient.executeRequest(request) {
                     jsonData, error in
-                    Logger.info("DATA: \(jsonData)")
-                    if let jsonArray = jsonData as? [[String:AnyObject]] {
-                        // parse each forum and produce an array of only valid Forum objects
-                        let forums = jsonArray.map(Forum.produceWithState).filter({$0 != nil}).map({$0!})
-                        completionHandler(forums: forums, error: nil)
-                    } else {
-                        completionHandler(forums: nil, error: "invalid server response")
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if let jsonArray = jsonData as? [[String:AnyObject]] {
+                            // parse each forum and produce an array of only valid Forum objects
+                            let forums = jsonArray.map(Forum.produceWithState).filter({$0 != nil}).map({$0!})
+                            completionHandler(forums: forums, error: nil)
+                        } else {
+                            completionHandler(forums: nil, error: "invalid server response")
+                        }
                     }
                 }
         }
     }
     
+    func listMessagesInForum(forum: Forum, completionHandler: (messages: [Message]?, error: String?) -> Void) {
+        if let forumId = forum.id,
+            request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
+            forUrlString: ForumService.ForumAction.MessageUrl(forumId),
+            includeHeaders: ForumService.StandardHeaders) {
+                webClient.executeRequest(request) {
+                    jsonData, error in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if let jsonArray = jsonData as? [[String:AnyObject]] {
+                            // parse each forum and produce an array of only valid Forum objects
+                            let messages = jsonArray.map(Message.produceWithState).filter({$0 != nil}).map({$0!})
+                            completionHandler(messages: messages, error: nil)
+                        } else {
+                            completionHandler(messages: nil, error: "invalid server response")
+                        }
+                    }
+                }
+        }
+    }
     
+    func createMessage(message: Message, completionHandler: (message: Message?, error: String?) -> Void) {
+        if let forum = message.forum,
+            forumId = forum.id,
+            request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
+                forUrlString: ForumService.ForumAction.MessageUrl(forumId),
+                includeHeaders: ForumService.StandardHeaders,
+                withBody: message.jsonData()) {
+                    webClient.executeRequest(request) {
+                        jsonData, error in
+                        dispatch_async(dispatch_get_main_queue()) {
+                            if error != nil {
+                                completionHandler(message: nil, error: "failed to create forum on server")
+                            } else if let jsonData = jsonData as? [String:AnyObject],
+                                let newMessage = Message.produceWithState(jsonData) {
+                                    completionHandler(message: newMessage, error: nil)
+                            } else {
+                                completionHandler(message: nil, error: "server responded with invalid data")
+                            }
+                        }
+                    }
+        } else {
+            Logger.error("failed to attempt request for new message")
+        }
+    }
+
+    // still want to support the exclusive filter
     //    List<MessageEntity> messageListFilteredById(Long forumId, Long lowId, Long highId);
-    //    MessageEntity postMessageToForum(MessageEntity message, Long forumId);
     
 //    ForumEntity getForumById(Long forumId);
 //    ForumEntity modifyForum(ForumEntity forum);
@@ -157,8 +202,10 @@ extension ForumService {
         static let LoginUrl = "\(AuthUrl)/login"
         static let WhoamiUrl = "\(AuthUrl)/whoami"
         static let LogoutUrl = "\(AuthUrl)/logout"
-        
         static let ForumUrl = "\(BaseUrl)/forum"
+        static func MessageUrl(forumId: NSNumber) -> String {
+            return ForumUrl + "/" + forumId.stringValue + "/message"
+        }
     }
     
     struct ForumParameter {

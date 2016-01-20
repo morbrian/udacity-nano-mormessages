@@ -18,6 +18,10 @@ class Forum: BaseEntity {
         return BaseEntity.findExistingEntity(EntityName, withUuid: uuid) as? Forum
     }
     
+    class func findExistingWithId(id: AnyObject?) -> Forum? {
+        return BaseEntity.findExistingEntity(EntityName, withId: id) as? Forum
+    }
+    
     class func produceWithState(state: [String:AnyObject]?) -> Forum? {
         return BaseEntity.produceEntity(EntityName, withState: state) as? Forum
     }

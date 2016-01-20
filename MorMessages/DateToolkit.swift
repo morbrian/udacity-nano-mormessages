@@ -26,7 +26,6 @@ struct DateToolkit {
         return dateFormatter
     }
     
-    
     static func dateFromString(string: String?) -> NSDate? {
         let dateFormatter = DateToolkit.DateFormatter
         if let string = string {
