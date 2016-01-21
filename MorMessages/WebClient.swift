@@ -84,10 +84,8 @@ public class WebClient {
             let (jsonData, parsingError): (AnyObject?, NSError?) =
             self.parseJsonFromData(data!)
             
-            
             if let parsingError = parsingError {
                 Logger.debug(parsingError.description)
-                Logger.debug("\(data)")
                 completionHandler(jsonData: nil, error: parsingError)
                 return
             }

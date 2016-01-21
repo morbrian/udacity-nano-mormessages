@@ -98,6 +98,7 @@ class ForumService {
                     jsonData, error in
                     dispatch_async(dispatch_get_main_queue()) {
                         if error != nil {
+                            Logger.debug("base error: \(error)")
                             completionHandler(forum: nil, error: "failed to create forum on server")
                         } else if let jsonData = jsonData as? [String:AnyObject],
                             let newForum = Forum.produceWithState(jsonData) {
@@ -129,11 +130,14 @@ class ForumService {
         }
     }
     
-    func listMessagesInForum(forum: Forum, completionHandler: (messages: [Message]?, error: String?) -> Void) {
+    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100,
+        completionHandler: (messages: [Message]?, error: String?) -> Void) {
+            let params = [ "offset":offset, "resultSize":resultSize ]
         if let forumId = forum.id,
             request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.MessageUrl(forumId),
-            includeHeaders: ForumService.StandardHeaders) {
+            includeHeaders: ForumService.StandardHeaders,
+                includeParameters: params) {
                 webClient.executeRequest(request) {
                     jsonData, error in
                     dispatch_async(dispatch_get_main_queue()) {
@@ -189,7 +193,7 @@ class ForumService {
 
 extension ForumService {
     
-    static let BaseUrl = "http://localhost:8080/j2ee-websockets/api/rest"
+    static let BaseUrl = "http://localhost:8080/mormessages/api/rest"
     
     static let StandardHeaders: [String:String] = ["Content-Type":"application/json"]
     
