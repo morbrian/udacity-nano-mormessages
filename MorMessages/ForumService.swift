@@ -27,30 +27,43 @@ class ForumService {
     }
     
     func login(username username: String, password: String, completionHandler:
-        (identity: String?, error: String?) -> Void) {
+        (identity: String?, error: NSError?) -> Void) {
+            if username.isEmpty {
+                completionHandler(identity: nil, error: ForumService.errorForCode(.UsernameRequired))
+                return
+            }
+            if password.isEmpty {
+                completionHandler(identity: nil, error: ForumService.errorForCode(.PasswordRequired))
+                return
+            }
             if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpPost,
                 forUrlString: ForumService.ForumAction.LoginUrl,
                 includeHeaders: ForumService.StandardHeaders,
                 withBody: ForumService.Credentials(username: username, password: password)) {
-                    
-                    //{"status":{"code":0,"type":"SUCCESS","details":"sampleuser"},"data":null}
                     webClient.executeRequest(request)
                         { jsonData, error in
-                            if let status = jsonData?.valueForKey(ForumJsonKey.Status) as? NSDictionary,
-                                statusCode = status.valueForKey(ForumJsonKey.Code) as? Int
-                                where statusCode != ForumJsonValue.Success {
-                                    completionHandler(identity: nil, error: "login failed: \(statusCode)")
-                            } else if error == nil {
-                                completionHandler(identity: username, error: nil)
+                            if let error = error {
+                                Logger.error("login failed code: \(error.code), type: \(error.description)")
+                                completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
+                            } else if let status = Status(jsonData: jsonData) {
+                                Logger.info("response status code: \(status.code), details: \(status.details)")
+                                if status.code == ForumJsonValue.Success {
+                                    completionHandler(identity: username, error: nil)
+                                } else {
+                                    completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
+                                }
                             } else {
-                                completionHandler(identity: nil, error: "login failed")
+                                Logger.error("login appears to fail but unexpected data in response")
+                                completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
                             }
                     }
-                    
+            } else {
+                Logger.error("failed to attempt request")
+                completionHandler(identity: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
             }
     }
     
-    func whoami(completionHandler: (identity: String?, error: String?) -> Void) {
+    func whoami(completionHandler: (identity: String?, error: NSError?) -> Void) {
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.WhoamiUrl,
             includeHeaders: ForumService.StandardHeaders) {
@@ -60,18 +73,21 @@ class ForumService {
                     if let status = jsonData?.valueForKey(ForumJsonKey.Status) as? NSDictionary,
                         statusCode = status.valueForKey(ForumJsonKey.Code) as? Int
                         where statusCode != ForumJsonValue.Success {
-                            completionHandler(identity: nil, error: "login failed: \(statusCode)")
+                            completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
                     } else if let data = jsonData?.valueForKey(ForumJsonKey.Data) as? NSDictionary,
                         let username = data.valueForKey(ForumJsonKey.Username) as? String {
                             completionHandler(identity: username, error: nil)
                     } else {
-                        completionHandler(identity: nil, error: "login failed")
+                        completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
                     }
                 }
+        } else {
+            Logger.error("failed to attempt request")
+            completionHandler(identity: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
     
-    func logout(completionHandler: (error: String?) -> Void) {
+    func logout(completionHandler: (error: NSError?) -> Void) {
         
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpDelete,
             forUrlString: ForumService.ForumAction.LogoutUrl,
@@ -83,13 +99,16 @@ class ForumService {
                     if error == nil {
                         completionHandler(error: nil)
                     } else {
-                        completionHandler(error: "logout failed")
+                        completionHandler(error: ForumService.errorForCode(.LogoutFailed))
                     }
                 }
+        } else {
+            Logger.error("failed to attempt request")
+            completionHandler(error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
     
-    func createForum(forum: Forum, completionHandler: (forum: Forum?, error: String?) -> Void) {
+    func createForum(forum: Forum, completionHandler: (forum: Forum?, error: NSError?) -> Void) {
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
             forUrlString: ForumService.ForumAction.ForumUrl,
             includeHeaders: ForumService.StandardHeaders,
@@ -99,19 +118,22 @@ class ForumService {
                     dispatch_async(dispatch_get_main_queue()) {
                         if error != nil {
                             Logger.debug("base error: \(error)")
-                            completionHandler(forum: nil, error: "failed to create forum on server")
+                            completionHandler(forum: nil, error: ForumService.errorForCode(.CreateFailed))
                         } else if let jsonData = jsonData as? [String:AnyObject],
                             let newForum = Forum.produceWithState(jsonData) {
                             completionHandler(forum: newForum, error: nil)
                         } else {
-                            completionHandler(forum: nil, error: "server responded with invalid data")
+                            completionHandler(forum: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
                         }
                     }
             }
+        } else {
+            Logger.error("failed to attempt request")
+            completionHandler(forum: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
     
-    func listForums(completionHandler: (forums: [Forum]?, error: String?) -> Void) {
+    func listForums(completionHandler: (forums: [Forum]?, error: NSError?) -> Void) {
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.ForumUrl,
             includeHeaders: ForumService.StandardHeaders) {
@@ -123,15 +145,18 @@ class ForumService {
                             let forums = jsonArray.map(Forum.produceWithState).filter({$0 != nil}).map({$0!})
                             completionHandler(forums: forums, error: nil)
                         } else {
-                            completionHandler(forums: nil, error: "invalid server response")
+                            completionHandler(forums: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
                         }
                     }
                 }
+        } else {
+            Logger.error("failed to attempt request")
+            completionHandler(forums: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
     
     func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100,
-        completionHandler: (messages: [Message]?, error: String?) -> Void) {
+        completionHandler: (messages: [Message]?, error: NSError?) -> Void) {
             let params = [ "offset":offset, "resultSize":resultSize ]
         if let forumId = forum.id,
             request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
@@ -146,14 +171,17 @@ class ForumService {
                             let messages = jsonArray.map(Message.produceWithState).filter({$0 != nil}).map({$0!})
                             completionHandler(messages: messages, error: nil)
                         } else {
-                            completionHandler(messages: nil, error: "invalid server response")
+                            completionHandler(messages: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
                         }
                     }
                 }
+        } else {
+            Logger.error("failed to attempt request")
+            completionHandler(messages: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
     
-    func createMessage(message: Message, completionHandler: (message: Message?, error: String?) -> Void) {
+    func createMessage(message: Message, completionHandler: (message: Message?, error: NSError?) -> Void) {
         if let forum = message.forum,
             forumId = forum.id,
             request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
@@ -164,17 +192,18 @@ class ForumService {
                         jsonData, error in
                         dispatch_async(dispatch_get_main_queue()) {
                             if error != nil {
-                                completionHandler(message: nil, error: "failed to create forum on server")
+                                completionHandler(message: nil, error: ForumService.errorForCode(.CreateFailed))
                             } else if let jsonData = jsonData as? [String:AnyObject],
                                 let newMessage = Message.produceWithState(jsonData) {
                                     completionHandler(message: newMessage, error: nil)
                             } else {
-                                completionHandler(message: nil, error: "server responded with invalid data")
+                                completionHandler(message: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
                             }
                         }
                     }
         } else {
-            Logger.error("failed to attempt request for new message")
+            Logger.error("failed to attempt request")
+            completionHandler(message: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
 
@@ -243,5 +272,62 @@ extension ForumService {
         static let Unauthorized = 3
     }
     
+}
+
+// MARK: - Errors {
+
+extension ForumService {
+    
+    private static let ErrorDomain = "ForumService"
+    
+    private enum ErrorCode: Int, CustomStringConvertible {
+        case UnexpectedResponseData, ResponseCodeNotSuccess, InsufficientDataLength, UsernameRequired,
+        PasswordRequired, MissingFacebookToken, LoginFailed, LogoutFailed, CreateFailed, FailedToMakeRequest
+        
+        var description: String {
+            switch self {
+            case UnexpectedResponseData: return "Unexpected Response Data"
+            case ResponseCodeNotSuccess: return "Response Code Not Success"
+            case InsufficientDataLength: return "Insufficient Data Length In Response"
+            case UsernameRequired: return "Must specify a username"
+            case PasswordRequired: return "Must specify a password"
+            case MissingFacebookToken: return "Facebook Has Not Authenticated User"
+            case LoginFailed: return "Login Failed"
+            case LogoutFailed: return "Logout Failed"
+            case CreateFailed: return "Create Failed"
+            case FailedToMakeRequest: return "Failed To Make Request"
+            }
+        }
+    }
+    
+    class ForumServiceError: NSError {
+        override init(domain: String, code: Int, userInfo dict: [NSObject : AnyObject]? ) {
+            super.init(domain: domain, code: code, userInfo: dict)
+        }
+
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override var description: String {
+            if let recognizedError = ErrorCode(rawValue: code) {
+                return recognizedError.description
+            } else {
+                return "unrecognized error"
+            }
+        }
+    }
+    
+    // createErrorWithCode
+    // helper function to simplify creation of error object
+    private static func errorForCode(code: ErrorCode) -> NSError {
+        let userInfo = [NSLocalizedDescriptionKey : code.description]
+        return ForumServiceError(domain: ForumService.ErrorDomain, code: code.rawValue, userInfo: userInfo)
+    }
+    
+    private static func errorWithMessage(message: String, code: Int) -> NSError {
+        let userInfo = [NSLocalizedDescriptionKey : message]
+        return ForumServiceError(domain: ForumService.ErrorDomain, code: code, userInfo: userInfo)
+    }
 }
 
