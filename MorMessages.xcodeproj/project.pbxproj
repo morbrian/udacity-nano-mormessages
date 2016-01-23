@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C7B1C4CC4360057D44A /* AppDelegate.swift */; };
-		4E913C7E1C4CC4360057D44A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C7D1C4CC4360057D44A /* ViewController.swift */; };
 		4E913C811C4CC4360057D44A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E913C7F1C4CC4360057D44A /* Main.storyboard */; };
 		4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C821C4CC4360057D44A /* MorMessages.xcdatamodeld */; };
 		4E913C861C4CC4360057D44A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E913C851C4CC4360057D44A /* Assets.xcassets */; };
@@ -28,6 +27,12 @@
 		4E913CEC1C4DCCA00057D44A /* BaseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE61C4DCCA00057D44A /* BaseEntity.swift */; };
 		4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE71C4DCCA00057D44A /* Message+CoreDataProperties.swift */; };
 		4E913CEE1C4DCCA00057D44A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE81C4DCCA00057D44A /* Message.swift */; };
+		4E913CF11C532A4F0057D44A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF01C532A4F0057D44A /* LoginViewController.swift */; };
+		4E913CF31C532C300057D44A /* MorMessagesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF21C532C300057D44A /* MorMessagesManager.swift */; };
+		4E913CF51C532CAA0057D44A /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF41C532CAA0057D44A /* UserInfo.swift */; };
+		4E913CF71C5338250057D44A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF61C5338250057D44A /* Constants.swift */; };
+		4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF81C5355D10057D44A /* ForumViewController.swift */; };
+		4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +55,6 @@
 /* Begin PBXFileReference section */
 		4E913C781C4CC4350057D44A /* MorMessages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MorMessages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E913C7B1C4CC4360057D44A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4E913C7D1C4CC4360057D44A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4E913C801C4CC4360057D44A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4E913C831C4CC4360057D44A /* MorMessages.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MorMessages.xcdatamodel; sourceTree = "<group>"; };
 		4E913C851C4CC4360057D44A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -75,6 +79,12 @@
 		4E913CE61C4DCCA00057D44A /* BaseEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntity.swift; sourceTree = "<group>"; };
 		4E913CE71C4DCCA00057D44A /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4E913CE81C4DCCA00057D44A /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		4E913CF01C532A4F0057D44A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4E913CF21C532C300057D44A /* MorMessagesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MorMessagesManager.swift; sourceTree = "<group>"; };
+		4E913CF41C532CAA0057D44A /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		4E913CF61C5338250057D44A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		4E913CF81C5355D10057D44A /* ForumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumViewController.swift; sourceTree = "<group>"; };
+		4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseStatus.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,13 +135,13 @@
 		4E913C7A1C4CC4360057D44A /* MorMessages */ = {
 			isa = PBXGroup;
 			children = (
-				4E913CD01C4D6F820057D44A /* Utilities */,
+				4E913CAE1C4CC5400057D44A /* Public */,
+				4E913CB31C4CC5C80057D44A /* Internet */,
 				4E913CB91C4CC8990057D44A /* Model */,
 				4E913CB61C4CC6620057D44A /* Persistence */,
-				4E913CB31C4CC5C80057D44A /* Internet */,
-				4E913CAE1C4CC5400057D44A /* Public */,
+				4E913CEF1C532A270057D44A /* ViewControllers */,
+				4E913CD01C4D6F820057D44A /* Utilities */,
 				4E913C7B1C4CC4360057D44A /* AppDelegate.swift */,
-				4E913C7D1C4CC4360057D44A /* ViewController.swift */,
 				4E913C7F1C4CC4360057D44A /* Main.storyboard */,
 				4E913C851C4CC4360057D44A /* Assets.xcassets */,
 				4E913C871C4CC4360057D44A /* LaunchScreen.storyboard */,
@@ -195,6 +205,8 @@
 				4E913CE61C4DCCA00057D44A /* BaseEntity.swift */,
 				4E913CE71C4DCCA00057D44A /* Message+CoreDataProperties.swift */,
 				4E913CE81C4DCCA00057D44A /* Message.swift */,
+				4E913CF41C532CAA0057D44A /* UserInfo.swift */,
+				4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -205,6 +217,17 @@
 				4E913CD11C4D6FAE0057D44A /* DateToolkit.swift */,
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		4E913CEF1C532A270057D44A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				4E913CF01C532A4F0057D44A /* LoginViewController.swift */,
+				4E913CF21C532C300057D44A /* MorMessagesManager.swift */,
+				4E913CF61C5338250057D44A /* Constants.swift */,
+				4E913CF81C5355D10057D44A /* ForumViewController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -341,17 +364,22 @@
 				4E913CD21C4D6FAE0057D44A /* DateToolkit.swift in Sources */,
 				4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */,
 				4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */,
+				4E913CF11C532A4F0057D44A /* LoginViewController.swift in Sources */,
+				4E913CF31C532C300057D44A /* MorMessagesManager.swift in Sources */,
+				4E913CF51C532CAA0057D44A /* UserInfo.swift in Sources */,
 				4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */,
 				4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */,
-				4E913C7E1C4CC4360057D44A /* ViewController.swift in Sources */,
 				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
 				4E913CEC1C4DCCA00057D44A /* BaseEntity.swift in Sources */,
+				4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */,
 				4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */,
+				4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */,
 				4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */,
 				4E913CB01C4CC55C0057D44A /* WebClient.swift in Sources */,
 				4E913CEA1C4DCCA00057D44A /* Forum.swift in Sources */,
 				4E913CEE1C4DCCA00057D44A /* Message.swift in Sources */,
+				4E913CF71C5338250057D44A /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
