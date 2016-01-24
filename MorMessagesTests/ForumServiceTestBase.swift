@@ -20,7 +20,7 @@ class ForumServiceTestBase: XCTestCase {
         let state: [String:AnyObject] = [
             ForumService.ForumJsonKey.Title : "title-\(NSUUID().UUIDString)",
             ForumService.ForumJsonKey.Description : "description-\(NSUUID().UUIDString)",
-            ForumService.ForumJsonKey.ImageUrl : "imageUrl-\(NSUUID().UUIDString)"
+            ForumService.ForumJsonKey.ImageUrl : "https://robohash.org/\(NSUUID().UUIDString)"
         ]
         return Forum.produceWithState(state)!
     }

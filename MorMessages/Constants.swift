@@ -14,12 +14,15 @@ struct Constants {
     // MARK: Application Info
     
     static let GravatarImageSize = 80.0
+    static let ForumNoImage = "ForumNoImage"
+    static let ForumFetchingImage = "ForumFetchingImage"
     
     
     // MARK: StoryBoard Identifiers
     
     static let SuccessfulLoginSegue = "SuccessfulLoginSegue"
     static let ReturnToLoginScreenSegue = "ReturnToLoginScreenSegue"
+    static let ForumCellViewIdentifier = "ForumCellViewIdentifier"
     
     // MARK: Physical Device Info
     

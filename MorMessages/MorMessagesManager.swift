@@ -42,6 +42,12 @@ class MorMessagesManager {
     func whoami(completionHandler: (identity: String?, error: NSError?) -> Void) {
         forumService.whoami(completionHandler)
     }
+    
+    func listForums(offset offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
+        completionHandler: (forums: [Forum]?, error: NSError?) -> Void) {
+            forumService.listForums(offset: offset, resultSize: resultSize, greaterThan: greaterThan,
+                completionHandler: completionHandler)
+    }
 
     // handles response after login attempt
     // userIdentity: unique key identifying the now logged in user after success

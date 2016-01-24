@@ -111,6 +111,35 @@ public class WebClient {
         }
     }
     
+    struct Caches {
+        static let imageCache = ImageCache()
+    }
+    
+    // MARK: - All purpose task method for images
+    
+    func taskForImageUrlString(urlString: String?, completionHandler: (imageData: NSData?, error: NSError?) ->  Void) -> NSURLSessionTask? {
+        if let urlString = urlString, url = NSURL(string: urlString) {
+            let request = NSURLRequest(URL: url)
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {data, response, downloadError in
+                
+                if let error = downloadError {
+                    //let newError = TheMovieDB.errorForData(data, response: response, error: downloadError)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        completionHandler(imageData: nil, error: error)
+                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        completionHandler(imageData: data, error: nil)
+                    })
+                }
+            }
+            task.resume()
+            return task
+        } else {
+            return nil
+        }
+    }
+    
     // MARK: Private Helpers
     
     // Produces usable JSON object from the raw data.
