@@ -33,6 +33,10 @@
 		4E913CF71C5338250057D44A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF61C5338250057D44A /* Constants.swift */; };
 		4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF81C5355D10057D44A /* ForumViewController.swift */; };
 		4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */; };
+		4E913CFE1C5433840057D44A /* ForumCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFD1C5433840057D44A /* ForumCellView.swift */; };
+		4E913D001C5433B80057D44A /* TaskCancelingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */; };
+		4E913D021C543DD30057D44A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913D011C543DD30057D44A /* ImageCache.swift */; };
+		4E9C388E1C546CB9002499C4 /* ToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388D1C546CB9002499C4 /* ToolKit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +89,11 @@
 		4E913CF61C5338250057D44A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4E913CF81C5355D10057D44A /* ForumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumViewController.swift; sourceTree = "<group>"; };
 		4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseStatus.swift; sourceTree = "<group>"; };
+		4E913CFD1C5433840057D44A /* ForumCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumCellView.swift; sourceTree = "<group>"; };
+		4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCancelingCollectionViewCell.swift; sourceTree = "<group>"; };
+		4E913D011C543DD30057D44A /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		4E9C388C1C546C8C002499C4 /* MorMessages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MorMessages-Bridging-Header.h"; sourceTree = "<group>"; };
+		4E9C388D1C546CB9002499C4 /* ToolKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolKit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +149,7 @@
 				4E913CB91C4CC8990057D44A /* Model */,
 				4E913CB61C4CC6620057D44A /* Persistence */,
 				4E913CEF1C532A270057D44A /* ViewControllers */,
+				4E913CFC1C5433470057D44A /* Views */,
 				4E913CD01C4D6F820057D44A /* Utilities */,
 				4E913C7B1C4CC4360057D44A /* AppDelegate.swift */,
 				4E913C7F1C4CC4360057D44A /* Main.storyboard */,
@@ -176,6 +186,9 @@
 			children = (
 				4E913CAF1C4CC55C0057D44A /* WebClient.swift */,
 				4E913CB11C4CC58D0057D44A /* Logger.swift */,
+				4E913D011C543DD30057D44A /* ImageCache.swift */,
+				4E9C388C1C546C8C002499C4 /* MorMessages-Bridging-Header.h */,
+				4E9C388D1C546CB9002499C4 /* ToolKit.swift */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -223,11 +236,20 @@
 			isa = PBXGroup;
 			children = (
 				4E913CF01C532A4F0057D44A /* LoginViewController.swift */,
+				4E913CF81C5355D10057D44A /* ForumViewController.swift */,
 				4E913CF21C532C300057D44A /* MorMessagesManager.swift */,
 				4E913CF61C5338250057D44A /* Constants.swift */,
-				4E913CF81C5355D10057D44A /* ForumViewController.swift */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		4E913CFC1C5433470057D44A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4E913CFD1C5433840057D44A /* ForumCellView.swift */,
+				4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -361,6 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E913D021C543DD30057D44A /* ImageCache.swift in Sources */,
 				4E913CD21C4D6FAE0057D44A /* DateToolkit.swift in Sources */,
 				4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */,
 				4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */,
@@ -368,6 +391,7 @@
 				4E913CF31C532C300057D44A /* MorMessagesManager.swift in Sources */,
 				4E913CF51C532CAA0057D44A /* UserInfo.swift in Sources */,
 				4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */,
+				4E913D001C5433B80057D44A /* TaskCancelingCollectionViewCell.swift in Sources */,
 				4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */,
 				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
@@ -375,11 +399,13 @@
 				4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */,
 				4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */,
 				4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */,
+				4E913CFE1C5433840057D44A /* ForumCellView.swift in Sources */,
 				4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */,
 				4E913CB01C4CC55C0057D44A /* WebClient.swift in Sources */,
 				4E913CEA1C4DCCA00057D44A /* Forum.swift in Sources */,
 				4E913CEE1C4DCCA00057D44A /* Message.swift in Sources */,
 				4E913CF71C5338250057D44A /* Constants.swift in Sources */,
+				4E9C388E1C546CB9002499C4 /* ToolKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,6 +502,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "MorMessages/MorMessages-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -514,6 +541,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "MorMessages/MorMessages-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -608,6 +636,7 @@
 				4E913CA51C4CC4360057D44A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4E913CA61C4CC4360057D44A /* Build configuration list for PBXNativeTarget "MorMessagesTests" */ = {
 			isa = XCConfigurationList;
@@ -616,6 +645,7 @@
 				4E913CA81C4CC4360057D44A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4E913CA91C4CC4360057D44A /* Build configuration list for PBXNativeTarget "MorMessagesUITests" */ = {
 			isa = XCConfigurationList;
@@ -624,6 +654,7 @@
 				4E913CAB1C4CC4360057D44A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

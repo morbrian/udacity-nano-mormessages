@@ -133,16 +133,20 @@ class ForumService {
         }
     }
     
-    func listForums(completionHandler: (forums: [Forum]?, error: NSError?) -> Void) {
+    func listForums(offset offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
+        completionHandler: (forums: [Forum]?, error: NSError?) -> Void) {
+        let params = [ "offset":offset, "resultSize":resultSize, "greaterThan":greaterThan ]
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.ForumUrl,
-            includeHeaders: ForumService.StandardHeaders) {
+            includeHeaders: ForumService.StandardHeaders,
+            includeParameters: params) {
                 webClient.executeRequest(request) {
                     jsonData, error in
                     dispatch_async(dispatch_get_main_queue()) {
                         if let jsonArray = jsonData as? [[String:AnyObject]] {
                             // parse each forum and produce an array of only valid Forum objects
                             let forums = jsonArray.map(Forum.produceWithState).filter({$0 != nil}).map({$0!})
+                            Logger.info("Requesed resultSize(\(resultSize)), Received(\(forums.count))")
                             completionHandler(forums: forums, error: nil)
                         } else {
                             completionHandler(forums: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
@@ -155,20 +159,21 @@ class ForumService {
         }
     }
     
-    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100,
+    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
         completionHandler: (messages: [Message]?, error: NSError?) -> Void) {
-            let params = [ "offset":offset, "resultSize":resultSize ]
+            let params = [ "offset":offset, "resultSize":resultSize, "greaterThan":greaterThan ]
         if let forumId = forum.id,
             request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.MessageUrl(forumId),
             includeHeaders: ForumService.StandardHeaders,
-                includeParameters: params) {
+            includeParameters: params) {
                 webClient.executeRequest(request) {
                     jsonData, error in
                     dispatch_async(dispatch_get_main_queue()) {
                         if let jsonArray = jsonData as? [[String:AnyObject]] {
                             // parse each forum and produce an array of only valid Forum objects
                             let messages = jsonArray.map(Message.produceWithState).filter({$0 != nil}).map({$0!})
+                            Logger.info("Requesed resultSize(\(resultSize)), Received(\(messages.count))")
                             completionHandler(messages: messages, error: nil)
                         } else {
                             completionHandler(messages: nil, error: ForumService.errorForCode(.UnexpectedResponseData))

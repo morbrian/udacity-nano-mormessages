@@ -138,28 +138,96 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cd7-aF-wPR">
-                                <rect key="frame" x="20" y="289" width="560" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pJD-hX-Odb">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" red="0.99008162420000001" green="0.90006377660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" id="J62-0A-0Kg">
+                                    <size key="itemSize" width="95" height="90"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ForumCellViewIdentifier" id="KfG-Bj-YD3" customClass="ForumCellView" customModule="MorMessages" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="64" width="95" height="90"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="95" height="90"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p9L-0p-ohi">
+                                                    <rect key="frame" x="8" y="8" width="79" height="53"/>
+                                                </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="S8S-6P-4k6">
+                                                    <rect key="frame" x="38" y="25" width="20" height="20"/>
+                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </activityIndicatorView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RJp-4n-l84">
+                                                    <rect key="frame" x="8" y="61" width="79" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Id" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofe-Jb-T5w" userLabel="Id">
+                                                    <rect key="frame" x="8" y="8" width="79" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="p9L-0p-ohi" firstAttribute="top" secondItem="KfG-Bj-YD3" secondAttribute="topMargin" id="474-Kq-hP6"/>
+                                            <constraint firstItem="S8S-6P-4k6" firstAttribute="centerY" secondItem="p9L-0p-ohi" secondAttribute="centerY" id="FZA-Ol-QWW"/>
+                                            <constraint firstItem="S8S-6P-4k6" firstAttribute="centerX" secondItem="KfG-Bj-YD3" secondAttribute="centerX" id="RSn-ds-7HC"/>
+                                            <constraint firstItem="p9L-0p-ohi" firstAttribute="leading" secondItem="KfG-Bj-YD3" secondAttribute="leadingMargin" id="VdC-dI-K57"/>
+                                            <constraint firstItem="RJp-4n-l84" firstAttribute="leading" secondItem="KfG-Bj-YD3" secondAttribute="leadingMargin" id="XDj-eF-4Yn"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="RJp-4n-l84" secondAttribute="bottom" id="XRE-CB-fi3"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="RJp-4n-l84" secondAttribute="trailing" id="bjZ-Sd-QS2"/>
+                                            <constraint firstItem="RJp-4n-l84" firstAttribute="top" secondItem="p9L-0p-ohi" secondAttribute="bottom" id="dfb-gw-OcJ"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="Ofe-Jb-T5w" secondAttribute="trailing" id="mSW-Va-Zoe"/>
+                                            <constraint firstAttribute="topMargin" secondItem="Ofe-Jb-T5w" secondAttribute="top" id="meJ-gx-tDA"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="p9L-0p-ohi" secondAttribute="trailing" id="mes-vE-a0S"/>
+                                            <constraint firstItem="Ofe-Jb-T5w" firstAttribute="leading" secondItem="KfG-Bj-YD3" secondAttribute="leadingMargin" id="obq-8v-kqm"/>
+                                            <constraint firstItem="S8S-6P-4k6" firstAttribute="centerX" secondItem="p9L-0p-ohi" secondAttribute="centerX" id="pxb-ph-Km6"/>
+                                            <constraint firstItem="S8S-6P-4k6" firstAttribute="centerY" secondItem="KfG-Bj-YD3" secondAttribute="centerY" id="wwi-cg-zBh"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="RSn-ds-7HC"/>
+                                                <exclude reference="wwi-cg-zBh"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="S8S-6P-4k6" id="I2P-Ch-igW"/>
+                                            <outlet property="idLabel" destination="Ofe-Jb-T5w" id="VKd-Gu-b8i"/>
+                                            <outlet property="imageView" destination="p9L-0p-ohi" id="ntW-dk-b0Q"/>
+                                            <outlet property="title" destination="RJp-4n-l84" id="nUP-ci-qLd"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="LJX-im-LK1" id="x2P-jZ-tgf"/>
+                                    <outlet property="delegate" destination="LJX-im-LK1" id="dAW-Pk-7aM"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.99008162420000001" green="0.90006377660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="cd7-aF-wPR" secondAttribute="trailing" id="3s9-Ym-GT5"/>
-                            <constraint firstItem="cd7-aF-wPR" firstAttribute="centerX" secondItem="721-bN-tb4" secondAttribute="centerX" id="4ej-dR-Z8F"/>
-                            <constraint firstItem="cd7-aF-wPR" firstAttribute="leading" secondItem="721-bN-tb4" secondAttribute="leadingMargin" id="KMW-XX-YxN"/>
-                            <constraint firstItem="cd7-aF-wPR" firstAttribute="centerY" secondItem="721-bN-tb4" secondAttribute="centerY" id="a79-bO-6V2"/>
+                            <constraint firstItem="pJD-hX-Odb" firstAttribute="leading" secondItem="721-bN-tb4" secondAttribute="leading" id="DLe-6J-9Td"/>
+                            <constraint firstItem="pJD-hX-Odb" firstAttribute="top" secondItem="721-bN-tb4" secondAttribute="top" id="SqI-G6-AWn"/>
+                            <constraint firstAttribute="trailing" secondItem="pJD-hX-Odb" secondAttribute="trailing" id="WYY-g9-WKm"/>
+                            <constraint firstAttribute="bottom" secondItem="pJD-hX-Odb" secondAttribute="bottom" id="rqE-nU-lvJ"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="usernameLabel" destination="cd7-aF-wPR" id="XO3-DJ-CnK"/>
+                        <outlet property="collectionView" destination="pJD-hX-Odb" id="C9h-cK-byJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fhl-T0-OpA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1320" y="792"/>
+            <point key="canvasLocation" x="1277" y="800"/>
         </scene>
     </scenes>
     <resources>
