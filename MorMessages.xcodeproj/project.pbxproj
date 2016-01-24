@@ -37,6 +37,7 @@
 		4E913D001C5433B80057D44A /* TaskCancelingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */; };
 		4E913D021C543DD30057D44A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913D011C543DD30057D44A /* ImageCache.swift */; };
 		4E9C388E1C546CB9002499C4 /* ToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388D1C546CB9002499C4 /* ToolKit.swift */; };
+		4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		4E913D011C543DD30057D44A /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		4E9C388C1C546C8C002499C4 /* MorMessages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MorMessages-Bridging-Header.h"; sourceTree = "<group>"; };
 		4E9C388D1C546CB9002499C4 /* ToolKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolKit.swift; sourceTree = "<group>"; };
+		4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewForumViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 			children = (
 				4E913CF01C532A4F0057D44A /* LoginViewController.swift */,
 				4E913CF81C5355D10057D44A /* ForumViewController.swift */,
+				4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */,
 				4E913CF21C532C300057D44A /* MorMessagesManager.swift */,
 				4E913CF61C5338250057D44A /* Constants.swift */,
 			);
@@ -384,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E913D021C543DD30057D44A /* ImageCache.swift in Sources */,
+				4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */,
 				4E913CD21C4D6FAE0057D44A /* DateToolkit.swift in Sources */,
 				4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */,
 				4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */,

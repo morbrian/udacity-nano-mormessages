@@ -223,14 +223,204 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="pJD-hX-Odb" id="C9h-cK-byJ"/>
+                        <segue destination="jNU-dd-fvx" kind="presentation" identifier="AddForumSegue" id="Sod-H2-iyw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fhl-T0-OpA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1277" y="800"/>
         </scene>
+        <!--New Forum View Controller-->
+        <scene sceneID="LUg-fn-wSf">
+            <objects>
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="jNU-dd-fvx" customClass="NewForumViewController" customModule="MorMessages" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="mIr-Nx-RE4"/>
+                        <viewControllerLayoutGuide type="bottom" id="Dik-4h-zyv"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="76a-bC-ubn">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HXf-ZU-rPk" userLabel="Web Browser">
+                                <rect key="frame" x="-20" y="20" width="640" height="580"/>
+                                <subviews>
+                                    <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="daR-qz-MwF">
+                                        <rect key="frame" x="20" y="44" width="600" height="492"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                    </webView>
+                                    <searchBar contentMode="redraw" placeholder="URL or Search Text" translatesAutoresizingMaskIntoConstraints="NO" id="Xgn-6R-dvc">
+                                        <rect key="frame" x="0.0" y="0.0" width="640" height="44"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </searchBar>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ob-bf-YB9">
+                                        <rect key="frame" x="0.0" y="536" width="640" height="44"/>
+                                        <items>
+                                            <barButtonItem style="plain" systemItem="flexibleSpace" id="xCT-S8-538"/>
+                                            <barButtonItem title="Use" id="nFp-iQ-QBh">
+                                                <connections>
+                                                    <action selector="useCurrentWebPage:" destination="jNU-dd-fvx" id="Snm-e9-Oiz"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem style="plain" systemItem="flexibleSpace" id="hEa-I9-TiV"/>
+                                        </items>
+                                    </toolbar>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="daR-qz-MwF" firstAttribute="top" secondItem="Xgn-6R-dvc" secondAttribute="bottom" id="5em-qR-qdd"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xgn-6R-dvc" secondAttribute="trailing" symbolic="YES" id="OMf-Lw-hdy"/>
+                                    <constraint firstItem="daR-qz-MwF" firstAttribute="leading" secondItem="HXf-ZU-rPk" secondAttribute="leading" constant="20" symbolic="YES" id="SLD-A8-ZFu"/>
+                                    <constraint firstItem="Xgn-6R-dvc" firstAttribute="leading" secondItem="HXf-ZU-rPk" secondAttribute="leading" symbolic="YES" id="cDA-jI-cG0"/>
+                                    <constraint firstItem="1ob-bf-YB9" firstAttribute="leading" secondItem="HXf-ZU-rPk" secondAttribute="leading" id="fm6-oA-xgd"/>
+                                    <constraint firstItem="1ob-bf-YB9" firstAttribute="top" secondItem="daR-qz-MwF" secondAttribute="bottom" id="lLw-Qf-D5N"/>
+                                    <constraint firstAttribute="bottom" secondItem="1ob-bf-YB9" secondAttribute="bottom" id="ngX-DK-EQy"/>
+                                    <constraint firstAttribute="bottom" secondItem="daR-qz-MwF" secondAttribute="bottom" id="nnk-fZ-sj6"/>
+                                    <constraint firstAttribute="trailing" secondItem="daR-qz-MwF" secondAttribute="trailing" constant="20" symbolic="YES" id="q8H-Y6-lbX"/>
+                                    <constraint firstItem="Xgn-6R-dvc" firstAttribute="top" secondItem="HXf-ZU-rPk" secondAttribute="top" id="qbp-3c-bPr"/>
+                                    <constraint firstAttribute="trailing" secondItem="1ob-bf-YB9" secondAttribute="trailing" id="zNb-I9-1sG"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="nnk-fZ-sj6"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                            <navigationBar opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PEF-SK-ibb">
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="barTintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </textAttributes>
+                                <items>
+                                    <navigationItem title="New Forum" id="SoG-zy-6NR">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="wUv-0l-2wq">
+                                            <color key="tintColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <connections>
+                                                <action selector="cancelAction:" destination="jNU-dd-fvx" id="lhj-or-wgd"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="eE3-x3-TKC">
+                                            <color key="tintColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <connections>
+                                                <action selector="doneWithAddForumAction:" destination="jNU-dd-fvx" id="V6h-rf-ztK"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iq7-a3-JRd">
+                                <rect key="frame" x="0.0" y="72" width="600" height="528"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Forum Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qab-Uw-Hcg">
+                                        <rect key="frame" x="20" y="20" width="560" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="beginEditTextfield:" destination="jNU-dd-fvx" eventType="editingDidBegin" id="3gO-fe-2aq"/>
+                                            <action selector="endTextEditing" destination="jNU-dd-fvx" eventType="editingDidEnd" id="ZNk-O5-FUY"/>
+                                            <action selector="updateImageUrlAction:" destination="jNU-dd-fvx" eventType="editingDidEnd" id="Dmx-7P-oE4"/>
+                                        </connections>
+                                    </textField>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Forum Description" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="mp6-o0-RFe">
+                                        <rect key="frame" x="20" y="58" width="560" height="64"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" priority="750" constant="64" id="Sfu-ul-FbS"/>
+                                        </constraints>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="64" image="ForumFetchingImage" translatesAutoresizingMaskIntoConstraints="NO" id="NhP-2h-XHR">
+                                        <rect key="frame" x="180" y="130" width="240" height="64"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add a web page link" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Hr-P6-EJR">
+                                        <rect key="frame" x="20" y="202" width="560" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                        <connections>
+                                            <action selector="beginEditTextfield:" destination="jNU-dd-fvx" eventType="editingDidBegin" id="VEr-ab-qA3"/>
+                                            <action selector="endTextEditing" destination="jNU-dd-fvx" eventType="editingDidEnd" id="GpP-eG-0jS"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" red="0.99008162420000001" green="0.90006377660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="8Hr-P6-EJR" firstAttribute="top" secondItem="mp6-o0-RFe" secondAttribute="bottom" priority="750" constant="8" symbolic="YES" id="87K-3P-iCH"/>
+                                    <constraint firstItem="NhP-2h-XHR" firstAttribute="top" secondItem="mp6-o0-RFe" secondAttribute="bottom" constant="8" symbolic="YES" id="ADM-rS-BBs"/>
+                                    <constraint firstItem="NhP-2h-XHR" firstAttribute="centerX" secondItem="Iq7-a3-JRd" secondAttribute="centerX" id="Boy-9f-6oE"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="8Hr-P6-EJR" secondAttribute="bottom" constant="20" symbolic="YES" id="Kdo-uD-QJW"/>
+                                    <constraint firstItem="8Hr-P6-EJR" firstAttribute="leading" secondItem="Iq7-a3-JRd" secondAttribute="leading" constant="20" symbolic="YES" id="Kft-Pl-OSL"/>
+                                    <constraint firstItem="qab-Uw-Hcg" firstAttribute="leading" secondItem="Iq7-a3-JRd" secondAttribute="leading" constant="20" symbolic="YES" id="QwY-8c-OsK"/>
+                                    <constraint firstAttribute="trailing" secondItem="8Hr-P6-EJR" secondAttribute="trailing" constant="20" symbolic="YES" id="Rag-bo-ge5"/>
+                                    <constraint firstItem="mp6-o0-RFe" firstAttribute="top" secondItem="qab-Uw-Hcg" secondAttribute="bottom" constant="8" symbolic="YES" id="Sih-Cs-XKj"/>
+                                    <constraint firstItem="qab-Uw-Hcg" firstAttribute="leading" secondItem="mp6-o0-RFe" secondAttribute="trailing" id="VPa-zu-ZaO"/>
+                                    <constraint firstItem="8Hr-P6-EJR" firstAttribute="centerX" secondItem="Iq7-a3-JRd" secondAttribute="centerX" id="dAP-8q-Jg9"/>
+                                    <constraint firstItem="qab-Uw-Hcg" firstAttribute="top" secondItem="Iq7-a3-JRd" secondAttribute="top" constant="20" symbolic="YES" id="eMF-59-24z"/>
+                                    <constraint firstItem="8Hr-P6-EJR" firstAttribute="leading" secondItem="Iq7-a3-JRd" secondAttribute="leading" constant="20" symbolic="YES" id="fRF-Nc-BqO"/>
+                                    <constraint firstItem="8Hr-P6-EJR" firstAttribute="top" secondItem="NhP-2h-XHR" secondAttribute="bottom" constant="8" symbolic="YES" id="hUc-TT-XEQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="mp6-o0-RFe" secondAttribute="trailing" constant="20" symbolic="YES" id="pke-Eb-twz"/>
+                                    <constraint firstAttribute="trailing" secondItem="qab-Uw-Hcg" secondAttribute="trailing" constant="20" symbolic="YES" id="tW4-rM-kXf"/>
+                                    <constraint firstAttribute="trailing" secondItem="8Hr-P6-EJR" secondAttribute="trailing" constant="20" symbolic="YES" id="tqV-aN-rFs"/>
+                                    <constraint firstItem="mp6-o0-RFe" firstAttribute="leading" secondItem="Iq7-a3-JRd" secondAttribute="leading" constant="20" symbolic="YES" id="xKD-9E-sWI"/>
+                                    <constraint firstItem="8Hr-P6-EJR" firstAttribute="top" secondItem="NhP-2h-XHR" secondAttribute="bottom" constant="8" symbolic="YES" id="zl9-eK-dPa"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="VPa-zu-ZaO"/>
+                                        <exclude reference="87K-3P-iCH"/>
+                                        <exclude reference="Kft-Pl-OSL"/>
+                                        <exclude reference="Rag-bo-ge5"/>
+                                        <exclude reference="dAP-8q-Jg9"/>
+                                        <exclude reference="zl9-eK-dPa"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="PEF-SK-ibb" firstAttribute="top" secondItem="mIr-Nx-RE4" secondAttribute="bottom" constant="8" id="4BQ-Cq-2bK"/>
+                            <constraint firstItem="Dik-4h-zyv" firstAttribute="top" secondItem="HXf-ZU-rPk" secondAttribute="bottom" id="6OW-f2-sEB"/>
+                            <constraint firstAttribute="bottom" secondItem="HXf-ZU-rPk" secondAttribute="bottom" constant="20" symbolic="YES" id="7tw-sb-WdH"/>
+                            <constraint firstItem="HXf-ZU-rPk" firstAttribute="top" secondItem="76a-bC-ubn" secondAttribute="top" constant="20" symbolic="YES" id="BuD-GS-yDI"/>
+                            <constraint firstItem="Iq7-a3-JRd" firstAttribute="top" secondItem="PEF-SK-ibb" secondAttribute="bottom" id="GMv-AN-dDV"/>
+                            <constraint firstItem="HXf-ZU-rPk" firstAttribute="top" secondItem="mIr-Nx-RE4" secondAttribute="bottom" id="LGC-dc-Kym"/>
+                            <constraint firstItem="HXf-ZU-rPk" firstAttribute="leading" secondItem="76a-bC-ubn" secondAttribute="leading" constant="-20" id="LUA-z0-4Pu"/>
+                            <constraint firstItem="Iq7-a3-JRd" firstAttribute="leading" secondItem="76a-bC-ubn" secondAttribute="leadingMargin" constant="-20" id="NlA-yj-tyk"/>
+                            <constraint firstItem="Dik-4h-zyv" firstAttribute="top" secondItem="Iq7-a3-JRd" secondAttribute="bottom" id="O12-z1-FGZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="PEF-SK-ibb" secondAttribute="trailing" constant="-20" id="VH4-Ok-Fi1"/>
+                            <constraint firstAttribute="trailing" secondItem="HXf-ZU-rPk" secondAttribute="trailing" constant="-20" id="ZHU-6i-3as"/>
+                            <constraint firstItem="PEF-SK-ibb" firstAttribute="leading" secondItem="76a-bC-ubn" secondAttribute="leadingMargin" constant="-20" id="ade-tg-y2M"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Iq7-a3-JRd" secondAttribute="trailing" constant="-20" id="iRo-87-VOu"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="7tw-sb-WdH"/>
+                                <exclude reference="BuD-GS-yDI"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <connections>
+                        <outlet property="forumDescTextView" destination="mp6-o0-RFe" id="6IX-Y2-zMe"/>
+                        <outlet property="forumImagePreview" destination="NhP-2h-XHR" id="CaL-tN-hZb"/>
+                        <outlet property="forumImageUrlTextField" destination="8Hr-P6-EJR" id="1pW-mM-eAW"/>
+                        <outlet property="forumTitleTextField" destination="qab-Uw-Hcg" id="ERx-4Q-W6i"/>
+                        <outlet property="searchBar" destination="Xgn-6R-dvc" id="hq3-z2-ukd"/>
+                        <outlet property="webBrowserPanel" destination="HXf-ZU-rPk" id="g58-jT-MZt"/>
+                        <outlet property="webView" destination="daR-qz-MwF" id="iCg-oi-uKe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DGn-fd-n3Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1277" y="1562"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="ForumFetchingImage" width="512" height="512"/>
         <image name="LoginImage" width="920" height="1135"/>
     </resources>
 </document>

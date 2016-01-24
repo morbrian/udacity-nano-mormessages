@@ -39,6 +39,11 @@ class MorMessagesManager {
             }
     }
     
+    func logout(completionHandler: (error: NSError?) -> Void) {
+        self.currentUser = nil
+        forumService.logout(completionHandler)
+    }
+    
     func whoami(completionHandler: (identity: String?, error: NSError?) -> Void) {
         forumService.whoami(completionHandler)
     }
@@ -47,6 +52,25 @@ class MorMessagesManager {
         completionHandler: (forums: [Forum]?, error: NSError?) -> Void) {
             forumService.listForums(offset: offset, resultSize: resultSize, greaterThan: greaterThan,
                 completionHandler: completionHandler)
+    }
+    
+    func createForum(forum: Forum, completionHandler: (forum: Forum?, error: NSError?) -> Void) {
+        forumService.createForum(forum, completionHandler: completionHandler)
+    }
+    
+    func createForumWithTitle(title: String, desc: String, imageUrl: String,
+        completionHandler: (forum: Forum?, error: NSError?) -> Void) {
+        let state = [
+            ForumService.ForumJsonKey.Title:title,
+            ForumService.ForumJsonKey.Description:desc,
+            ForumService.ForumJsonKey.ImageUrl:imageUrl
+        ]
+        var pairs = [String?]()
+        for (key,value) in state {
+            pairs += [BaseEntity.stringForSingleKey(key, andValue: value)]
+        }
+        let jsonBody = BaseEntity.jsonData(pairs.filter({$0 != nil}).map({$0!}))
+        forumService.createForumWithBody(jsonBody, completionHandler: completionHandler)
     }
 
     // handles response after login attempt

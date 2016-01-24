@@ -88,17 +88,17 @@ class BaseEntity: NSManagedObject {
     
     func fieldPairArray() -> [String] {
         return [
-            stringForSingleKey(ForumService.ForumJsonKey.Id, andValue: id),
-            stringForSingleKey(ForumService.ForumJsonKey.CreatedTime, andValue: createdTime),
-            stringForSingleKey(ForumService.ForumJsonKey.ModifiedTime, andValue: modifiedTime),
-            stringForSingleKey(ForumService.ForumJsonKey.CreatedBy, andValue: createdBy),
-            stringForSingleKey(ForumService.ForumJsonKey.ModifiedBy, andValue: modifiedBy),
-            stringForSingleKey(ForumService.ForumJsonKey.Uuid, andValue: uuid)
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.Id, andValue: id),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.CreatedTime, andValue: createdTime),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.ModifiedTime, andValue: modifiedTime),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.CreatedBy, andValue: createdBy),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.ModifiedBy, andValue: modifiedBy),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.Uuid, andValue: uuid)
         ].filter({$0 != nil}).map({$0!})
     }
 
     // returns a simple key : value pair suitable to be the field of a json object
-    func stringForSingleKey(key: String, andValue value: AnyObject?) -> String? {
+    class func stringForSingleKey(key: String, andValue value: AnyObject?) -> String? {
         if let typedValue = value as? String {
             return "\"\(key)\":\"\(typedValue)\""
         } else if let typedValue = value as? Int {
@@ -108,16 +108,19 @@ class BaseEntity: NSManagedObject {
         }
     }
     
-    
     func jsonData() -> NSData {
+        return BaseEntity.jsonData(fieldPairArray())
+    }
+    
+    class func jsonData(fieldPairArray: [String]) -> NSData {
         var jsonString = "{"
         var first = true
-        for pair in fieldPairArray() {
+        for pair in fieldPairArray {
             jsonString += first ? pair : "," + pair
             first = false
         }
         jsonString += "}"
         return (jsonString as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
     }
-
+    
 }

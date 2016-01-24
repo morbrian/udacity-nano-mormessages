@@ -32,6 +32,9 @@ class ForumViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.hidden = false
+        navigationItem.leftBarButtonItem = produceLogoutBarButtonItem()
+        navigationItem.rightBarButtonItem = produceAddBarButtonItem()
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -41,6 +44,49 @@ class ForumViewController: UIViewController {
         fetchedResultsController.delegate = self
         fetchNewest()
     }
+    
+    // MARK: UIBarButonItem Producers
+    
+    // return a button with appropriate label for the logout position on the navigation bar
+    private func produceLogoutBarButtonItem() -> UIBarButtonItem? {
+        let button = UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.Done, target: self, action: "returnToLoginScreen:")
+        applyThemeToButton(button)
+        return button
+    }
+    
+    // return a button with appropriate label for the adding forum on the navigation bar
+    private func produceAddBarButtonItem() -> UIBarButtonItem? {
+        let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addForumAction:")
+        applyThemeToButton(button)
+        return button
+    }
+    
+    private func applyThemeToButton(button: UIBarButtonItem) {
+        button.tintColor = Constants.ThemeButtonTintColor
+    }
+    
+    // MARK: View Transitions
+    
+    // log out and pop to root login viewcontroller
+    func returnToLoginScreen(sender: AnyObject) {
+        manager.logout(){_ in }
+        navigationController?.popToRootViewControllerAnimated(true)
+        //performSegueWithIdentifier(Constants.ReturnToLoginScreenSegue, sender: self)
+    }
+    
+    // action when "Add Forum" button is tapped
+    func addForumAction(sender: AnyObject!) {
+        performSegueWithIdentifier(Constants.AddForumSegue, sender: self)
+    }
+    
+    // segue preparations
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destination = segue.destinationViewController as? NewForumViewController {
+            destination.manager = manager
+        }
+    }
+    
+    // MARK: Layout Helpers
     
     override func viewWillLayoutSubviews() {
         calculateCollectionCellSize()
@@ -255,11 +301,9 @@ extension ForumViewController:NSFetchedResultsControllerDelegate {
                 }
                 
             case .Move:
-                if let index = indexPath {
-                    collectionView.deleteItemsAtIndexPaths([index])
-                }
-                if let index = newIndexPath {
-                    collectionView.insertItemsAtIndexPaths([index])
+                if let indexPath = indexPath, newIndexPath = newIndexPath {
+                    collectionView.deleteItemsAtIndexPaths([indexPath])
+                    collectionView.insertItemsAtIndexPaths([newIndexPath])
                 }
             }
     }

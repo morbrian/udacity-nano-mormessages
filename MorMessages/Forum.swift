@@ -27,11 +27,20 @@ class Forum: BaseEntity {
         return BaseEntity.produceEntity(EntityName, withState: state) as? Forum
     }
     
+    class func produceWithTitle(title: String, desc: String, imageUrl: String) -> Forum? {
+        let state = [
+            ForumService.ForumJsonKey.Title:title,
+            ForumService.ForumJsonKey.Description:desc,
+            ForumService.ForumJsonKey.ImageUrl:imageUrl
+        ]
+        return produceWithState(state)
+    }
+    
     override func fieldPairArray() -> [String] {
         return super.fieldPairArray() + ([
-            stringForSingleKey(ForumService.ForumJsonKey.Title, andValue: title),
-            stringForSingleKey(ForumService.ForumJsonKey.Description, andValue: desc),
-            stringForSingleKey(ForumService.ForumJsonKey.ImageUrl, andValue: imageUrl)
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.Title, andValue: title),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.Description, andValue: desc),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.ImageUrl, andValue: imageUrl)
         ].filter({$0 != nil}).map({$0!}))
     }
 

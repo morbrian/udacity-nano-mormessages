@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 // Constants used Application wide
 struct Constants {
@@ -22,10 +23,16 @@ struct Constants {
     
     static let SuccessfulLoginSegue = "SuccessfulLoginSegue"
     static let ReturnToLoginScreenSegue = "ReturnToLoginScreenSegue"
+    static let AddForumSegue = "AddForumSegue"
     static let ForumCellViewIdentifier = "ForumCellViewIdentifier"
     
     // MARK: Physical Device Info
     
     static let DeviceiPhone5Height = 568.0
+    static let DeviceiPhone5Width = 320.0
+    
+    // MARK: Theme Look and Feel
+    static let ThemeButtonTintColor = UIColor.purpleColor()
+    static let DefaultForumDescriptionText = "Forum Description"
     
 }

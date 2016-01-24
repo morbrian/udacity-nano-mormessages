@@ -24,9 +24,9 @@ class Message: BaseEntity {
     
     override func fieldPairArray() -> [String] {
         return super.fieldPairArray() + ([
-            stringForSingleKey(ForumService.ForumJsonKey.Text, andValue: text),
-            stringForSingleKey(ForumService.ForumJsonKey.ImageUrl, andValue: imageUrl),
-            stringForSingleKey(ForumService.ForumJsonKey.ForumId, andValue: forum?.id)
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.Text, andValue: text),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.ImageUrl, andValue: imageUrl),
+            BaseEntity.stringForSingleKey(ForumService.ForumJsonKey.ForumId, andValue: forum?.id)
             ].filter({$0 != nil}).map({$0!}))
     }
     
