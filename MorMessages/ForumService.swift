@@ -109,10 +109,14 @@ class ForumService {
     }
     
     func createForum(forum: Forum, completionHandler: (forum: Forum?, error: NSError?) -> Void) {
+        createForumWithBody(forum.jsonData(), completionHandler: completionHandler)
+    }
+    
+    func createForumWithBody(body: NSData, completionHandler: (forum: Forum?, error: NSError?) -> Void) {
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
             forUrlString: ForumService.ForumAction.ForumUrl,
             includeHeaders: ForumService.StandardHeaders,
-            withBody: forum.jsonData()) {
+            withBody: body) {
                 webClient.executeRequest(request) {
                     jsonData, error in
                     dispatch_async(dispatch_get_main_queue()) {
@@ -121,12 +125,12 @@ class ForumService {
                             completionHandler(forum: nil, error: ForumService.errorForCode(.CreateFailed))
                         } else if let jsonData = jsonData as? [String:AnyObject],
                             let newForum = Forum.produceWithState(jsonData) {
-                            completionHandler(forum: newForum, error: nil)
+                                completionHandler(forum: newForum, error: nil)
                         } else {
                             completionHandler(forum: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
                         }
                     }
-            }
+                }
         } else {
             Logger.error("failed to attempt request")
             completionHandler(forum: nil, error: ForumService.errorForCode(.FailedToMakeRequest))

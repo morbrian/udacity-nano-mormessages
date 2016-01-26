@@ -195,6 +195,7 @@ class LoginViewController: UIViewController {
         Logger.info("should stop network activity")
         self.networkActivity(false)
         if success {
+            self.passwordTextField.text = ""
             self.transitionSucessfulLoginSegue()
         } else {
             dispatch_async(dispatch_get_main_queue()) {

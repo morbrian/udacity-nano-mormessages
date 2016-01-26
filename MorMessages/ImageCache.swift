@@ -46,6 +46,7 @@ class ImageCache {
             inMemoryCache.removeObjectForKey(path)
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(path)
+                Logger.info("removed item for \(identifier)")
             } catch _ {
                 // was always ignoring errors here anyway,
                 // just printing out a reminder since this
@@ -61,6 +62,7 @@ class ImageCache {
         // And in documents directory
         let data = UIImagePNGRepresentation(image!)
         data!.writeToFile(path, atomically: true)
+        Logger.info("stored item for \(identifier)")
     }
     
     // MARK: - Helper

@@ -38,6 +38,7 @@ class ForumCellView: TaskCancelingCollectionViewCell {
             idLabel.text = String(id)
         }
         // Set the Image
+        Logger.info("URL \(forum.imageUrl)")
         if forum.imageUrl == nil || forum.imageUrl!.isEmpty {
             imageView!.image = UIImage(named: Constants.ForumNoImage)
         } else if forum.forumImage != nil {
@@ -51,7 +52,7 @@ class ForumCellView: TaskCancelingCollectionViewCell {
                     self.activityIndicator?.stopAnimating()
                 }
                 if let error = error {
-                    print("Image download error: \(error.localizedDescription)")
+                    Logger.info("Image download error: \(error.localizedDescription)")
                     dispatch_async(dispatch_get_main_queue()) {
                         self.imageView!.image = UIImage(named: Constants.ForumNoImage)
                     }
@@ -59,7 +60,7 @@ class ForumCellView: TaskCancelingCollectionViewCell {
                     // Craete the image
                     let image = UIImage(data: data)
                     dispatch_async(dispatch_get_main_queue()) {
-                        // update the model, so that the infrmation gets cashed
+                        // update the model, so that the informatino gets cached
                         forum.forumImage = image
                         if self.forum?.imageUrl == forum.imageUrl {
                             self.imageView!.image = image
@@ -77,6 +78,7 @@ class ForumCellView: TaskCancelingCollectionViewCell {
                 taskToCancelifCellIsReused = nil
                 self.activityIndicator?.stopAnimating()
             }
+            
         }
     }
 

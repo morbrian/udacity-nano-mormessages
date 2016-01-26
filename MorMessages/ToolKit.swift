@@ -11,6 +11,60 @@ import UIKit
 
 class ToolKit {
     
+    // informs user of error status
+    static func showErrorAlert(viewController viewController: UIViewController, title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .Default) {
+            action -> Void in
+            // nothing to do
+            })
+        dispatch_async(dispatch_get_main_queue()) {
+            viewController.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
+    // try to manipulate the given string into a valid URL, or return nil if it can't be done.
+    static func produceValidUrlFromString(string: String) -> NSURL? {
+        let stringWithScheme = string
+        let url = NSURL(string: stringWithScheme)
+        if let url = url,
+            hostname = url.host
+            where !hostname.isEmpty
+                &&  (url.scheme.lowercaseString == WebClient.HttpScheme
+                    || url.scheme.lowercaseString == WebClient.HttpsScheme) {
+                    return url
+        } else {
+            return nil
+        }
+    }
+    
+    // turn the search text into a Bing search query URL
+    static func produceBingUrlFromSearchString(searchString: String) -> NSURL? {
+        let bingUrlString = "https://www.bing.com/search"
+        let encodedSearch = WebClient.encodeParameters(["q":searchString])
+        let queryString = encodedSearch.stringByReplacingOccurrencesOfString("%20", withString: "+")
+        return NSURL(string: "\(bingUrlString)?\(queryString)")
+    }
+    
+    // turn the search text into a Bing search query URL
+    static func produceGoogleImageUrlFromSearchString(searchString: String) -> NSURL? {
+        let bingUrlString = "https://www.google.com/search"
+        let encodedSearch = WebClient.encodeParameters([
+            "site":"",
+            "tbm":"isch",
+            "source":"hp",
+            "q":searchString,
+            "oq":searchString])
+        let queryString = encodedSearch.stringByReplacingOccurrencesOfString("%20", withString: "+")
+        return NSURL(string: "\(bingUrlString)?\(queryString)")
+    }
+
+    // use the md5 hash of the input string to produce a robohash
+    static func produceRobohashUrlFromString(string: String) -> NSURL? {
+        return NSURL(string: "https://robohash.org/\(string.md5)")
+    }
     
 }
 
