@@ -17,12 +17,9 @@ class NewForumViewController: UIViewController {
     @IBOutlet weak var forumImageUrlTextField: UITextField!
     
     @IBOutlet weak var forumImagePreview: UIImageView!
-        
-    @IBOutlet weak var browseButton: UIButton!
-    @IBOutlet weak var webBrowserPanel: UIView!
-    @IBOutlet weak var webView: UIWebView!
-    @IBOutlet weak var searchBar: UISearchBar!
     
+    @IBOutlet weak var activityView: UIView!
+
     var storedImageUrl: String?
     
     // remember how far we moved the view after the keyboard displays
@@ -40,7 +37,6 @@ class NewForumViewController: UIViewController {
         view.addGestureRecognizer(tapRecognizer)
         forumDescTextView.delegate = self
         forumDescTextView.text = Constants.DefaultForumDescriptionText
-        searchBar.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,7 +78,7 @@ class NewForumViewController: UIViewController {
             if let bottomOfCurrentlyEditedItem = bottomOfCurrentlyEditedItem
                 where topOfKeyboard < bottomOfCurrentlyEditedItem {
                 viewShiftDistance = bottomOfCurrentlyEditedItem - topOfKeyboard
-                self.view.bounds.origin.y += viewShiftDistance!
+                self.activityView.bounds.origin.y += viewShiftDistance!
             }
         }
     }
@@ -90,7 +86,7 @@ class NewForumViewController: UIViewController {
     // if bottom textfield just completed editing, shift the view back down
     func keyboardWillHide(notification: NSNotification) {
         if let shiftDistance = viewShiftDistance {
-            self.view.bounds.origin.y -= shiftDistance
+            self.activityView.bounds.origin.y -= shiftDistance
             viewShiftDistance = nil
         }
     }
@@ -104,35 +100,42 @@ class NewForumViewController: UIViewController {
     }
 
     @IBAction func updateImageUrlAction(sender: UITextField) {
-        forumImageUrlTextField.text = ""
-        if let text = sender.text {
+        var urlString: String?
+        if forumImageUrlTextField == sender {
+            urlString = forumImageUrlTextField.text
+        } else if let text = sender.text {
+            forumImageUrlTextField.text = ""
             if let url = ToolKit.produceRobohashUrlFromString(text) {
-                let urlString = url.absoluteString
+                urlString = url.absoluteString
                 forumImageUrlTextField.text = urlString
-                if let storedImage = WebClient.Caches.imageCache.imageWithIdentifier(urlString) {
-                    forumImagePreview.image = storedImage
-                } else {
-                    forumImagePreview.image = UIImage(named: Constants.ForumFetchingImage)
-                    networkActivity(true)
-                    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) {
-                        if let data = NSData(contentsOfURL: url) {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                self.networkActivity(false)
-                                let newImage = UIImage(data: data)
-                                if let storedImageUrl = self.storedImageUrl {
-                                    // remove the old value so we don't build up a store of unused images
-                                    // while the user is still editing the tite
-                                    WebClient.Caches.imageCache.storeImage(nil, withIdentifier: storedImageUrl)
-                                }
-                                self.storedImageUrl = urlString
-                                WebClient.Caches.imageCache.storeImage(newImage, withIdentifier: urlString)
-                                self.forumImagePreview.image = newImage
-                            })
+            }
+        }
+        if let storedImage = WebClient.Caches.imageCache.imageWithIdentifier(urlString) {
+            forumImagePreview.image = storedImage
+        } else {
+            forumImagePreview.image = UIImage(named: Constants.ForumFetchingImage)
+            networkActivity(true)
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) {
+                if let urlString = urlString,
+                    url = NSURL(string: urlString),
+                    data = NSData(contentsOfURL: url) {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.networkActivity(false)
+                        let newImage = UIImage(data: data)
+                        if let storedImageUrl = self.storedImageUrl {
+                            // remove the old value so we don't build up a store of unused images
+                            // while the user is still editing the tite
+                            WebClient.Caches.imageCache.storeImage(nil, withIdentifier: storedImageUrl)
                         }
-                    }
+                        self.storedImageUrl = urlString
+                        WebClient.Caches.imageCache.storeImage(newImage, withIdentifier: urlString)
+                        self.forumImagePreview.image = newImage
+                    })
                 }
             }
         }
+        
+        
     }
     
     // MARK: Gestures
@@ -190,21 +193,7 @@ class NewForumViewController: UIViewController {
             ToolKit.showErrorAlert(viewController: self, title: "Invalid Url", message: "Try entering a valid URL.")
         }
     }
-    @IBAction func useCurrentWebPage(sender: UIBarButtonItem) {
-        forumImageUrlTextField?.text = webView.request?.URL?.absoluteString
-        webBrowserPanel.hidden = true
-    }
-    
-    @IBAction func showWebView(sender: UIButton) {
-        forumImageUrlTextField.endEditing(false)
-        if let urlText = forumImageUrlTextField.text {
-            webView.loadRequest(produceRequestForText(urlText))
-        } else {
-            webView.loadRequest(produceRequestForText("images"))
-        }
-        webBrowserPanel.hidden = false
-    }
-    
+
     private func produceRequestForText(textString: String) -> NSURLRequest {
         
         if let validUrl = ToolKit.produceValidUrlFromString(textString),
@@ -223,21 +212,6 @@ class NewForumViewController: UIViewController {
     func networkActivity(active: Bool) {
         dispatch_async(dispatch_get_main_queue()) {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = active
-        }
-//        dispatch_async(dispatch_get_main_queue()) {
-//            self.activitySpinner?.spinnerActivity(active)
-//        }
-    }
-}
-
-// MARK: - UISearchBarDelegate
-
-extension NewForumViewController: UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        if let searchText = searchBar.text {
-            let request = produceRequestForText(searchText)
-            webView.loadRequest(request)
         }
     }
 }
