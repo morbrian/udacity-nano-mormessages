@@ -23,7 +23,9 @@ struct Constants {
     
     static let SuccessfulLoginSegue = "SuccessfulLoginSegue"
     static let ReturnToLoginScreenSegue = "ReturnToLoginScreenSegue"
+    static let ShowMessageListSegue = "ShowMessageListSegue"
     static let AddForumSegue = "AddForumSegue"
+    static let AddMessageSegue = "AddMessageSegue"
     static let ForumCellViewIdentifier = "ForumCellViewIdentifier"
     
     // MARK: Physical Device Info
@@ -34,5 +36,6 @@ struct Constants {
     // MARK: Theme Look and Feel
     static let ThemeButtonTintColor = UIColor.purpleColor()
     static let DefaultForumDescriptionText = "Forum Description"
+    static let DefaultMessageText = "Message"
     
 }
