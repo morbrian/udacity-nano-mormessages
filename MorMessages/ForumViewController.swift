@@ -83,7 +83,14 @@ class ForumViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destination = segue.destinationViewController as? NewForumViewController {
             destination.manager = manager
+        } else if let destination = segue.destinationViewController as? MessageViewController,
+            forum = sender as? Forum {
+                destination.forum = forum
+                destination.manager = self.manager
+        } else {
+            Logger.error("Unrecognized Segue Destination Class For Segue: \(segue.identifier ?? nil)")
         }
+        
     }
     
     // MARK: Layout Helpers
@@ -202,7 +209,6 @@ class ForumViewController: UIViewController {
         }
     }
     
-    
 
 }
 
@@ -212,7 +218,7 @@ extension ForumViewController: UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let forum = fetchedResultsController.objectAtIndexPath(indexPath) as? Forum {
-            // TODO: i think we'll want to segue to messag lists from here right?
+            self.performSegueWithIdentifier(Constants.ShowMessageListSegue, sender: forum)
         }
     }
     

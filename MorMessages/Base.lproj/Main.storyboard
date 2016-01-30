@@ -13,6 +13,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HVi-11-pWd">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="fwn-0Z-Aih" kind="relationship" relationship="rootViewController" id="ahw-Wx-vC5"/>
@@ -224,11 +227,135 @@
                     <connections>
                         <outlet property="collectionView" destination="pJD-hX-Odb" id="C9h-cK-byJ"/>
                         <segue destination="jNU-dd-fvx" kind="presentation" identifier="AddForumSegue" id="Sod-H2-iyw"/>
+                        <segue destination="9Bl-fT-yug" kind="show" identifier="ShowMessageListSegue" id="rJG-Gh-RLr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fhl-T0-OpA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1277" y="800"/>
+            <point key="canvasLocation" x="1277" y="792"/>
+        </scene>
+        <!--Message View Controller-->
+        <scene sceneID="8uw-Xw-k8Z">
+            <objects>
+                <viewController id="9Bl-fT-yug" customClass="MessageViewController" customModule="MorMessages" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Okj-TU-Yzu"/>
+                        <viewControllerLayoutGuide type="bottom" id="4v7-1M-cvZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jjl-BH-GEr">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7EF-c9-8Pe">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="sectionIndexBackgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCellViewIdentifier" id="joa-0t-RiN" customClass="MessageCellView" customModule="MorMessages" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="joa-0t-RiN" id="C2d-1J-d7Z">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="9Bl-fT-yug" id="1Nh-ly-LqR"/>
+                                    <outlet property="delegate" destination="9Bl-fT-yug" id="nHZ-FZ-3W2"/>
+                                </connections>
+                            </tableView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nw1-5T-EtM" userLabel="Bottom Bar Scroll">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hAa-nJ-ng8" userLabel="Browser">
+                                        <rect key="frame" x="8" y="6" width="31" height="30"/>
+                                        <state key="normal" title="Web"/>
+                                    </button>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" text="Message" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="u1J-vx-Z2J">
+                                        <rect key="frame" x="47" y="8" width="506" height="26"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="4Nr-ZK-3Ji"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="4Nr-ZK-3Ji"/>
+                                            </mask>
+                                        </variation>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7sz-oJ-T02" userLabel="Send">
+                                        <rect key="frame" x="561" y="6" width="36" height="30"/>
+                                        <state key="normal" title="Send"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="u1J-vx-Z2J" firstAttribute="leading" secondItem="hAa-nJ-ng8" secondAttribute="leading" id="2gC-Zk-NJm"/>
+                                    <constraint firstAttribute="bottom" secondItem="hAa-nJ-ng8" secondAttribute="bottom" constant="8" id="2ke-xM-Ode"/>
+                                    <constraint firstAttribute="bottom" secondItem="u1J-vx-Z2J" secondAttribute="bottom" constant="10" id="Arc-tF-iVg"/>
+                                    <constraint firstItem="hAa-nJ-ng8" firstAttribute="leading" secondItem="nw1-5T-EtM" secondAttribute="leading" constant="8" id="DMn-fJ-Abn"/>
+                                    <constraint firstItem="7sz-oJ-T02" firstAttribute="leading" secondItem="hAa-nJ-ng8" secondAttribute="leading" id="MjD-eN-n5W"/>
+                                    <constraint firstAttribute="trailing" secondItem="7sz-oJ-T02" secondAttribute="trailing" constant="8" id="QOP-Jt-aTx"/>
+                                    <constraint firstAttribute="bottom" secondItem="7sz-oJ-T02" secondAttribute="bottom" constant="8" id="Yw1-ic-fOy"/>
+                                    <constraint firstItem="u1J-vx-Z2J" firstAttribute="centerX" secondItem="nw1-5T-EtM" secondAttribute="centerX" id="Zvq-JK-UAz"/>
+                                    <constraint firstItem="7sz-oJ-T02" firstAttribute="centerY" secondItem="nw1-5T-EtM" secondAttribute="centerY" id="fVK-4j-4sj"/>
+                                    <constraint firstItem="u1J-vx-Z2J" firstAttribute="leading" secondItem="hAa-nJ-ng8" secondAttribute="trailing" constant="8" symbolic="YES" id="iGo-2z-RkR"/>
+                                    <constraint firstItem="u1J-vx-Z2J" firstAttribute="leading" secondItem="7sz-oJ-T02" secondAttribute="trailing" constant="8" symbolic="YES" id="jYD-cc-iP4"/>
+                                    <constraint firstItem="u1J-vx-Z2J" firstAttribute="centerY" secondItem="hAa-nJ-ng8" secondAttribute="centerY" id="kAY-qW-V0z"/>
+                                    <constraint firstAttribute="height" constant="44" id="n8v-Ra-hSc"/>
+                                    <constraint firstItem="7sz-oJ-T02" firstAttribute="leading" secondItem="u1J-vx-Z2J" secondAttribute="trailing" constant="8" symbolic="YES" id="wXX-7p-JwG"/>
+                                    <constraint firstItem="u1J-vx-Z2J" firstAttribute="top" secondItem="nw1-5T-EtM" secondAttribute="top" constant="8" id="zaw-wr-iNs"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="2gC-Zk-NJm"/>
+                                        <exclude reference="jYD-cc-iP4"/>
+                                        <exclude reference="MjD-eN-n5W"/>
+                                        <exclude reference="fVK-4j-4sj"/>
+                                    </mask>
+                                </variation>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.99008162420000001" green="0.90006377660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="nw1-5T-EtM" firstAttribute="centerX" secondItem="jjl-BH-GEr" secondAttribute="centerX" id="EBy-WM-iW5"/>
+                            <constraint firstItem="nw1-5T-EtM" firstAttribute="leading" secondItem="jjl-BH-GEr" secondAttribute="leadingMargin" constant="160" id="EMZ-MO-mX5"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nw1-5T-EtM" secondAttribute="trailing" constant="-20" id="ElX-Lm-tSP"/>
+                            <constraint firstItem="7EF-c9-8Pe" firstAttribute="leading" secondItem="jjl-BH-GEr" secondAttribute="leadingMargin" constant="-20" id="RGS-2J-UzB"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="7EF-c9-8Pe" secondAttribute="bottom" constant="231" id="Xkz-FJ-Nhc"/>
+                            <constraint firstItem="7EF-c9-8Pe" firstAttribute="top" secondItem="jjl-BH-GEr" secondAttribute="topMargin" id="fQU-TP-Ptm"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="7EF-c9-8Pe" secondAttribute="trailing" constant="-20" id="iSh-jj-MHb"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="7EF-c9-8Pe" secondAttribute="bottom" id="jSo-fd-PTU"/>
+                            <constraint firstItem="nw1-5T-EtM" firstAttribute="width" secondItem="jjl-BH-GEr" secondAttribute="width" id="jmM-O8-o7t"/>
+                            <constraint firstItem="nw1-5T-EtM" firstAttribute="width" secondItem="jjl-BH-GEr" secondAttribute="width" id="mSl-H6-m3n"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="nw1-5T-EtM" secondAttribute="bottom" id="ngm-jV-CWQ"/>
+                            <constraint firstItem="nw1-5T-EtM" firstAttribute="leading" secondItem="jjl-BH-GEr" secondAttribute="leadingMargin" constant="-20" id="p0q-Wz-3Jc"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Xkz-FJ-Nhc"/>
+                                <exclude reference="EBy-WM-iW5"/>
+                                <exclude reference="EMZ-MO-mX5"/>
+                                <exclude reference="jmM-O8-o7t"/>
+                                <exclude reference="mSl-H6-m3n"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="bottomBarScroll" destination="nw1-5T-EtM" id="sLV-EE-hzS"/>
+                        <outlet property="browserButton" destination="hAa-nJ-ng8" id="7RJ-4c-tVP"/>
+                        <outlet property="messageTextView" destination="u1J-vx-Z2J" id="AlI-oq-vNB"/>
+                        <outlet property="sendButton" destination="7sz-oJ-T02" id="YrC-50-GfE"/>
+                        <outlet property="tableView" destination="7EF-c9-8Pe" id="4jk-0r-bZI"/>
+                        <segue destination="4WM-oS-TlW" kind="presentation" identifier="AddMessageSegue" id="Ux3-Zc-B1e"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zye-zR-cDU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2031" y="792"/>
         </scene>
         <!--New Forum View Controller-->
         <scene sceneID="LUg-fn-wSf">
@@ -499,7 +626,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wxd-Zc-39e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1933" y="1690"/>
+            <point key="canvasLocation" x="2031" y="1561"/>
         </scene>
     </scenes>
     <resources>

@@ -175,7 +175,7 @@ class ForumService {
                     jsonData, error in
                     dispatch_async(dispatch_get_main_queue()) {
                         if let jsonArray = jsonData as? [[String:AnyObject]] {
-                            // parse each forum and produce an array of only valid Forum objects
+                            // parse each message and produce an array of only valid Forum objects
                             let messages = jsonArray.map(Message.produceWithState).filter({$0 != nil}).map({$0!})
                             Logger.info("Requesed resultSize(\(resultSize)), Received(\(messages.count))")
                             completionHandler(messages: messages, error: nil)
