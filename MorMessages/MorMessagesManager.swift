@@ -72,6 +72,12 @@ class MorMessagesManager {
         let jsonBody = BaseEntity.jsonData(pairs.filter({$0 != nil}).map({$0!}))
         forumService.createForumWithBody(jsonBody, completionHandler: completionHandler)
     }
+    
+    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
+        completionHandler: (messages: [Message]?, error: NSError?) -> Void) {
+            forumService.listMessagesInForum(forum, offset: offset, resultSize: resultSize, greaterThan: greaterThan,
+                completionHandler: completionHandler)
+    }
 
     // handles response after login attempt
     // userIdentity: unique key identifying the now logged in user after success

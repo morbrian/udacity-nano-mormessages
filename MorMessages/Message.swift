@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 
 class Message: BaseEntity {
@@ -38,6 +39,18 @@ class Message: BaseEntity {
         forum = Forum.findExistingWithId(state[ForumService.ForumJsonKey.ForumId])
     }
     
+    var messageImage: UIImage? {
+        
+        get {
+            return WebClient.Caches.imageCache.imageWithIdentifier(imageUrl)
+        }
+        
+        set {
+            if let imageUrl = imageUrl {
+                WebClient.Caches.imageCache.storeImage(newValue, withIdentifier: imageUrl)
+            }
+        }
+    }
     
 
 }
