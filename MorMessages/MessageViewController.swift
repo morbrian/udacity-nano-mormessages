@@ -21,6 +21,7 @@ class MessageViewController: UIViewController {
     var offset = 0
     var ResultSize = 100
     let PreFetchTrigger = 50
+    var insertedIndexPath: NSIndexPath?
     
     // central data management object
     var manager: MorMessagesManager!
@@ -30,12 +31,17 @@ class MessageViewController: UIViewController {
     // Forum associated with this view
     var forum: Forum!
     
+    // remember how far we moved the view after the keyboard displays
+    private var viewShiftDistance: CGFloat? = nil
+    private var bottomOfCurrentlyEditedItem: CGFloat? = nil
+    
     // MARK: ViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.tintColor = Constants.ThemeButtonTintColor
-        navigationItem.rightBarButtonItem = produceAddBarButtonItem()
+        navigationItem.rightBarButtonItem = produceDetailsBarButtonItem()
+        resetMessageTextView()
         messageTextView.delegate = self
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
@@ -46,12 +52,60 @@ class MessageViewController: UIViewController {
         fetchedResultsController.delegate = self
         fetchNewest()
     }
+    override func viewWillAppear(animated: Bool) {
+        // register action if keyboard will show
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        // unregister keyboard actions when view not showing
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    // MARK: Keyboard Handling
+
+    func makeNoteOfBottomOfView(notedView: UIView) {
+        let senderOrigin =  view.convertPoint(notedView.bounds.origin, fromView: notedView)
+        bottomOfCurrentlyEditedItem =  senderOrigin.y + notedView.bounds.height
+    }
+    
+    // shift the bottom bar view up if text field being edited will be obstructed
+    func keyboardWillShow(notification: NSNotification) {
+        if viewShiftDistance == nil {
+            let keyboardHeight = getKeyboardHeight(notification)
+            let topOfKeyboard = view.bounds.maxY - keyboardHeight
+            // we only need to move the view if the keyboard will cover up the login button and text fields
+            if let bottomOfCurrentlyEditedItem = bottomOfCurrentlyEditedItem
+                where topOfKeyboard < bottomOfCurrentlyEditedItem {
+                    viewShiftDistance = bottomOfCurrentlyEditedItem - topOfKeyboard
+                    self.view.bounds.origin.y += viewShiftDistance!
+            }
+        }
+    }
+    
+    // if bottom textfield just completed editing, shift the view back down
+    func keyboardWillHide(notification: NSNotification) {
+        if let shiftDistance = viewShiftDistance {
+            self.view.bounds.origin.y -= shiftDistance
+            viewShiftDistance = nil
+        }
+    }
+    
+    // return height of displayed keyboard
+    private func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        Logger.info("we think the keyboard height is: \(keyboardSize.CGRectValue().height)")
+        return keyboardSize.CGRectValue().height
+    }
     
     // MARK: UIBarButonItem Producers
 
-    // return a button with appropriate label for the adding message on the navigation bar
-    private func produceAddBarButtonItem() -> UIBarButtonItem? {
-        let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addMessageAction:")
+    // return a button with details label
+    private func produceDetailsBarButtonItem() -> UIBarButtonItem? {
+        let button = UIBarButtonItem(title: "Details", style: UIBarButtonItemStyle.Plain, target: self, action: "forumDetailsAction:")
         applyThemeToButton(button)
         return button
     }
@@ -62,9 +116,35 @@ class MessageViewController: UIViewController {
         }
     }
     
-    // action when "Add Message" button is tapped
-    func addMessageAction(sender: AnyObject!) {
-        performSegueWithIdentifier(Constants.AddMessageSegue, sender: self)
+    // action when "Details" button is tapped
+    func forumDetailsAction(sender: AnyObject!) {
+        //performSegueWithIdentifier(Constants.ForumDetailsSegue, sender: self)
+    }
+    
+    @IBAction func sendMessageAction(sender: UIButton) {
+        if let text = messageTextView.text,
+            forumId = forum.id {
+                self.messageTextView.editable = false
+            self.manager.createMessageWithText(text, inForum: forumId) { message, error in
+                self.networkActivity(false)
+                self.messageTextView.editable = true
+                if message != nil {
+                    self.resetMessageTextView()
+                } else if let error = error {
+                    ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: error.localizedDescription)
+                } else {
+                    ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: "We failed to send the message, but we aren't sure why.")
+                }
+            }
+        } else {
+            // the send button should be disabled, so this should never happen
+            Logger.error("cannot send message, forum.id or message text is nil")
+        }
+    }
+    
+    func resetMessageTextView() {
+        self.messageTextView.text = Constants.DefaultMessageText
+        self.messageTextView.textColor = Constants.DefaultMessageTextPlaceHolderColor
     }
     
     // MARK: - Core Data Convenience
@@ -82,7 +162,7 @@ class MessageViewController: UIViewController {
         
         // Add a sort descriptor. This enforces a sort order on the results that are generated
         // In this case we want the events sorted by id.
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         
         fetchRequest.predicate = NSPredicate(format: "forum = %@", self.forum)
         
@@ -137,8 +217,8 @@ class MessageViewController: UIViewController {
                         last = objects[section.numberOfObjects - 1] as? Message,
                         firstId = last.id,
                         lastId = first.id {
-                            oldest = Int(firstId)
-                            newest = Int(lastId)
+                            oldest = Int(lastId)
+                            newest = Int(firstId)
                     }
                 }
         }
@@ -169,15 +249,9 @@ extension MessageViewController: UITableViewDataSource {
     func tableView(tableView: UITableView,
         cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
             let CellIdentifier = Constants.MessageCellViewIdentifier
-            
-            // Here is how to replace the actors array using objectAtIndexPath
             let message = fetchedResultsController.objectAtIndexPath(indexPath) as! Message
-            
-            let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as! TaskCancelingTableViewCell
-            
-            // This is the new configureCell method
-            configureCell(cell, message: message)
-            
+            let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as! MessageCellView
+            cell.configureCellWithMessage(message)
             return cell
     }
     
@@ -195,14 +269,6 @@ extension MessageViewController: UITableViewDataSource {
             default:
                 break
             }
-    }
-
-    
-    // MARK: - Configure Cell
-    
-    func configureCell(cell: TaskCancelingTableViewCell, message: Message) {
-        cell.textLabel!.text = message.text
-        cell.imageView!.image = nil
     }
 }
 
@@ -230,10 +296,6 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
             }
     }
 
-    //
-    // This is the most interesting method. Take particular note of way the that newIndexPath
-    // parameter gets unwrapped and put into an array literal: [newIndexPath!]
-    //
     func controller(controller: NSFetchedResultsController,
         didChangeObject anObject: AnyObject,
         atIndexPath indexPath: NSIndexPath?,
@@ -243,7 +305,8 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
             switch type {
             case .Insert:
                 if let newIndexPath = newIndexPath {
-                    tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
+                    self.tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
+                    insertedIndexPath = newIndexPath
                 }
                 
             case .Delete:
@@ -253,7 +316,7 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
                 if let indexPath = indexPath,
                     cell = tableView.cellForRowAtIndexPath(indexPath) as? MessageCellView,
                     message = controller.objectAtIndexPath(indexPath) as? Message {
-                        self.configureCell(cell, message: message)
+                        cell.configureCellWithMessage(message)
                     }
                 
             case .Move:
@@ -268,6 +331,10 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.tableView.endUpdates()
+        if let indexPath = insertedIndexPath {
+            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            insertedIndexPath = nil
+        }
     }
 
 }
@@ -276,6 +343,7 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
 
 extension MessageViewController: UITextViewDelegate {
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        makeNoteOfBottomOfView(textView)
         if textView.text == Constants.DefaultMessageText {
             textView.text = ""
             textView.textColor = UIColor.blackColor()
@@ -299,9 +367,9 @@ extension MessageViewController: UITextViewDelegate {
     }
  
     func textViewShouldEndEditing(textView: UITextView) -> Bool {
+        bottomOfCurrentlyEditedItem = nil
         if textView.text == "" {
-            textView.textColor = UIColor.lightGrayColor()
-            textView.text = Constants.DefaultMessageText
+            resetMessageTextView()
         }
         return true
     }

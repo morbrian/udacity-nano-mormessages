@@ -38,5 +38,6 @@ struct Constants {
     static let ThemeButtonTintColor = UIColor.purpleColor()
     static let DefaultForumDescriptionText = "Forum Description"
     static let DefaultMessageText = "Message"
+    static let DefaultMessageTextPlaceHolderColor = UIColor.lightGrayColor()
     
 }

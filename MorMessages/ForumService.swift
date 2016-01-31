@@ -190,13 +190,22 @@ class ForumService {
         }
     }
     
+    
     func createMessage(message: Message, completionHandler: (message: Message?, error: NSError?) -> Void) {
         if let forum = message.forum,
-            forumId = forum.id,
-            request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
+            forumId = forum.id {
+                createMessageWithBody(message.jsonData(), inForum: forumId, completionHandler: completionHandler)
+        } else {
+            Logger.error("failed to attempt request, forumId not specified on new message")
+            completionHandler(message: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
+        }
+    }
+    
+    func createMessageWithBody(body: NSData, inForum forumId: NSNumber, completionHandler: (message: Message?, error: NSError?) -> Void) {
+        if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
                 forUrlString: ForumService.ForumAction.MessageUrl(forumId),
                 includeHeaders: ForumService.StandardHeaders,
-                withBody: message.jsonData()) {
+                withBody: body) {
                     webClient.executeRequest(request) {
                         jsonData, error in
                         dispatch_async(dispatch_get_main_queue()) {
