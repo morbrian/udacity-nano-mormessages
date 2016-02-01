@@ -91,6 +91,14 @@ class MorMessagesManager {
             forumService.listMessagesInForum(forum, offset: offset, resultSize: resultSize, greaterThan: greaterThan,
                 completionHandler: completionHandler)
     }
+    
+    func subscribeToForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
+        forumService.subscribeToForum(forum, completionHandler: completionHandler)
+    }
+    
+    func subscribeFromForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
+        forumService.unsubscribeFromForum(forum, completionHandler: completionHandler)
+    }
 
     // handles response after login attempt
     // userIdentity: unique key identifying the now logged in user after success

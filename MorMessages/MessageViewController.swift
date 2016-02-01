@@ -51,6 +51,9 @@ class MessageViewController: UIViewController {
         }
         fetchedResultsController.delegate = self
         fetchNewest()
+        manager.subscribeToForum(forum){ error in
+            Logger.error("Subscribe failed: \(error?.description)")
+        }
     }
     override func viewWillAppear(animated: Bool) {
         // register action if keyboard will show
@@ -352,8 +355,6 @@ extension MessageViewController: UITextViewDelegate {
     }
     
     func textViewDidChange(textView: UITextView) {
-        Logger.info("Text Did Change")
-
         let fixedWidth = textView.frame.size.width
         let oldSize = textView.frame.size
         textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
@@ -361,7 +362,6 @@ extension MessageViewController: UITextViewDelegate {
         var newFrame = textView.frame
         newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
         let dy = oldSize.height - newSize.height
-        print("dy(\(dy))")
         newFrame.offsetInPlace(dx: 0.0, dy: dy)
         textView.frame = newFrame;
     }
