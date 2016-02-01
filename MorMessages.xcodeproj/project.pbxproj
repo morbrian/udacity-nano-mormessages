@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4E0EE02B1C572F1700B2AA0A /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */; };
+		4E32F7B91C5F1DC800ACA787 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E32F7B81C5F1DC800ACA787 /* WebSocket.swift */; };
+		4E32F7BB1C5F1F6F00ACA787 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */; };
 		4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C7B1C4CC4360057D44A /* AppDelegate.swift */; };
 		4E913C811C4CC4360057D44A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E913C7F1C4CC4360057D44A /* Main.storyboard */; };
 		4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C821C4CC4360057D44A /* MorMessages.xcdatamodeld */; };
@@ -63,6 +65,8 @@
 
 /* Begin PBXFileReference section */
 		4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageViewController.swift; sourceTree = "<group>"; };
+		4E32F7B81C5F1DC800ACA787 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4E913C781C4CC4350057D44A /* MorMessages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MorMessages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E913C7B1C4CC4360057D44A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E913C801C4CC4360057D44A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E32F7BB1C5F1F6F00ACA787 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,9 +136,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E32F7B71C5F1D9600ACA787 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				4E32F7B81C5F1DC800ACA787 /* WebSocket.swift */,
+			);
+			name = ThirdParty;
+			sourceTree = "<group>";
+		};
 		4E913C6F1C4CC4350057D44A = {
 			isa = PBXGroup;
 			children = (
+				4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */,
 				4E913C7A1C4CC4360057D44A /* MorMessages */,
 				4E913C921C4CC4360057D44A /* MorMessagesTests */,
 				4E913C9D1C4CC4360057D44A /* MorMessagesUITests */,
@@ -154,6 +168,7 @@
 		4E913C7A1C4CC4360057D44A /* MorMessages */ = {
 			isa = PBXGroup;
 			children = (
+				4E32F7B71C5F1D9600ACA787 /* ThirdParty */,
 				4E913CAE1C4CC5400057D44A /* Public */,
 				4E913CB31C4CC5C80057D44A /* Internet */,
 				4E913CB91C4CC8990057D44A /* Model */,
@@ -413,6 +428,7 @@
 				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
 				4E913CEC1C4DCCA00057D44A /* BaseEntity.swift in Sources */,
+				4E32F7B91C5F1DC800ACA787 /* WebSocket.swift in Sources */,
 				4EEA21BB1C5879C800DB0325 /* MessageViewController.swift in Sources */,
 				4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */,
 				4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */,
@@ -521,6 +537,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "MorMessages/MorMessages-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -560,6 +577,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "MorMessages/MorMessages-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -573,6 +591,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MorMessages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = morbrian.MorMessages;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -584,6 +603,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MorMessages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = morbrian.MorMessages;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
