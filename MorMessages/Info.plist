@@ -43,7 +43,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <!-- FIX LATER ... FOR TESTING ONLY -->
+    <!-- FOR TESTING ONLY -->
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSExceptionDomains</key>

@@ -11,6 +11,7 @@ import Foundation
 class ForumService {
     
     private var webClient: WebClient!
+    private var webSocket: WebSocket?
     
     // singleton instance
     class func sharedInstance() -> ForumService {
@@ -44,7 +45,7 @@ class ForumService {
                         { jsonData, error in
                             if let error = error {
                                 Logger.error("login failed code: \(error.code), type: \(error.description)")
-                                completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
+                                completionHandler(identity: nil, error: error)
                             } else if let status = Status(jsonData: jsonData) {
                                 Logger.info("response status code: \(status.code), details: \(status.details)")
                                 if status.code == ForumJsonValue.Success {
@@ -190,6 +191,45 @@ class ForumService {
         }
     }
     
+    func subscribeToForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
+        if let forumId = forum.id {
+            webSocket = WebSocket("\(ForumAction.ForumSocketUrl)/\(forumId)")
+            webSocket!.event.message = { data in
+                
+                if let text = data as? String,
+                    textData = text.dataUsingEncoding(NSUTF8StringEncoding) {
+                    
+                    let (jsonData, parsingError): (AnyObject?, NSError?) =
+                    self.webClient.parseJsonFromData(textData)
+                    
+                    if let parsingError = parsingError {
+                        Logger.debug(parsingError.description)
+                        return
+                    }
+                    if let jsonData = jsonData as? [String:AnyObject],
+                        let textMessage = Message.produceWithState(jsonData) {
+                            Logger.info("processed message(\(textMessage))")
+                    }
+                } else {
+                    Logger.info("WebSocket Received Unknown Thing: \(data)")
+                }
+            }
+            completionHandler(error: nil)
+            Logger.info("Completed Subscribe to Forum(\(forumId)) with URL: \(ForumAction.ForumSocketUrl)/\(forumId)")
+        } else {
+            Logger.error("unable to subscribe, specified forum has no 'id'")
+            completionHandler(error: ForumService.errorForCode(.WebSocketSubscribeError))
+            
+        }
+    }
+    
+    func unsubscribeFromForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
+        if let webSocket = webSocket {
+            webSocket.close()
+        }
+        webSocket = nil
+    }
+    
     
     func createMessage(message: Message, completionHandler: (message: Message?, error: NSError?) -> Void) {
         if let forum = message.forum,
@@ -225,15 +265,12 @@ class ForumService {
         }
     }
 
-    // still want to support the exclusive filter
-    //    List<MessageEntity> messageListFilteredById(Long forumId, Long lowId, Long highId);
-    
-//    ForumEntity getForumById(Long forumId);
-//    ForumEntity modifyForum(ForumEntity forum);
-//    void deleteForum(Long forumId);
-//    MessageEntity getMessageById(Long messageId);
-//    List<MessageEntity> messageList(Long forumId);
- 
+    // Optional client functionality I may or may not implement:
+    //
+    //    ForumEntity getForumById(Long forumId);
+    //    ForumEntity modifyForum(ForumEntity forum);
+    //    void deleteForum(Long forumId);
+    //    MessageEntity getMessageById(Long messageId);
 }
 
 // MARK: - Constants
@@ -241,6 +278,7 @@ class ForumService {
 extension ForumService {
     
     static let BaseUrl = "http://localhost:8080/mormessages/api/rest"
+    static let BaseSocketUrl = "ws://localhost:8080/mormessages/api/websocket"
     
     static let StandardHeaders: [String:String] = ["Content-Type":"application/json"]
     
@@ -257,6 +295,7 @@ extension ForumService {
         static func MessageUrl(forumId: NSNumber) -> String {
             return ForumUrl + "/" + forumId.stringValue + "/message"
         }
+        static let ForumSocketUrl = "\(BaseSocketUrl)/forum"
     }
     
     struct ForumParameter {
@@ -300,7 +339,8 @@ extension ForumService {
     
     private enum ErrorCode: Int, CustomStringConvertible {
         case UnexpectedResponseData, ResponseCodeNotSuccess, InsufficientDataLength, UsernameRequired,
-        PasswordRequired, MissingFacebookToken, LoginFailed, LogoutFailed, CreateFailed, FailedToMakeRequest
+        PasswordRequired, MissingFacebookToken, LoginFailed, LogoutFailed, CreateFailed, FailedToMakeRequest,
+        WebSocketSubscribeError
         
         var description: String {
             switch self {
@@ -314,6 +354,7 @@ extension ForumService {
             case LogoutFailed: return "Logout Failed"
             case CreateFailed: return "Create Failed"
             case FailedToMakeRequest: return "Failed To Make Request"
+            case WebSocketSubscribeError: return "Failed to subscribe with WebSocket"
             }
         }
     }
