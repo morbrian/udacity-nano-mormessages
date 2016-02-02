@@ -143,7 +143,7 @@ public class WebClient {
     // MARK: Private Helpers
     
     // Produces usable JSON object from the raw data.
-    private func parseJsonFromData(data: NSData) -> (jsonData: AnyObject?, error: NSError?) {
+    func parseJsonFromData(data: NSData) -> (jsonData: AnyObject?, error: NSError?) {
         var mutableData = data
         var parsingError: NSError? = nil
         if let prepareData = prepareData,

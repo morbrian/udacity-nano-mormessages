@@ -45,7 +45,7 @@ class ForumService {
                         { jsonData, error in
                             if let error = error {
                                 Logger.error("login failed code: \(error.code), type: \(error.description)")
-                                completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
+                                completionHandler(identity: nil, error: error)
                             } else if let status = Status(jsonData: jsonData) {
                                 Logger.info("response status code: \(status.code), details: \(status.details)")
                                 if status.code == ForumJsonValue.Success {
@@ -195,12 +195,26 @@ class ForumService {
         if let forumId = forum.id {
             webSocket = WebSocket("\(ForumAction.ForumSocketUrl)/\(forumId)")
             webSocket!.event.message = { data in
-                if let text = data as? String {
-                    Logger.info("WebSocket Message Received: \(text)")
+                
+                if let text = data as? String,
+                    textData = text.dataUsingEncoding(NSUTF8StringEncoding) {
+                    
+                    let (jsonData, parsingError): (AnyObject?, NSError?) =
+                    self.webClient.parseJsonFromData(textData)
+                    
+                    if let parsingError = parsingError {
+                        Logger.debug(parsingError.description)
+                        return
+                    }
+                    if let jsonData = jsonData as? [String:AnyObject],
+                        let textMessage = Message.produceWithState(jsonData) {
+                            Logger.info("processed message(\(textMessage))")
+                    }
                 } else {
                     Logger.info("WebSocket Received Unknown Thing: \(data)")
                 }
             }
+            completionHandler(error: nil)
             Logger.info("Completed Subscribe to Forum(\(forumId)) with URL: \(ForumAction.ForumSocketUrl)/\(forumId)")
         } else {
             Logger.error("unable to subscribe, specified forum has no 'id'")

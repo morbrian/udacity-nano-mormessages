@@ -200,7 +200,7 @@ class LoginViewController: UIViewController {
         } else {
             dispatch_async(dispatch_get_main_queue()) {
                 if let reason = error {
-                    self.loginStatusLabel?.text = "!! \(reason.description)"
+                    self.loginStatusLabel?.text = "!! \(reason.localizedDescription)"
                 } else {
                     self.loginStatusLabel?.text = "!! Login failed"
                 }

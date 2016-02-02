@@ -1,0 +1,13 @@
+{
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  },
+  "data" : [
+    {
+      "idiom" : "universal",
+      "filename" : "servercert.der",
+      "universal-type-identifier" : "public.x509-certificate"
+    }
+  ]
+}
