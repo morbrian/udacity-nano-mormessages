@@ -6,7 +6,7 @@
   "data" : [
     {
       "idiom" : "universal",
-      "filename" : "servercert.der",
+      "filename" : "mormessages-server.der",
       "universal-type-identifier" : "public.x509-certificate"
     }
   ]

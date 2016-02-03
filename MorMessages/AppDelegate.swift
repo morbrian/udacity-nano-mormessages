@@ -16,21 +16,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-        // this is not working yet in testing do to a variety of ATS restrictions,
-        // raning from IP addresses not allowed any more to self signed certs not allowed.
-        //
-        // trustServerCert()
+        // TODO: I think this is adding the cert correctly.
+        // but I need to learn how to add the trusts on it.
+        trustServerCert()
         
         return true
     }
     
-    private func trustServerCert() -> Bool {
+    private func trustServerCert() {
         // want to trust my own server
         // tips from stackoverflow:
         // http://stackoverflow.com/questions/5323686/ios-pre-install-ssl-certificate-in-keychain-programmatically
-        
-        // TODO: after doing this, still wasn't able to connect to my server.
-        
         if let asset = NSDataAsset(name: "servercert"),
             certificate = SecCertificateCreateWithData(nil, asset.data) {
                 let dictionary: [NSObject:AnyObject] = [kSecClass:kSecClassCertificate, kSecValueRef:certificate]
@@ -41,7 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     Logger.error("failed to trust cert: \(statusAdd.description)")
                 }
         }
-        return false
     }
 
 }
