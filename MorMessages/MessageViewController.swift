@@ -67,6 +67,12 @@ class MessageViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
     
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        if parent == nil {
+            manager.unsubscribeFromForum(forum)
+        }
+    }
+    
     // MARK: Keyboard Handling
 
     func makeNoteOfBottomOfView(notedView: UIView) {

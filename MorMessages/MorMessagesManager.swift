@@ -34,7 +34,7 @@ class MorMessagesManager {
     func authenticateByUsername(username: String, withPassword password: String,
         completionHandler: (success: Bool, error: NSError?) -> Void) {
             forumService.login(username: username, password: password){ identity, error in
-                self.handleLoginResponse(username, authType: .MorMessagesUsernameAndPassword,
+                self.handleLoginResponse(username, password: password, authType: .MorMessagesUsernameAndPassword,
                     error: error, completionHandler: completionHandler)
             }
     }
@@ -96,19 +96,22 @@ class MorMessagesManager {
         forumService.subscribeToForum(forum, completionHandler: completionHandler)
     }
     
-    func subscribeFromForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
-        forumService.unsubscribeFromForum(forum, completionHandler: completionHandler)
+    func unsubscribeFromForum(forum: Forum) {
+        forumService.unsubscribeFromForum(forum)
     }
 
     // handles response after login attempt
     // userIdentity: unique key identifying the now logged in user after success
     // authType: the type of authenticatio used
-    private func handleLoginResponse(userIdentity: String?, authType: AuthenticationType, error: NSError?,
+    private func handleLoginResponse(userIdentity: String?, password: String?, authType: AuthenticationType, error: NSError?,
         completionHandler: (success: Bool, error: NSError?) -> Void) {
             if let error = error {
                 completionHandler(success: false, error: error)
             } else if let userIdentity = userIdentity {
                 currentUser = UserInfo(identity: userIdentity)
+                if let password = password {
+                    forumService.useBasicAuth("\(userIdentity):\(password)")
+                }
                 completionHandler(success: true, error: nil)
             } else {
                 completionHandler(success: false, error: nil)
