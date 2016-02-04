@@ -14,6 +14,25 @@ import Foundation
 // Base Class for general interactions with any Web Service API that produces JSON data.
 public class WebClient {
     
+    var session: NSURLSession!
+    
+    init(basicAuthCredentials: String? = nil) {
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let cookieStorage = NSHTTPCookieStorage()
+        cookieStorage.cookieAcceptPolicy = NSHTTPCookieAcceptPolicy.Always
+        config.HTTPCookieStorage = cookieStorage
+        if let basicAuthCredentials = basicAuthCredentials {
+            config.HTTPAdditionalHeaders = ["Authorization" : basicAuthCredentials]
+        }
+        self.session = NSURLSession(configuration: config, delegate: SessionDelegate(), delegateQueue: nil)
+    }
+    
+    public class func basicAuthFromCredentials(credentials: String)  -> String {
+        let userPasswordData = credentials.dataUsingEncoding(NSUTF8StringEncoding)
+        let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+        return "Basic \(base64EncodedCredential)"
+    }
+    
     // optional data maniupation function
     // if set will modify the data before handing it off to the parser.
     // Common Use Case: some web services include extraneous content
@@ -70,8 +89,6 @@ public class WebClient {
     // Performs the work of checking for general errors and then
     // turning raw data into JSON data to feed to completionHandler.
     public func executeRequest(request: NSURLRequest, completionHandler: (jsonData: AnyObject?, error: NSError?) -> Void) {
-        
-        let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
             
             // this is a general communication error
@@ -98,7 +115,6 @@ public class WebClient {
     // quick check to see if URL is valid and responsive
     public func pingUrl(urlString: String, completionHandler: (reply: Bool, error: NSError?) -> Void) {
         if let request = createHttpRequestUsingMethod(WebClient.HttpHead, forUrlString: urlString) {
-            let session = NSURLSession.sharedSession()
             let task = session.dataTaskWithRequest(request) { data, response, error in
                 if let error = error {
                     Logger.debug(error.description)
@@ -120,7 +136,7 @@ public class WebClient {
     func taskForImageUrlString(urlString: String?, completionHandler: (imageData: NSData?, error: NSError?) ->  Void) -> NSURLSessionTask? {
         if let urlString = urlString, url = NSURL(string: urlString) {
             let request = NSURLRequest(URL: url)
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {data, response, downloadError in
+            let task = session.dataTaskWithRequest(request) {data, response, downloadError in
                 
                 if let error = downloadError {
                     //let newError = TheMovieDB.errorForData(data, response: response, error: downloadError)
@@ -214,6 +230,19 @@ extension WebClient {
     static func errorWithMessage(message: String, code: Int) -> NSError {
         let userInfo = [NSLocalizedDescriptionKey : message]
         return NSError(domain: WebClient.ErrorDomain, code: code, userInfo: userInfo)
+    }
+}
+
+
+// learned from: http://stackoverflow.com/questions/34327857/ios9-self-signed-certificate-and-app-transport-security
+class SessionDelegate: NSObject, NSURLSessionDelegate {
+    func URLSession(session: NSURLSession,
+        didReceiveChallenge challenge: NSURLAuthenticationChallenge,
+        completionHandler: (NSURLSessionAuthChallengeDisposition,
+        NSURLCredential?) -> Void) {
+            if let serverTrust = challenge.protectionSpace.serverTrust {
+                completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential,NSURLCredential(forTrust: serverTrust))
+            }
     }
 }
 

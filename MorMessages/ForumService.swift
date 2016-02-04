@@ -12,6 +12,7 @@ class ForumService {
     
     private var webClient: WebClient!
     private var webSocket: WebSocket?
+    private var basicAuthCredentials: String?
     
     // singleton instance
     class func sharedInstance() -> ForumService {
@@ -25,6 +26,11 @@ class ForumService {
     // client: insteance of a WebClient
     private init(client: WebClient) {
         self.webClient = client
+    }
+    
+    func useBasicAuth(authCredentials: String) {
+        basicAuthCredentials = WebClient.basicAuthFromCredentials(authCredentials)
+        webClient = WebClient(basicAuthCredentials: basicAuthCredentials)
     }
     
     func login(username username: String, password: String, completionHandler:
@@ -193,7 +199,12 @@ class ForumService {
     
     func subscribeToForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
         if let forumId = forum.id {
-            webSocket = WebSocket("\(ForumAction.ForumSocketUrl)/\(forumId)")
+            let request = NSMutableURLRequest(URL: NSURL(string:"\(ForumAction.ForumSocketUrl)/\(forumId)")!)
+            if let basicAuthCredentials = basicAuthCredentials {
+                request.addValue(basicAuthCredentials, forHTTPHeaderField: "Authorization")
+            }
+            webSocket = WebSocket(request: request)
+            webSocket!.allowSelfSignedSSL = true
             webSocket!.event.message = { data in
                 
                 if let text = data as? String,
@@ -223,7 +234,7 @@ class ForumService {
         }
     }
     
-    func unsubscribeFromForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
+    func unsubscribeFromForum(forum: Forum) {
         if let webSocket = webSocket {
             webSocket.close()
         }
@@ -277,8 +288,8 @@ class ForumService {
 
 extension ForumService {
     
-    static let BaseUrl = "http://localhost:8080/mormessages/api/rest"
-    static let BaseSocketUrl = "ws://localhost:8080/mormessages/api/websocket"
+    static let BaseUrl = "https://mormessages.morbrian.com/mormessages/api/rest"
+    static let BaseSocketUrl = "wss://mormessages.morbrian.com/mormessages/api/websocket"
     
     static let StandardHeaders: [String:String] = ["Content-Type":"application/json"]
     

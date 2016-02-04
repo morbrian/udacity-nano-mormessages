@@ -91,8 +91,7 @@ class LoginViewController: UIViewController {
     // return height of displayed keyboard
     private func getKeyboardHeight(notification: NSNotification) -> CGFloat {
         let userInfo = notification.userInfo
-        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        Logger.info("we think the keyboard height is: \(keyboardSize.CGRectValue().height)")
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
         return keyboardSize.CGRectValue().height
     }
     
