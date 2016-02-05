@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="kqZ-b8-Svx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="kqZ-b8-Svx">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -18,25 +18,94 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginImage" translatesAutoresizingMaskIntoConstraints="NO" id="5ap-Wa-Ax9">
-                                <rect key="frame" x="20" y="20" width="560" height="561"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="512" placeholderIntrinsicHeight="200" image="LoginImage" translatesAutoresizingMaskIntoConstraints="NO" id="5ap-Wa-Ax9">
+                                <rect key="frame" x="44" y="202" width="512" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="BlB-gG-4JI"/>
+                                </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="morbrian/udacity-nano-mormessages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mBx-GF-tt3">
+                                <rect key="frame" x="20" y="570" width="560" height="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View the source on github:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98T-eN-GR5">
+                                <rect key="frame" x="20" y="540" width="560" height="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="by Brian Moriarty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJ6-pM-CzB">
+                                <rect key="frame" x="20" y="410" width="560" height="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="highlightedColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mor" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c9o-RH-AWr">
+                                <rect key="frame" x="20" y="52" width="560" height="96"/>
+                                <fontDescription key="fontDescription" name="Zapfino" family="Zapfino" pointSize="28"/>
+                                <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Messages" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtg-PQ-pgu">
+                                <rect key="frame" x="20" y="98" width="560" height="96"/>
+                                <fontDescription key="fontDescription" name="Zapfino" family="Zapfino" pointSize="28"/>
+                                <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.99008162420000001" green="0.90006377660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="5ap-Wa-Ax9" firstAttribute="centerX" secondItem="jeB-04-eef" secondAttribute="centerX" id="0VL-BP-Hvh"/>
+                            <constraint firstItem="c9o-RH-AWr" firstAttribute="leading" secondItem="jeB-04-eef" secondAttribute="leadingMargin" id="0ba-oP-iAE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mBx-GF-tt3" secondAttribute="trailing" id="1Rd-1g-vPN"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="98T-eN-GR5" secondAttribute="leading" id="2UI-PB-pkV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="OJ6-pM-CzB" secondAttribute="trailing" id="8mp-Zt-WPU"/>
+                            <constraint firstItem="98T-eN-GR5" firstAttribute="top" relation="greaterThanOrEqual" secondItem="OJ6-pM-CzB" secondAttribute="bottom" constant="8" symbolic="YES" id="BQi-Jn-SMJ"/>
+                            <constraint firstItem="81J-li-pex" firstAttribute="top" secondItem="mBx-GF-tt3" secondAttribute="bottom" constant="8" symbolic="YES" id="JBt-8r-0yh"/>
+                            <constraint firstItem="c9o-RH-AWr" firstAttribute="top" secondItem="Mz5-4l-YdD" secondAttribute="bottom" constant="32" id="JbU-Jw-C5e"/>
                             <constraint firstItem="5ap-Wa-Ax9" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Mz5-4l-YdD" secondAttribute="bottom" id="OLR-MW-724"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="wtg-PQ-pgu" secondAttribute="trailing" id="SXe-AM-tFF"/>
+                            <constraint firstItem="5ap-Wa-Ax9" firstAttribute="centerX" secondItem="jeB-04-eef" secondAttribute="centerX" id="U0j-Us-Cp2"/>
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="5ap-Wa-Ax9" secondAttribute="trailing" id="awO-wz-xNi"/>
+                            <constraint firstItem="wtg-PQ-pgu" firstAttribute="top" secondItem="c9o-RH-AWr" secondAttribute="bottom" constant="-50" id="dEm-rz-pva"/>
+                            <constraint firstItem="OJ6-pM-CzB" firstAttribute="top" secondItem="5ap-Wa-Ax9" secondAttribute="bottom" constant="8" symbolic="YES" id="dHj-C4-uGv"/>
+                            <constraint firstItem="OJ6-pM-CzB" firstAttribute="leading" secondItem="jeB-04-eef" secondAttribute="leadingMargin" id="eiZ-XH-j2v"/>
+                            <constraint firstItem="mBx-GF-tt3" firstAttribute="top" secondItem="98T-eN-GR5" secondAttribute="bottom" constant="8" symbolic="YES" id="lJG-rW-Tws"/>
+                            <constraint firstItem="mBx-GF-tt3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="5ap-Wa-Ax9" secondAttribute="bottom" constant="8" symbolic="YES" id="miN-3A-wzp"/>
+                            <constraint firstItem="wtg-PQ-pgu" firstAttribute="leading" secondItem="jeB-04-eef" secondAttribute="leadingMargin" id="pCc-W0-tkZ"/>
+                            <constraint firstItem="5ap-Wa-Ax9" firstAttribute="top" secondItem="wtg-PQ-pgu" secondAttribute="bottom" constant="8" symbolic="YES" id="q17-xc-iLt"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="c9o-RH-AWr" secondAttribute="trailing" id="q5o-l3-LY4"/>
+                            <constraint firstItem="OJ6-pM-CzB" firstAttribute="centerX" secondItem="jeB-04-eef" secondAttribute="centerX" id="smi-jF-wtk"/>
                             <constraint firstItem="5ap-Wa-Ax9" firstAttribute="centerY" secondItem="jeB-04-eef" secondAttribute="centerY" id="tA9-va-vYc"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="98T-eN-GR5" secondAttribute="trailing" id="tj7-nj-tgU"/>
+                            <constraint firstItem="98T-eN-GR5" firstAttribute="top" relation="greaterThanOrEqual" secondItem="5ap-Wa-Ax9" secondAttribute="bottom" constant="8" symbolic="YES" id="wJo-EP-CgW"/>
+                            <constraint firstItem="mBx-GF-tt3" firstAttribute="leading" secondItem="jeB-04-eef" secondAttribute="leadingMargin" id="wkY-LV-bPN"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="0VL-BP-Hvh"/>
+                                <exclude reference="OLR-MW-724"/>
+                                <exclude reference="awO-wz-xNi"/>
+                                <exclude reference="tA9-va-vYc"/>
+                                <exclude reference="wJo-EP-CgW"/>
+                                <exclude reference="miN-3A-wzp"/>
+                            </mask>
+                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qmw-8j-71L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="91" y="691"/>
+            <point key="canvasLocation" x="341" y="595"/>
         </scene>
     </scenes>
     <resources>
-        <image name="LoginImage" width="920" height="1135"/>
+        <image name="LoginImage" width="512" height="512"/>
     </resources>
 </document>

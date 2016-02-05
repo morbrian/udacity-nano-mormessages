@@ -17,7 +17,7 @@ struct Constants {
     static let GravatarImageSize = 80.0
     static let ForumNoImage = "ForumNoImage"
     static let ForumFetchingImage = "ForumFetchingImage"
-    
+    static let MorMessagesInverseImage = "MorMessagesInverseImage"
     
     // MARK: StoryBoard Identifiers
     
@@ -35,7 +35,8 @@ struct Constants {
     static let DeviceiPhone5Width = 320.0
     
     // MARK: Theme Look and Feel
-    static let ThemeButtonTintColor = UIColor.purpleColor()
+    static let ThemeStrongColor = UIColor.purpleColor()
+    static let ThemeButtonTintColor = ThemeStrongColor
     static let DefaultForumDescriptionText = "Forum Description"
     static let DefaultMessageText = "Message"
     static let DefaultMessageTextPlaceHolderColor = UIColor.lightGrayColor()
