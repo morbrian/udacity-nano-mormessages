@@ -51,17 +51,6 @@ class BaseEntity: NSManagedObject {
         }
     }
     
-    class func findExistingEntity(entityName: String, withId id: AnyObject?) -> BaseEntity? {
-        if let id = id as? NSNumber {
-            let uuidPredicate = NSPredicate(format: "id = %@", id)
-            let results = fetchEntity(entityName, usingPredicate: uuidPredicate)
-            
-            return (results.count > 0) ? results[0] : nil
-        } else {
-            return nil
-        }
-    }
-    
     class func produceEntity(entityName: String, withState state: [String:AnyObject]?) -> BaseEntity? {
         if let state = state {
             if let entity = findExistingEntity(entityName, withUuid: state[ForumService.ForumJsonKey.Uuid]) {
@@ -79,8 +68,8 @@ class BaseEntity: NSManagedObject {
     func applyState(state: [String:AnyObject]) {
         //  common
         id = state[ForumService.ForumJsonKey.Id] as? NSNumber
-        createdTime = state[ForumService.ForumJsonKey.CreatedTime] as? NSDate
-        modifiedTime = state[ForumService.ForumJsonKey.ModifiedTime] as? NSDate
+        createdTime = ToolKit.DateKit.dateFromString(state[ForumService.ForumJsonKey.CreatedTime] as? String)
+        modifiedTime = ToolKit.DateKit.dateFromString(state[ForumService.ForumJsonKey.ModifiedTime] as? String)
         createdBy = state[ForumService.ForumJsonKey.CreatedBy] as? String
         modifiedBy = state[ForumService.ForumJsonKey.ModifiedBy] as? String
         uuid = state[ForumService.ForumJsonKey.Uuid] as? String
@@ -103,6 +92,8 @@ class BaseEntity: NSManagedObject {
             return "\"\(key)\":\"\(typedValue)\""
         } else if let typedValue = value as? Int {
             return "\"\(key)\":\(typedValue)"
+        } else if let typedValue = value as? NSDate {
+            return "\"\(key)\":\"\(ToolKit.DateKit.DateFormatter.stringFromDate(typedValue))\""
         } else {
             return nil
         }

@@ -11,11 +11,19 @@ import XCTest
 
 class ForumServiceTestBase: XCTestCase {
     
-    let Username = "sampleuser"
-    let Password = "changeme"
+    static let Username = "sampleuser"
+    static let Password = "changeme"
     
     let sampleForums: [Forum] = [] //[ForumServiceAuthenticationTests.randomSampleForum()]
+    
+    static let service = ForumServiceTestBase.createForumService()
 
+    class func createForumService() -> ForumService {
+        let service = ForumService.sharedInstance()
+        service.useBasicAuth("\(ForumServiceTestBase.Username):\(ForumServiceTestBase.Password)")
+        return service
+    }
+    
     class func randomSampleForum() -> Forum {
         let state: [String:AnyObject] = [
             ForumService.ForumJsonKey.Title : "title-\(NSUUID().UUIDString)",
@@ -42,30 +50,27 @@ class ForumServiceTestBase: XCTestCase {
     }
     
     func doLogin(expectation: XCTestExpectation) {
-        let service = ForumService.sharedInstance()
-        service.login(username: Username, password: Password) {
+        ForumServiceTestBase.service.login(username: ForumServiceTestBase.Username, password: ForumServiceTestBase.Password) {
             identity, error in
             XCTAssertNotNil(identity, "identity should not be nil")
             XCTAssertNil(error, "error should be nil")
-            XCTAssertEqual(self.Username, identity, "correct username")
+            XCTAssertEqual(ForumServiceTestBase.Username, identity, "correct username")
             expectation.fulfill()
         }
     }
     
     func doWhoami(expectation: XCTestExpectation) {
-        let service = ForumService.sharedInstance()
-        service.whoami() {
+        ForumServiceTestBase.service.whoami() {
             identity, error in
             XCTAssertNotNil(identity, "identity should not be nil")
             XCTAssertNil(error, "error should be nil")
-            XCTAssertEqual(self.Username, identity, "correct username")
+            XCTAssertEqual(ForumServiceTestBase.Username, identity, "correct username")
             expectation.fulfill()
         }
     }
     
     func doLogout(expectation: XCTestExpectation) {
-        let service = ForumService.sharedInstance()
-        service.logout() {
+        ForumServiceTestBase.service.logout() {
             error in
             XCTAssertNil(error, "error should be nil")
             expectation.fulfill()

@@ -98,11 +98,16 @@ public class WebClient {
                 return
             }
             
+            if let response = response as? NSHTTPURLResponse
+                where response.statusCode >= 400 {
+                    let httpError = WebClient.errorWithMessage("unexpected http response (\(response.statusCode))", code: response.statusCode)
+                    completionHandler(jsonData: nil, error: httpError)
+            }
+            
             let (jsonData, parsingError): (AnyObject?, NSError?) =
             self.parseJsonFromData(data!)
             
             if let parsingError = parsingError {
-                Logger.debug(parsingError.description)
                 completionHandler(jsonData: nil, error: parsingError)
                 return
             }

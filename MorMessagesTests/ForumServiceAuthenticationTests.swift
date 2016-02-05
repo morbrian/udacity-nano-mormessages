@@ -35,6 +35,7 @@ class ForumServiceAuthenticationTests: ForumServiceTestBase {
         justWait()
     }
     
+    // this started failing when we switched to pure Basic Auth instead of FORM
     func testLogoutShouldRemoveIdentity() {
         doLogin(expectationWithDescription("login request"))
         justWait()
@@ -50,7 +51,7 @@ class ForumServiceAuthenticationTests: ForumServiceTestBase {
         let expectation = expectationWithDescription("final whoami request")
         service.whoami() {
             identity, error in
-            XCTAssertNotEqual(self.Username, identity, "removed username")
+            XCTAssertNotEqual(ForumServiceTestBase.Username, identity, "removed username")
             XCTAssertNil(error, "error should be nil")
             expectation.fulfill()
         }

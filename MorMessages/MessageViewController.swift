@@ -132,9 +132,9 @@ class MessageViewController: UIViewController {
     
     @IBAction func sendMessageAction(sender: UIButton) {
         if let text = messageTextView.text,
-            forumId = forum.id {
+            forumUuid = forum.uuid {
                 self.messageTextView.editable = false
-            self.manager.createMessageWithText(text, inForum: forumId) { message, error in
+            self.manager.createMessageWithText(text, inForum: forumUuid) { message, error in
                 self.networkActivity(false)
                 self.messageTextView.editable = true
                 if message != nil {
@@ -171,7 +171,7 @@ class MessageViewController: UIViewController {
         
         // Add a sort descriptor. This enforces a sort order on the results that are generated
         // In this case we want the events sorted by id.
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modifiedTime", ascending: true)]
         
         fetchRequest.predicate = NSPredicate(format: "forum = %@", self.forum)
         
