@@ -25,6 +25,8 @@ class ForumViewController: UIViewController {
     // central data management object
     var manager: MorMessagesManager!
     
+     var topRefreshView: RefreshView!
+    
     @IBOutlet weak var collectionView: UICollectionView!
     var context: NSManagedObjectContext!
     
@@ -35,6 +37,10 @@ class ForumViewController: UIViewController {
         navigationController?.navigationBar.hidden = false
         navigationItem.leftBarButtonItem = produceLogoutBarButtonItem()
         navigationItem.rightBarButtonItem = produceAddBarButtonItem()
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.translucent = false
+            topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
+        }
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -45,7 +51,17 @@ class ForumViewController: UIViewController {
         fetchNewest()
     }
     
-    // MARK: UIBarButonItem Producers
+    // MARK: Button and Sub-View Producers
+    
+    // figure out the best height for the activity spinner area
+    private func produceRefreshViewWithHeight(spinnerAreaHeight: CGFloat) -> RefreshView {
+        let refreshViewHeight = view.bounds.height
+        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: CGRectGetWidth(view.bounds), height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: collectionView)
+        refreshView.translatesAutoresizingMaskIntoConstraints = false
+        refreshView.delegate = self
+        collectionView.insertSubview(refreshView, atIndex: 0)
+        return refreshView
+    }
     
     // return a button with appropriate label for the logout position on the navigation bar
     private func produceLogoutBarButtonItem() -> UIBarButtonItem? {
@@ -147,19 +163,20 @@ class ForumViewController: UIViewController {
         }
     }
     
-    func fetchNewest() {
+    func fetchNewest(completionHandler: (() -> Void)? = nil) {
+        Logger.info("Fetching Newest")
         var greaterThan = 0
         if let maxIndex = storedRange().maxElement() {
             greaterThan = maxIndex
         }
-        fetchWithOffset(0, greaterThan: greaterThan)
+        fetchWithOffset(0, greaterThan: greaterThan, completionHandler: completionHandler)
     }
     
-    func fetchOlder() {
-        fetchWithOffset(offset, greaterThan: -1)
+    func fetchOlder(completionHandler: (() -> Void)? = nil) {
+        fetchWithOffset(offset, greaterThan: -1, completionHandler: completionHandler)
     }
     
-    func fetchWithOffset(offset: Int, greaterThan: Int) {
+    func fetchWithOffset(offset: Int, greaterThan: Int, completionHandler: (() -> Void)? = nil) {
         // TODO: make use of greater than
         networkActivity(true)
         manager.listForums(offset: offset, resultSize: ResultSize, greaterThan: greaterThan) { forums, error in
@@ -169,6 +186,7 @@ class ForumViewController: UIViewController {
                 self.offset += count
                 Logger.info("Fetched count(\(count)) items, setting offset(\(offset))")
             }
+            completionHandler?()
         }
     }
 
@@ -314,4 +332,24 @@ extension ForumViewController:NSFetchedResultsControllerDelegate {
             }
     }
     
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension ForumViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        topRefreshView.scrollViewDidScroll(scrollView)
+    }
+    
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        topRefreshView.scrollViewWillEndDragging(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
+    }
+}
+
+// MARK: - RefreshViewDelegate
+
+extension ForumViewController: RefreshViewDelegate {
+    func refreshViewDidRefresh(refreshView: RefreshView) {
+        fetchNewest(refreshView.endRefreshing)
+    }
 }

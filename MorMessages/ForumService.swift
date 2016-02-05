@@ -287,8 +287,8 @@ class ForumService {
 
 extension ForumService {
     
-    static let BaseUrl = "https://mormessages.morbrian.com/mormessages/api/rest"
-    static let BaseSocketUrl = "wss://mormessages.morbrian.com/mormessages/api/websocket"
+    static let BaseUrl = "https://mormessages.morbrian.com:8443/mormessages/api/rest"
+    static let BaseSocketUrl = "wss://mormessages.morbrian.com:8443/mormessages/api/websocket"
     
     static let StandardHeaders: [String:String] = ["Content-Type":"application/json"]
     
