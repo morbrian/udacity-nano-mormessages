@@ -123,7 +123,7 @@ class ForumViewController: UIViewController {
         
         // Add a sort descriptor. This enforces a sort order on the results that are generated
         // In this case we want the events sored by id.
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modifiedTime", ascending: false)]
         
         // Create the Fetched Results Controller
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)

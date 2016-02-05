@@ -66,6 +66,34 @@ class ToolKit {
         return NSURL(string: "https://robohash.org/\(string.md5)")
     }
     
+    struct DateKit {
+        
+        struct DateFormat {
+            static let ISO8601 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+        }
+
+        struct Locale {
+            static let EN_US_POSIX = "en_US_POSIX"
+        }
+
+        static var DateFormatter: NSDateFormatter {
+            let dateFormatter = NSDateFormatter()
+            let enUSPosixLocale = NSLocale(localeIdentifier: Locale.EN_US_POSIX)
+            dateFormatter.locale = enUSPosixLocale
+            dateFormatter.dateFormat = DateFormat.ISO8601
+            return dateFormatter
+        }
+
+        // parse the string into a data object
+        static func dateFromString(string: String?) -> NSDate? {
+            if let string = string {
+                return DateFormatter.dateFromString(string)
+            } else {
+                return nil
+            }
+        }
+    }
+    
 }
 
 // extend String with a property to get its md5 hash

@@ -73,9 +73,9 @@ class MorMessagesManager {
         forumService.createForumWithBody(jsonBody, completionHandler: completionHandler)
     }
     
-    func createMessageWithText(text: String, inForum forumId: NSNumber, completionHandler: (message: Message?, error: NSError?) -> Void) {
+    func createMessageWithText(text: String, inForum forumUuid: String, completionHandler: (message: Message?, error: NSError?) -> Void) {
         let state = [
-            ForumService.ForumJsonKey.ForumId:forumId,
+            ForumService.ForumJsonKey.ForumUuid:forumUuid,
             ForumService.ForumJsonKey.Text:text
         ]
         var pairs = [String?]()
@@ -83,7 +83,7 @@ class MorMessagesManager {
             pairs += [BaseEntity.stringForSingleKey(key, andValue: value)]
         }
         let jsonBody = BaseEntity.jsonData(pairs.filter({$0 != nil}).map({$0!}))
-        forumService.createMessageWithBody(jsonBody, inForum: forumId, completionHandler: completionHandler)
+        forumService.createMessageWithBody(jsonBody, inForum: forumUuid, completionHandler: completionHandler)
     }
     
     func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,

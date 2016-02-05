@@ -28,9 +28,7 @@ class ForumServiceApiTests: ForumServiceTestBase {
     
     func testListForums() {
         let expectation = expectationWithDescription("list forums")
-        
-        let service = ForumService.sharedInstance()
-        service.listForums() {
+        ForumServiceTestBase.service.listForums() {
             forums, error in
             XCTAssertNil(error, "error should be nil")
             XCTAssertNotNil(forums, "forums should not be nil")
@@ -73,8 +71,7 @@ class ForumServiceApiTests: ForumServiceTestBase {
     func createNewForum() -> Forum? {
         let expectation = expectationWithDescription("create new forum")
         var submittedForum = ForumServiceTestBase.randomSampleForum()
-        let service = ForumService.sharedInstance()
-        service.createForum(submittedForum) {
+        ForumServiceTestBase.service.createForum(submittedForum) {
             forum, error in
             XCTAssertNil(error, "error should be nil")
             XCTAssertNotNil(forum, "forum should not be nil")
@@ -102,9 +99,8 @@ class ForumServiceApiTests: ForumServiceTestBase {
     
     func listSinglePageOfMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 50, expectedCount: Int) -> [Message]? {
         let expectation = expectationWithDescription("get empty message list")
-        let service = ForumService.sharedInstance()
         var resultMessages: [Message]?
-        service.listMessagesInForum(forum, offset: offset, resultSize: resultSize) {
+        ForumServiceTestBase.service.listMessagesInForum(forum, offset: offset, resultSize: resultSize) {
             messages, error in
             XCTAssertNil(error, "error should be nil")
             XCTAssertNotNil(messages, "messages should not be nil")
@@ -119,9 +115,8 @@ class ForumServiceApiTests: ForumServiceTestBase {
     func createMessageInForum(forum: Forum) -> Message? {
         let expectation = expectationWithDescription("create new message")
         let newMessage = ForumServiceTestBase.randomSampleMessage(forum)
-        let service = ForumService.sharedInstance()
         var resultMessage: Message?
-        service.createMessage(newMessage) {
+        ForumServiceTestBase.service.createMessage(newMessage) {
             message, error in
             XCTAssertNil(error, "error should be nil")
             XCTAssertNotNil(message, "message should not be nil")

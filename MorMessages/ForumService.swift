@@ -128,7 +128,6 @@ class ForumService {
                     jsonData, error in
                     dispatch_async(dispatch_get_main_queue()) {
                         if error != nil {
-                            Logger.debug("base error: \(error)")
                             completionHandler(forum: nil, error: ForumService.errorForCode(.CreateFailed))
                         } else if let jsonData = jsonData as? [String:AnyObject],
                             let newForum = Forum.produceWithState(jsonData) {
@@ -173,9 +172,9 @@ class ForumService {
     func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
         completionHandler: (messages: [Message]?, error: NSError?) -> Void) {
             let params = [ "offset":offset, "resultSize":resultSize, "greaterThan":greaterThan ]
-        if let forumId = forum.id,
+        if let forumUuid = forum.uuid,
             request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
-            forUrlString: ForumService.ForumAction.MessageUrl(forumId),
+            forUrlString: ForumService.ForumAction.MessageUrl(forumUuid),
             includeHeaders: ForumService.StandardHeaders,
             includeParameters: params) {
                 webClient.executeRequest(request) {
@@ -198,8 +197,8 @@ class ForumService {
     }
     
     func subscribeToForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
-        if let forumId = forum.id {
-            let request = NSMutableURLRequest(URL: NSURL(string:"\(ForumAction.ForumSocketUrl)/\(forumId)")!)
+        if let forumUuid = forum.uuid {
+            let request = NSMutableURLRequest(URL: NSURL(string:"\(ForumAction.ForumSocketUrl)/\(forumUuid)")!)
             if let basicAuthCredentials = basicAuthCredentials {
                 request.addValue(basicAuthCredentials, forHTTPHeaderField: "Authorization")
             }
@@ -219,6 +218,7 @@ class ForumService {
                     }
                     if let jsonData = jsonData as? [String:AnyObject],
                         let textMessage = Message.produceWithState(jsonData) {
+                            Logger.info("given state(\(jsonData))")
                             Logger.info("processed message(\(textMessage))")
                     }
                 } else {
@@ -226,11 +226,10 @@ class ForumService {
                 }
             }
             completionHandler(error: nil)
-            Logger.info("Completed Subscribe to Forum(\(forumId)) with URL: \(ForumAction.ForumSocketUrl)/\(forumId)")
+            Logger.info("Completed Subscribe to Forum(\(forumUuid)) with URL: \(ForumAction.ForumSocketUrl)/\(forumUuid)")
         } else {
             Logger.error("unable to subscribe, specified forum has no 'id'")
             completionHandler(error: ForumService.errorForCode(.WebSocketSubscribeError))
-            
         }
     }
     
@@ -244,17 +243,17 @@ class ForumService {
     
     func createMessage(message: Message, completionHandler: (message: Message?, error: NSError?) -> Void) {
         if let forum = message.forum,
-            forumId = forum.id {
-                createMessageWithBody(message.jsonData(), inForum: forumId, completionHandler: completionHandler)
+            forumUuid = forum.uuid {
+                createMessageWithBody(message.jsonData(), inForum: forumUuid, completionHandler: completionHandler)
         } else {
             Logger.error("failed to attempt request, forumId not specified on new message")
             completionHandler(message: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
     
-    func createMessageWithBody(body: NSData, inForum forumId: NSNumber, completionHandler: (message: Message?, error: NSError?) -> Void) {
+    func createMessageWithBody(body: NSData, inForum forumUuid: String, completionHandler: (message: Message?, error: NSError?) -> Void) {
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
-                forUrlString: ForumService.ForumAction.MessageUrl(forumId),
+                forUrlString: ForumService.ForumAction.MessageUrl(forumUuid),
                 includeHeaders: ForumService.StandardHeaders,
                 withBody: body) {
                     webClient.executeRequest(request) {
@@ -303,8 +302,8 @@ extension ForumService {
         static let WhoamiUrl = "\(AuthUrl)/whoami"
         static let LogoutUrl = "\(AuthUrl)/logout"
         static let ForumUrl = "\(BaseUrl)/forum"
-        static func MessageUrl(forumId: NSNumber) -> String {
-            return ForumUrl + "/" + forumId.stringValue + "/message"
+        static func MessageUrl(forumUuid: String) -> String {
+            return ForumUrl + "/" + forumUuid + "/message"
         }
         static let ForumSocketUrl = "\(BaseSocketUrl)/forum"
     }
@@ -322,15 +321,15 @@ extension ForumService {
         static let Type = "type"
         static let Details = "details"
         static let Text = "text"
-        static let ForumId = "forumId"
+        static let ForumUuid = "forumUuid"
         static let Title = "title"
         static let Description = "description"
         static let ImageUrl = "imageUrl"
         static let Id = "id"
         static let CreatedTime = "createdTime"
-        static let CreatedBy = "createdBy"
+        static let CreatedBy = "createdByUid"
         static let ModifiedTime = "modifiedTime"
-        static let ModifiedBy = "modifiedBy"
+        static let ModifiedBy = "modifiedByUid"
         static let Uuid = "uuid"
     }
     

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4E0EE02B1C572F1700B2AA0A /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */; };
+		4E30D07C1C63DDF0002786DA /* SpinnerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */; };
+		4E30D07E1C63DE6C002786DA /* RefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30D07D1C63DE6C002786DA /* RefreshView.swift */; };
+		4E30D0801C63DE8D002786DA /* RefreshItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30D07F1C63DE8D002786DA /* RefreshItem.swift */; };
 		4E32F7B91C5F1DC800ACA787 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E32F7B81C5F1DC800ACA787 /* WebSocket.swift */; };
 		4E32F7BB1C5F1F6F00ACA787 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */; };
 		4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C7B1C4CC4360057D44A /* AppDelegate.swift */; };
@@ -65,6 +68,9 @@
 
 /* Begin PBXFileReference section */
 		4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageViewController.swift; sourceTree = "<group>"; };
+		4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerPanelView.swift; sourceTree = "<group>"; };
+		4E30D07D1C63DE6C002786DA /* RefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshView.swift; sourceTree = "<group>"; };
+		4E30D07F1C63DE8D002786DA /* RefreshItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshItem.swift; sourceTree = "<group>"; };
 		4E32F7B81C5F1DC800ACA787 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4E913C781C4CC4350057D44A /* MorMessages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MorMessages.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +145,7 @@
 		4E32F7B71C5F1D9600ACA787 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				4E913D011C543DD30057D44A /* ImageCache.swift */,
 				4E32F7B81C5F1DC800ACA787 /* WebSocket.swift */,
 			);
 			name = ThirdParty;
@@ -211,7 +218,6 @@
 			children = (
 				4E913CAF1C4CC55C0057D44A /* WebClient.swift */,
 				4E913CB11C4CC58D0057D44A /* Logger.swift */,
-				4E913D011C543DD30057D44A /* ImageCache.swift */,
 				4E9C388C1C546C8C002499C4 /* MorMessages-Bridging-Header.h */,
 				4E9C388D1C546CB9002499C4 /* ToolKit.swift */,
 			);
@@ -278,6 +284,9 @@
 				4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */,
 				4E933DD51C5C57C90003FEFC /* TaskCancelingTableViewCell.swift */,
 				4E933DD71C5C5B630003FEFC /* MessageCellView.swift */,
+				4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */,
+				4E30D07D1C63DE6C002786DA /* RefreshView.swift */,
+				4E30D07F1C63DE8D002786DA /* RefreshItem.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -423,10 +432,12 @@
 				4E913CF31C532C300057D44A /* MorMessagesManager.swift in Sources */,
 				4E913CF51C532CAA0057D44A /* UserInfo.swift in Sources */,
 				4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */,
+				4E30D0801C63DE8D002786DA /* RefreshItem.swift in Sources */,
 				4E913D001C5433B80057D44A /* TaskCancelingCollectionViewCell.swift in Sources */,
 				4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */,
 				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
+				4E30D07E1C63DE6C002786DA /* RefreshView.swift in Sources */,
 				4E913CEC1C4DCCA00057D44A /* BaseEntity.swift in Sources */,
 				4E32F7B91C5F1DC800ACA787 /* WebSocket.swift in Sources */,
 				4EEA21BB1C5879C800DB0325 /* MessageViewController.swift in Sources */,
@@ -438,6 +449,7 @@
 				4E913CFE1C5433840057D44A /* ForumCellView.swift in Sources */,
 				4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */,
 				4E913CB01C4CC55C0057D44A /* WebClient.swift in Sources */,
+				4E30D07C1C63DDF0002786DA /* SpinnerPanelView.swift in Sources */,
 				4E913CEA1C4DCCA00057D44A /* Forum.swift in Sources */,
 				4E913CEE1C4DCCA00057D44A /* Message.swift in Sources */,
 				4E913CF71C5338250057D44A /* Constants.swift in Sources */,
@@ -589,6 +601,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "Debug=1";
 				INFOPLIST_FILE = MorMessages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "";
@@ -601,6 +615,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = MorMessages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "";
