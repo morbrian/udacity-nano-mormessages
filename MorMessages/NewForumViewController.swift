@@ -151,6 +151,7 @@ class NewForumViewController: UIViewController {
     }
     
     @IBAction func doneWithAddForumAction(sender: AnyObject) {
+        endTextEditing()
         let title = forumTitleTextField.text ?? ""
         var desc = forumDescTextView.text ?? ""
         if desc == Constants.DefaultForumDescriptionText {
