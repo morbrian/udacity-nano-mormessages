@@ -114,7 +114,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func gotoAccountSignup(sender: UIButton) {
         Logger.error("Sign up not implemented yet.")
-        //UIApplication.sharedApplication().openURL(NSURL(string: Constants.UdacitySignupUrlString)!)
+        //UIApplication.sharedApplication().openURL(NSURL(string: Constants.SignupUrlString)!)
     }
 
     // MARK: Segue Transition
@@ -191,7 +191,6 @@ class LoginViewController: UIViewController {
     // MARK: Authentication
     
     func handleAuthenticationResponse(success: Bool, error: NSError?) {
-        Logger.info("should stop network activity")
         self.networkActivity(false)
         if success {
             self.passwordTextField.text = ""
@@ -209,7 +208,6 @@ class LoginViewController: UIViewController {
     }
     
     func resetStateAfterUserLogout() {
-        Logger.info("Logging out...")
         manager = MorMessagesManager()
         resetLoginStatusLabel()
     }

@@ -18,8 +18,8 @@ class ForumViewController: UIViewController {
     let CollectionCellSpacing = 2
     
     // fetch controllers
-    var offset = 0
-    var ResultSize = 100
+    var fetchOffset = 0
+    let ResultSize = 100
     let PreFetchTrigger = 50
 
     // central data management object
@@ -48,7 +48,7 @@ class ForumViewController: UIViewController {
             Logger.info("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
-        fetchNewest()
+        fetchRecent()
     }
     
     // MARK: Button and Sub-View Producers
@@ -163,30 +163,33 @@ class ForumViewController: UIViewController {
         }
     }
     
+    // similar to "Newest" but not constrained by already downloaded dates
+    func fetchRecent() {
+        fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch)
+    }
+    
     func fetchNewest(completionHandler: (() -> Void)? = nil) {
-        Logger.info("Fetching Newest")
-        var greaterThan = 0
-        if let maxIndex = storedRange().maxElement() {
-            greaterThan = maxIndex
-        }
+        let greaterThan = storedRange().newest
         fetchWithOffset(0, greaterThan: greaterThan, completionHandler: completionHandler)
     }
     
     func fetchOlder(completionHandler: (() -> Void)? = nil) {
-        fetchWithOffset(offset, greaterThan: -1, completionHandler: completionHandler)
+        fetchWithOffset(fetchOffset, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
     }
     
-    func fetchWithOffset(offset: Int, greaterThan: Int, completionHandler: (() -> Void)? = nil) {
-        // TODO: make use of greater than
+    func fetchWithOffset(fetchOffset: Int, greaterThan: NSDate, completionHandler: (() -> Void)? = nil) {
+        let beforeCount = itemCount()
         networkActivity(true)
-        manager.listForums(offset: offset, resultSize: ResultSize, greaterThan: greaterThan) { forums, error in
-            
-            self.networkActivity(false)
-            if let count = forums?.count {
-                self.offset += count
-                Logger.info("Fetched count(\(count)) items, setting offset(\(offset))")
+        manager.listForums(offset: fetchOffset, resultSize: ResultSize, greaterThan: greaterThan) { forums, error in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.networkActivity(false)
+                let afterCount = self.itemCount()
+                
+                self.fetchOffset += afterCount - beforeCount
+                Logger.info("Fetched count(\(afterCount - beforeCount)) items, setting offset(\(self.fetchOffset))")
+
+                completionHandler?()
             }
-            completionHandler?()
         }
     }
 
@@ -196,10 +199,18 @@ class ForumViewController: UIViewController {
         }
     }
     
+    func itemCount() -> Int {
+        if let sections = self.fetchedResultsController.sections
+            where sections.count == 1 {
+                return sections[0].numberOfObjects
+        }
+        return 0
+    }
+    
     // return the first and last items that we already downloaded
-    func storedRange() -> Range<Int> {
-        var oldest = 0
-        var newest = 0
+    func storedRange() -> (oldest: NSDate, newest: NSDate) {
+        var oldest = ToolKit.DateKit.Epoch
+        var newest = ToolKit.DateKit.Epoch
         if let sections = self.fetchedResultsController.sections
             where sections.count == 1 {
                 let section = sections[0]
@@ -207,26 +218,15 @@ class ForumViewController: UIViewController {
                     if let objects = section.objects,
                         first = objects[0] as? Forum,
                         last = objects[section.numberOfObjects - 1] as? Forum,
-                        firstId = last.id,
-                        lastId = first.id {
-                            oldest = Int(firstId)
-                            newest = Int(lastId)
+                        firstId = last.modifiedTime,
+                        lastId = first.modifiedTime {
+                            oldest = firstId
+                            newest = lastId
                     }
                 }
         }
-        return oldest...newest
+        return (oldest, newest)
     }
-    
-    func itemCount() -> Int? {
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                let section = sections[0]
-                return section.numberOfObjects
-        } else {
-            return nil
-        }
-    }
-    
 
 }
 
@@ -241,10 +241,8 @@ extension ForumViewController: UICollectionViewDelegate {
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        if let itemCount = itemCount() {
-            if indexPath.item == itemCount - PreFetchTrigger {
-                fetchOlder()
-            }
+        if indexPath.item == itemCount() - PreFetchTrigger {
+            fetchOlder()
         }
     }
 }

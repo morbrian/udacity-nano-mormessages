@@ -18,8 +18,8 @@ class MessageViewController: UIViewController {
     @IBOutlet weak var messageTextView: UITextView!
     
     // fetch controllers
-    var offset = 0
-    var ResultSize = 100
+    var fetchOffset = 0
+    let ResultSize = 100
     let PreFetchTrigger = 50
     var insertedIndexPath: NSIndexPath?
     
@@ -183,26 +183,23 @@ class MessageViewController: UIViewController {
     } ()
     
     func fetchNewest() {
-        var greaterThan = 0
-        if let maxIndex = storedRange().maxElement() {
-            greaterThan = maxIndex
-        }
+        let greaterThan = storedRange().newest
         fetchWithOffset(0, greaterThan: greaterThan)
     }
     
     func fetchOlder() {
-        fetchWithOffset(offset, greaterThan: -1)
+        fetchWithOffset(fetchOffset, greaterThan: ToolKit.DateKit.Epoch)
     }
     
-    func fetchWithOffset(offset: Int, greaterThan: Int) {
+    func fetchWithOffset(offset: Int, greaterThan: NSDate) {
         // TODO: make use of greater than
         networkActivity(true)
         manager.listMessagesInForum(forum, offset: offset, resultSize: ResultSize, greaterThan: greaterThan) { messages, error in
             
             self.networkActivity(false)
             if let count = messages?.count {
-                self.offset += count
-                Logger.info("Fetched count(\(count)) items, setting offset(\(offset))")
+                self.fetchOffset += count
+                Logger.info("Fetched count(\(count)) items, setting offset(\(self.fetchOffset))")
             }
         }
     }
@@ -214,9 +211,9 @@ class MessageViewController: UIViewController {
     }
     
     // return the first and last items that we already downloaded
-    func storedRange() -> Range<Int> {
-        var oldest = 0
-        var newest = 0
+    func storedRange() -> (oldest: NSDate, newest: NSDate)  {
+        var oldest = ToolKit.DateKit.Epoch
+        var newest = ToolKit.DateKit.Epoch
         if let sections = self.fetchedResultsController.sections
             where sections.count == 1 {
                 let section = sections[0]
@@ -224,23 +221,23 @@ class MessageViewController: UIViewController {
                     if let objects = section.objects,
                         first = objects[0] as? Message,
                         last = objects[section.numberOfObjects - 1] as? Message,
-                        firstId = last.id,
-                        lastId = first.id {
-                            oldest = Int(lastId)
-                            newest = Int(firstId)
+                        firstId = last.modifiedTime,
+                        lastId = first.modifiedTime {
+                            oldest = lastId
+                            newest = firstId
                     }
                 }
         }
-        return oldest...newest
+        return (oldest, newest)
     }
     
-    func itemCount() -> Int? {
+    func itemCount() -> Int {
         if let sections = self.fetchedResultsController.sections
             where sections.count == 1 {
                 let section = sections[0]
                 return section.numberOfObjects
         } else {
-            return nil
+            return 0
         }
     }
     

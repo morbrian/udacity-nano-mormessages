@@ -90,7 +90,6 @@ public class WebClient {
     // turning raw data into JSON data to feed to completionHandler.
     public func executeRequest(request: NSURLRequest, completionHandler: (jsonData: AnyObject?, error: NSError?) -> Void) {
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            
             // this is a general communication error
             if error != nil {
                 Logger.debug(error!.description)
@@ -102,6 +101,7 @@ public class WebClient {
                 where response.statusCode >= 400 {
                     let httpError = WebClient.errorWithMessage("unexpected http response (\(response.statusCode))", code: response.statusCode)
                     completionHandler(jsonData: nil, error: httpError)
+                    return
             }
             
             let (jsonData, parsingError): (AnyObject?, NSError?) =
