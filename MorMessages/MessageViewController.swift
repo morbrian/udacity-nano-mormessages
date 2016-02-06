@@ -31,6 +31,8 @@ class MessageViewController: UIViewController {
     // Forum associated with this view
     var forum: Forum!
     
+    var topRefreshView: RefreshView!
+    
     // remember how far we moved the view after the keyboard displays
     private var viewShiftDistance: CGFloat? = nil
     private var bottomOfCurrentlyEditedItem: CGFloat? = nil
@@ -41,6 +43,10 @@ class MessageViewController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.tintColor = Constants.ThemeButtonTintColor
         navigationItem.rightBarButtonItem = produceDetailsBarButtonItem()
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.translucent = false
+            topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
+        }
         resetMessageTextView()
         messageTextView.delegate = self
         context = CoreDataStackManager.sharedInstance().managedObjectContext
@@ -50,10 +56,10 @@ class MessageViewController: UIViewController {
             Logger.info("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
-        fetchNewest()
         manager.subscribeToForum(forum){ error in
             Logger.error("Subscribe failed: \(error?.description)")
         }
+        fetchRecent(self.scrollToBottom)
     }
     override func viewWillAppear(animated: Bool) {
         // register action if keyboard will show
@@ -110,7 +116,17 @@ class MessageViewController: UIViewController {
         return keyboardSize.CGRectValue().height
     }
     
-    // MARK: UIBarButonItem Producers
+    // MARK: Button and Sub-View Producers
+    
+    // figure out the best height for the activity spinner area
+    private func produceRefreshViewWithHeight(spinnerAreaHeight: CGFloat) -> RefreshView {
+        let refreshViewHeight = view.bounds.height
+        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: CGRectGetWidth(view.bounds), height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: tableView)
+        refreshView.translatesAutoresizingMaskIntoConstraints = false
+        refreshView.delegate = self
+        tableView.insertSubview(refreshView, atIndex: 0)
+        return refreshView
+    }
 
     // return a button with details label
     private func produceDetailsBarButtonItem() -> UIBarButtonItem? {
@@ -182,24 +198,42 @@ class MessageViewController: UIViewController {
         return fetchedResultsController
     } ()
     
-    func fetchNewest() {
+    func scrollToBottom() {
+        if let sections = self.fetchedResultsController.sections
+            where sections.count == 1 {
+                let section = sections[0]
+                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: section.numberOfObjects - 1, inSection: 0),
+                    atScrollPosition: UITableViewScrollPosition.Bottom,
+                    animated: false)
+        }
+    }
+    // similar to "Newest" but not constrained by already downloaded dates
+    func fetchRecent(completionHandler: (() -> Void)? = nil) {
+        fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
+    }
+    
+    func fetchNewest(completionHandler: (() -> Void)? = nil) {
         let greaterThan = storedRange().newest
-        fetchWithOffset(0, greaterThan: greaterThan)
+        fetchWithOffset(0, greaterThan: greaterThan, completionHandler: completionHandler)
     }
     
-    func fetchOlder() {
-        fetchWithOffset(fetchOffset, greaterThan: ToolKit.DateKit.Epoch)
+    func fetchOlder(completionHandler: (() -> Void)? = nil) {
+        fetchWithOffset(fetchOffset, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
     }
     
-    func fetchWithOffset(offset: Int, greaterThan: NSDate) {
-        // TODO: make use of greater than
+    func fetchWithOffset(fetchOffset: Int, greaterThan: NSDate, completionHandler: (() -> Void)? = nil) {
+        let beforeCount = itemCount()
         networkActivity(true)
-        manager.listMessagesInForum(forum, offset: offset, resultSize: ResultSize, greaterThan: greaterThan) { messages, error in
-            
-            self.networkActivity(false)
-            if let count = messages?.count {
-                self.fetchOffset += count
-                Logger.info("Fetched count(\(count)) items, setting offset(\(self.fetchOffset))")
+        manager.listMessagesInForum(forum, offset: fetchOffset, resultSize: ResultSize, greaterThan: greaterThan) { messages, error in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.networkActivity(false)
+                let afterCount = self.itemCount()
+                
+                self.fetchOffset += afterCount - beforeCount
+                Logger.info("BEFORE(\(beforeCount)), AFTER(\(afterCount))")
+                Logger.info("Fetched count(\(afterCount - beforeCount)) items, setting offset(\(self.fetchOffset))")
+
+                completionHandler?()
             }
         }
     }
@@ -210,8 +244,16 @@ class MessageViewController: UIViewController {
         }
     }
     
+    func itemCount() -> Int {
+        if let sections = self.fetchedResultsController.sections
+            where sections.count == 1 {
+                return sections[0].numberOfObjects
+        }
+        return 0
+    }
+    
     // return the first and last items that we already downloaded
-    func storedRange() -> (oldest: NSDate, newest: NSDate)  {
+    func storedRange() -> (oldest: NSDate, newest: NSDate) {
         var oldest = ToolKit.DateKit.Epoch
         var newest = ToolKit.DateKit.Epoch
         if let sections = self.fetchedResultsController.sections
@@ -230,17 +272,13 @@ class MessageViewController: UIViewController {
         }
         return (oldest, newest)
     }
-    
-    func itemCount() -> Int {
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                let section = sections[0]
-                return section.numberOfObjects
-        } else {
-            return 0
-        }
-    }
-    
+   
+}
+
+// MARK: - UITableViewDelegate
+
+extension MessageViewController: UITableViewDelegate {
+    // placeholder
 }
 
 // MARK: - TableViewDataSource
@@ -261,21 +299,10 @@ extension MessageViewController: UITableViewDataSource {
             return cell
     }
     
-    func tableView(tableView: UITableView,
-        commitEditingStyle editingStyle: UITableViewCellEditingStyle,
-        forRowAtIndexPath indexPath: NSIndexPath) {
-            
-            switch (editingStyle) {
-            case .Delete:
-                // Here we get the actor, then delete it from core data
-                let movie = fetchedResultsController.objectAtIndexPath(indexPath) as! Message
-                sharedContext.deleteObject(movie)
-                CoreDataStackManager.sharedInstance().saveContext()
-                
-            default:
-                break
-            }
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.None;
     }
+    
 }
 
 // MARK: - Fetched Results Controller Delegate
@@ -338,7 +365,7 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.tableView.endUpdates()
         if let indexPath = insertedIndexPath {
-            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+           tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
             insertedIndexPath = nil
         }
     }
@@ -377,4 +404,24 @@ extension MessageViewController: UITextViewDelegate {
         return true
     }
     
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension MessageViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        topRefreshView.scrollViewDidScroll(scrollView)
+    }
+    
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        topRefreshView.scrollViewWillEndDragging(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
+    }
+}
+
+// MARK: - RefreshViewDelegate
+
+extension MessageViewController: RefreshViewDelegate {
+    func refreshViewDidRefresh(refreshView: RefreshView) {
+        fetchOlder(refreshView.endRefreshing)
+    }
 }
