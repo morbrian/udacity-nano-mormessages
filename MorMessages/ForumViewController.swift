@@ -25,7 +25,7 @@ class ForumViewController: UIViewController {
     // central data management object
     var manager: MorMessagesManager!
     
-     var topRefreshView: RefreshView!
+    var topRefreshView: RefreshView!
     
     @IBOutlet weak var collectionView: UICollectionView!
     var context: NSManagedObjectContext!
@@ -164,8 +164,8 @@ class ForumViewController: UIViewController {
     }
     
     // similar to "Newest" but not constrained by already downloaded dates
-    func fetchRecent() {
-        fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch)
+    func fetchRecent(completionHandler: (() -> Void)? = nil) {
+        fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
     }
     
     func fetchNewest(completionHandler: (() -> Void)? = nil) {
