@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "MorMessagesTheme.png",
+      "filename" : "MorMessagesInverse.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "MorMessagesTheme-1.png",
+      "filename" : "MorMessagesInverse-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "MorMessagesTheme-2.png",
+      "filename" : "MorMessagesInverse-2.png",
       "scale" : "3x"
     }
   ],

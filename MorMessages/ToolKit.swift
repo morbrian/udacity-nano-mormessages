@@ -68,6 +68,8 @@ class ToolKit {
     
     struct DateKit {
         
+        static let Epoch = NSDate(timeIntervalSince1970: 0)
+        
         struct DateFormat {
             static let ISO8601 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
         }

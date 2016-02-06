@@ -50,22 +50,18 @@ class ForumService {
                     webClient.executeRequest(request)
                         { jsonData, error in
                             if let error = error {
-                                Logger.error("login failed code: \(error.code), type: \(error.description)")
                                 completionHandler(identity: nil, error: error)
                             } else if let status = Status(jsonData: jsonData) {
-                                Logger.info("response status code: \(status.code), details: \(status.details)")
                                 if status.code == ForumJsonValue.Success {
                                     completionHandler(identity: username, error: nil)
                                 } else {
                                     completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
                                 }
                             } else {
-                                Logger.error("login appears to fail but unexpected data in response")
                                 completionHandler(identity: nil, error: ForumService.errorForCode(.LoginFailed))
                             }
                     }
             } else {
-                Logger.error("failed to attempt request")
                 completionHandler(identity: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
             }
     }
@@ -143,9 +139,10 @@ class ForumService {
         }
     }
     
-    func listForums(offset offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
+    func listForums(offset offset: Int = 0, resultSize: Int = 100, greaterThan: NSDate = ToolKit.DateKit.Epoch,
         completionHandler: (forums: [Forum]?, error: NSError?) -> Void) {
-        let params = [ "offset":offset, "resultSize":resultSize, "greaterThan":greaterThan ]
+        let params: [String:NSObject] = [ "offset":offset, "resultSize":resultSize,
+            "greaterThan":ToolKit.DateKit.DateFormatter.stringFromDate(greaterThan) ]
         if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.ForumUrl,
             includeHeaders: ForumService.StandardHeaders,
@@ -156,7 +153,6 @@ class ForumService {
                         if let jsonArray = jsonData as? [[String:AnyObject]] {
                             // parse each forum and produce an array of only valid Forum objects
                             let forums = jsonArray.map(Forum.produceWithState).filter({$0 != nil}).map({$0!})
-                            Logger.info("Requesed resultSize(\(resultSize)), Received(\(forums.count))")
                             completionHandler(forums: forums, error: nil)
                         } else {
                             completionHandler(forums: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
@@ -164,14 +160,14 @@ class ForumService {
                     }
                 }
         } else {
-            Logger.error("failed to attempt request")
             completionHandler(forums: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
         }
     }
     
-    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
+    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: NSDate = ToolKit.DateKit.Epoch,
         completionHandler: (messages: [Message]?, error: NSError?) -> Void) {
-            let params = [ "offset":offset, "resultSize":resultSize, "greaterThan":greaterThan ]
+            let params: [String:NSObject] = [ "offset":offset, "resultSize":resultSize,
+                "greaterThan":ToolKit.DateKit.DateFormatter.stringFromDate(greaterThan) ]
         if let forumUuid = forum.uuid,
             request = webClient.createHttpRequestUsingMethod(WebClient.HttpGet,
             forUrlString: ForumService.ForumAction.MessageUrl(forumUuid),
@@ -287,8 +283,8 @@ class ForumService {
 
 extension ForumService {
     
-    static let BaseUrl = "https://mormessages.morbrian.com/mormessages/api/rest"
-    static let BaseSocketUrl = "wss://mormessages.morbrian.com/mormessages/api/websocket"
+    static let BaseUrl = "https://mormessages.morbrian.com:8443/mormessages/api/rest"
+    static let BaseSocketUrl = "wss://mormessages.morbrian.com:8443/mormessages/api/websocket"
     
     static let StandardHeaders: [String:String] = ["Content-Type":"application/json"]
     

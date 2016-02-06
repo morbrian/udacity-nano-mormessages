@@ -18,12 +18,14 @@ class ForumViewController: UIViewController {
     let CollectionCellSpacing = 2
     
     // fetch controllers
-    var offset = 0
-    var ResultSize = 100
+    var fetchOffset = 0
+    let ResultSize = 100
     let PreFetchTrigger = 50
 
     // central data management object
     var manager: MorMessagesManager!
+    
+     var topRefreshView: RefreshView!
     
     @IBOutlet weak var collectionView: UICollectionView!
     var context: NSManagedObjectContext!
@@ -35,6 +37,10 @@ class ForumViewController: UIViewController {
         navigationController?.navigationBar.hidden = false
         navigationItem.leftBarButtonItem = produceLogoutBarButtonItem()
         navigationItem.rightBarButtonItem = produceAddBarButtonItem()
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.translucent = false
+            topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
+        }
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -42,10 +48,20 @@ class ForumViewController: UIViewController {
             Logger.info("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
-        fetchNewest()
+        fetchRecent()
     }
     
-    // MARK: UIBarButonItem Producers
+    // MARK: Button and Sub-View Producers
+    
+    // figure out the best height for the activity spinner area
+    private func produceRefreshViewWithHeight(spinnerAreaHeight: CGFloat) -> RefreshView {
+        let refreshViewHeight = view.bounds.height
+        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: CGRectGetWidth(view.bounds), height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: collectionView)
+        refreshView.translatesAutoresizingMaskIntoConstraints = false
+        refreshView.delegate = self
+        collectionView.insertSubview(refreshView, atIndex: 0)
+        return refreshView
+    }
     
     // return a button with appropriate label for the logout position on the navigation bar
     private func produceLogoutBarButtonItem() -> UIBarButtonItem? {
@@ -147,27 +163,32 @@ class ForumViewController: UIViewController {
         }
     }
     
-    func fetchNewest() {
-        var greaterThan = 0
-        if let maxIndex = storedRange().maxElement() {
-            greaterThan = maxIndex
-        }
-        fetchWithOffset(0, greaterThan: greaterThan)
+    // similar to "Newest" but not constrained by already downloaded dates
+    func fetchRecent() {
+        fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch)
     }
     
-    func fetchOlder() {
-        fetchWithOffset(offset, greaterThan: -1)
+    func fetchNewest(completionHandler: (() -> Void)? = nil) {
+        let greaterThan = storedRange().newest
+        fetchWithOffset(0, greaterThan: greaterThan, completionHandler: completionHandler)
     }
     
-    func fetchWithOffset(offset: Int, greaterThan: Int) {
-        // TODO: make use of greater than
+    func fetchOlder(completionHandler: (() -> Void)? = nil) {
+        fetchWithOffset(fetchOffset, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
+    }
+    
+    func fetchWithOffset(fetchOffset: Int, greaterThan: NSDate, completionHandler: (() -> Void)? = nil) {
+        let beforeCount = itemCount()
         networkActivity(true)
-        manager.listForums(offset: offset, resultSize: ResultSize, greaterThan: greaterThan) { forums, error in
-            
-            self.networkActivity(false)
-            if let count = forums?.count {
-                self.offset += count
-                Logger.info("Fetched count(\(count)) items, setting offset(\(offset))")
+        manager.listForums(offset: fetchOffset, resultSize: ResultSize, greaterThan: greaterThan) { forums, error in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.networkActivity(false)
+                let afterCount = self.itemCount()
+                
+                self.fetchOffset += afterCount - beforeCount
+                Logger.info("Fetched count(\(afterCount - beforeCount)) items, setting offset(\(self.fetchOffset))")
+
+                completionHandler?()
             }
         }
     }
@@ -178,10 +199,18 @@ class ForumViewController: UIViewController {
         }
     }
     
+    func itemCount() -> Int {
+        if let sections = self.fetchedResultsController.sections
+            where sections.count == 1 {
+                return sections[0].numberOfObjects
+        }
+        return 0
+    }
+    
     // return the first and last items that we already downloaded
-    func storedRange() -> Range<Int> {
-        var oldest = 0
-        var newest = 0
+    func storedRange() -> (oldest: NSDate, newest: NSDate) {
+        var oldest = ToolKit.DateKit.Epoch
+        var newest = ToolKit.DateKit.Epoch
         if let sections = self.fetchedResultsController.sections
             where sections.count == 1 {
                 let section = sections[0]
@@ -189,26 +218,15 @@ class ForumViewController: UIViewController {
                     if let objects = section.objects,
                         first = objects[0] as? Forum,
                         last = objects[section.numberOfObjects - 1] as? Forum,
-                        firstId = last.id,
-                        lastId = first.id {
-                            oldest = Int(firstId)
-                            newest = Int(lastId)
+                        firstId = last.modifiedTime,
+                        lastId = first.modifiedTime {
+                            oldest = firstId
+                            newest = lastId
                     }
                 }
         }
-        return oldest...newest
+        return (oldest, newest)
     }
-    
-    func itemCount() -> Int? {
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                let section = sections[0]
-                return section.numberOfObjects
-        } else {
-            return nil
-        }
-    }
-    
 
 }
 
@@ -223,10 +241,8 @@ extension ForumViewController: UICollectionViewDelegate {
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        if let itemCount = itemCount() {
-            if indexPath.item == itemCount - PreFetchTrigger {
-                fetchOlder()
-            }
+        if indexPath.item == itemCount() - PreFetchTrigger {
+            fetchOlder()
         }
     }
 }
@@ -314,4 +330,24 @@ extension ForumViewController:NSFetchedResultsControllerDelegate {
             }
     }
     
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension ForumViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        topRefreshView.scrollViewDidScroll(scrollView)
+    }
+    
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        topRefreshView.scrollViewWillEndDragging(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
+    }
+}
+
+// MARK: - RefreshViewDelegate
+
+extension ForumViewController: RefreshViewDelegate {
+    func refreshViewDidRefresh(refreshView: RefreshView) {
+        fetchNewest(refreshView.endRefreshing)
+    }
 }

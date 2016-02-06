@@ -48,7 +48,7 @@ class MorMessagesManager {
         forumService.whoami(completionHandler)
     }
     
-    func listForums(offset offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
+    func listForums(offset offset: Int = 0, resultSize: Int = 100, greaterThan: NSDate = ToolKit.DateKit.Epoch,
         completionHandler: (forums: [Forum]?, error: NSError?) -> Void) {
             forumService.listForums(offset: offset, resultSize: resultSize, greaterThan: greaterThan,
                 completionHandler: completionHandler)
@@ -86,7 +86,7 @@ class MorMessagesManager {
         forumService.createMessageWithBody(jsonBody, inForum: forumUuid, completionHandler: completionHandler)
     }
     
-    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: Int = 0,
+    func listMessagesInForum(forum: Forum, offset: Int = 0, resultSize: Int = 100, greaterThan: NSDate = ToolKit.DateKit.Epoch,
         completionHandler: (messages: [Message]?, error: NSError?) -> Void) {
             forumService.listMessagesInForum(forum, offset: offset, resultSize: resultSize, greaterThan: greaterThan,
                 completionHandler: completionHandler)

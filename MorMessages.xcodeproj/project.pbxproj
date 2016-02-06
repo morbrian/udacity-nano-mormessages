@@ -26,7 +26,6 @@
 		4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CB71C4CC6730057D44A /* CoreDataStackManager.swift */; };
 		4E913CCD1C4D5BCD0057D44A /* ForumServiceTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CCC1C4D5BCD0057D44A /* ForumServiceTestBase.swift */; };
 		4E913CCF1C4D5ECF0057D44A /* ForumServiceApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CCE1C4D5ECF0057D44A /* ForumServiceApiTests.swift */; };
-		4E913CD21C4D6FAE0057D44A /* DateToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CD11C4D6FAE0057D44A /* DateToolkit.swift */; };
 		4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE31C4DCCA00057D44A /* Forum+CoreDataProperties.swift */; };
 		4E913CEA1C4DCCA00057D44A /* Forum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE41C4DCCA00057D44A /* Forum.swift */; };
 		4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CE51C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift */; };
@@ -92,7 +91,6 @@
 		4E913CB71C4CC6730057D44A /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 		4E913CCC1C4D5BCD0057D44A /* ForumServiceTestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumServiceTestBase.swift; sourceTree = "<group>"; };
 		4E913CCE1C4D5ECF0057D44A /* ForumServiceApiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumServiceApiTests.swift; sourceTree = "<group>"; };
-		4E913CD11C4D6FAE0057D44A /* DateToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateToolkit.swift; sourceTree = "<group>"; };
 		4E913CE31C4DCCA00057D44A /* Forum+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Forum+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4E913CE41C4DCCA00057D44A /* Forum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forum.swift; sourceTree = "<group>"; };
 		4E913CE51C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BaseEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -182,7 +180,6 @@
 				4E913CB61C4CC6620057D44A /* Persistence */,
 				4E913CEF1C532A270057D44A /* ViewControllers */,
 				4E913CFC1C5433470057D44A /* Views */,
-				4E913CD01C4D6F820057D44A /* Utilities */,
 				4E913C7B1C4CC4360057D44A /* AppDelegate.swift */,
 				4E913C7F1C4CC4360057D44A /* Main.storyboard */,
 				4E913C851C4CC4360057D44A /* Assets.xcassets */,
@@ -253,14 +250,6 @@
 				4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */,
 			);
 			name = Model;
-			sourceTree = "<group>";
-		};
-		4E913CD01C4D6F820057D44A /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				4E913CD11C4D6FAE0057D44A /* DateToolkit.swift */,
-			);
-			name = Utilities;
 			sourceTree = "<group>";
 		};
 		4E913CEF1C532A270057D44A /* ViewControllers */ = {
@@ -424,7 +413,6 @@
 			files = (
 				4E913D021C543DD30057D44A /* ImageCache.swift in Sources */,
 				4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */,
-				4E913CD21C4D6FAE0057D44A /* DateToolkit.swift in Sources */,
 				4E933DD61C5C57C90003FEFC /* TaskCancelingTableViewCell.swift in Sources */,
 				4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */,
 				4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */,
