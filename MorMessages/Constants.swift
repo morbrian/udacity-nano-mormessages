@@ -28,6 +28,7 @@ struct Constants {
     static let AddMessageSegue = "AddMessageSegue"
     static let ForumCellViewIdentifier = "ForumCellViewIdentifier"
     static let MessageCellViewIdentifier = "MessageCellViewIdentifier"
+    static let ShowDetailsSegue = "ShowDetailsSegue"
     
     // MARK: Physical Device Info
     

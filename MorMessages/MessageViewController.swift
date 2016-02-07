@@ -11,11 +11,10 @@ import CoreData
 
 class MessageViewController: UIViewController {
     
-    @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var browserButton: UIButton!
     
-    @IBOutlet weak var bottomBarScroll: UIScrollView!
-    @IBOutlet weak var messageTextView: UITextView!
+    @IBOutlet weak var bottomBarView: UIView!
+    @IBOutlet weak var messageTextField: UITextField!
     
     // fetch controllers
     var fetchOffset = 0
@@ -35,7 +34,6 @@ class MessageViewController: UIViewController {
     
     // remember how far we moved the view after the keyboard displays
     private var viewShiftDistance: CGFloat? = nil
-    private var bottomOfCurrentlyEditedItem: CGFloat? = nil
     
     // MARK: ViewController Lifecycle
     
@@ -47,8 +45,6 @@ class MessageViewController: UIViewController {
             navigationBar.translucent = false
             topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
         }
-        resetMessageTextView()
-        messageTextView.delegate = self
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -61,6 +57,7 @@ class MessageViewController: UIViewController {
         }
         fetchRecent(self.scrollToBottom)
     }
+    
     override func viewWillAppear(animated: Bool) {
         // register action if keyboard will show
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
@@ -80,22 +77,18 @@ class MessageViewController: UIViewController {
     }
     
     // MARK: Keyboard Handling
-
-    func makeNoteOfBottomOfView(notedView: UIView) {
-        let senderOrigin =  view.convertPoint(notedView.bounds.origin, fromView: notedView)
-        bottomOfCurrentlyEditedItem =  senderOrigin.y + notedView.bounds.height
-    }
     
     // shift the bottom bar view up if text field being edited will be obstructed
     func keyboardWillShow(notification: NSNotification) {
+        let senderOrigin =  view.convertPoint(bottomBarView.bounds.origin, fromView: bottomBarView)
+        let bottomOfCurrentlyEditedItem =  senderOrigin.y + bottomBarView.bounds.height
         if viewShiftDistance == nil {
             let keyboardHeight = getKeyboardHeight(notification)
             let topOfKeyboard = view.bounds.maxY - keyboardHeight
             // we only need to move the view if the keyboard will cover up the login button and text fields
-            if let bottomOfCurrentlyEditedItem = bottomOfCurrentlyEditedItem
-                where topOfKeyboard < bottomOfCurrentlyEditedItem {
+            if topOfKeyboard < bottomOfCurrentlyEditedItem {
                     viewShiftDistance = bottomOfCurrentlyEditedItem - topOfKeyboard
-                    self.view.bounds.origin.y += viewShiftDistance!
+                    self.bottomBarView.bounds.offsetInPlace(dx: 0.0, dy: viewShiftDistance!)
             }
         }
     }
@@ -103,7 +96,7 @@ class MessageViewController: UIViewController {
     // if bottom textfield just completed editing, shift the view back down
     func keyboardWillHide(notification: NSNotification) {
         if let shiftDistance = viewShiftDistance {
-            self.view.bounds.origin.y -= shiftDistance
+            self.bottomBarView.bounds.offsetInPlace(dx: 0.0, dy: -shiftDistance)
             viewShiftDistance = nil
         }
     }
@@ -143,33 +136,52 @@ class MessageViewController: UIViewController {
     
     // action when "Details" button is tapped
     func forumDetailsAction(sender: AnyObject!) {
-        //performSegueWithIdentifier(Constants.ForumDetailsSegue, sender: self)
+        performSegueWithIdentifier(Constants.ShowDetailsSegue, sender: self)
+    }
+    
+    // segue preparations
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destination = segue.destinationViewController as? DetailsViewController {
+            destination.manager = manager
+            destination.forum = forum
+        } else {
+            Logger.error("Unrecognized Segue Destination Class For Segue: \(segue.identifier ?? nil)")
+        }
+        
+    }
+    
+    @IBAction func editingChanged(sender: UITextField) {
+        // placeholder
+    }
+    
+    @IBAction func sendMessageOnEnter(sender: UITextField) {
+        sendMessage()
     }
     
     @IBAction func sendMessageAction(sender: UIButton) {
-        if let text = messageTextView.text,
+        sendMessage()
+    }
+    
+    func sendMessage() {
+        messageTextField.endEditing(true)
+        if let text = messageTextField.text,
             forumUuid = forum.uuid {
-                self.messageTextView.editable = false
-            self.manager.createMessageWithText(text, inForum: forumUuid) { message, error in
-                self.networkActivity(false)
-                self.messageTextView.editable = true
-                if message != nil {
-                    self.resetMessageTextView()
-                } else if let error = error {
-                    ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: error.localizedDescription)
-                } else {
-                    ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: "We failed to send the message, but we aren't sure why.")
+                self.messageTextField.enabled = false
+                self.manager.createMessageWithText(text, inForum: forumUuid) { message, error in
+                    self.networkActivity(false)
+                    self.messageTextField.enabled = true
+                    if message != nil {
+                        self.messageTextField.text = nil
+                    } else if let error = error {
+                        ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: error.localizedDescription)
+                    } else {
+                        ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: "We failed to send the message, but we aren't sure why.")
+                    }
                 }
-            }
         } else {
             // the send button should be disabled, so this should never happen
             Logger.error("cannot send message, forum.id or message text is nil")
         }
-    }
-    
-    func resetMessageTextView() {
-        self.messageTextView.text = Constants.DefaultMessageText
-        self.messageTextView.textColor = Constants.DefaultMessageTextPlaceHolderColor
     }
     
     // MARK: - Core Data Convenience
@@ -372,40 +384,6 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
         }
     }
 
-}
-
-// MARK: UITextViewDelegate
-
-extension MessageViewController: UITextViewDelegate {
-    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-        makeNoteOfBottomOfView(textView)
-        if textView.text == Constants.DefaultMessageText {
-            textView.text = ""
-            textView.textColor = UIColor.blackColor()
-        }
-        return true
-    }
-    
-    func textViewDidChange(textView: UITextView) {
-        let fixedWidth = textView.frame.size.width
-        let oldSize = textView.frame.size
-        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        var newFrame = textView.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-        let dy = oldSize.height - newSize.height
-        newFrame.offsetInPlace(dx: 0.0, dy: dy)
-        textView.frame = newFrame;
-    }
- 
-    func textViewShouldEndEditing(textView: UITextView) -> Bool {
-        bottomOfCurrentlyEditedItem = nil
-        if textView.text == "" {
-            resetMessageTextView()
-        }
-        return true
-    }
-    
 }
 
 // MARK: - UIScrollViewDelegate
