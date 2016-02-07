@@ -44,6 +44,7 @@
 		4E933DD81C5C5B630003FEFC /* MessageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E933DD71C5C5B630003FEFC /* MessageCellView.swift */; };
 		4E9C388E1C546CB9002499C4 /* ToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388D1C546CB9002499C4 /* ToolKit.swift */; };
 		4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */; };
+		4EA6FDE91C67053300B99D7D /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */; };
 		4EEA21BB1C5879C800DB0325 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -109,6 +110,7 @@
 		4E9C388C1C546C8C002499C4 /* MorMessages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MorMessages-Bridging-Header.h"; sourceTree = "<group>"; };
 		4E9C388D1C546CB9002499C4 /* ToolKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolKit.swift; sourceTree = "<group>"; };
 		4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewForumViewController.swift; sourceTree = "<group>"; };
+		4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -260,6 +262,7 @@
 				4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */,
 				4E913CF21C532C300057D44A /* MorMessagesManager.swift */,
 				4E913CF61C5338250057D44A /* Constants.swift */,
+				4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 				4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */,
 				4E0EE02B1C572F1700B2AA0A /* NewMessageViewController.swift in Sources */,
 				4E933DD81C5C5B630003FEFC /* MessageCellView.swift in Sources */,
+				4EA6FDE91C67053300B99D7D /* DetailsViewController.swift in Sources */,
 				4E913CFE1C5433840057D44A /* ForumCellView.swift in Sources */,
 				4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */,
 				4E913CB01C4CC55C0057D44A /* WebClient.swift in Sources */,
