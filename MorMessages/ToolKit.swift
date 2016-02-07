@@ -66,6 +66,11 @@ class ToolKit {
         return NSURL(string: "https://robohash.org/\(string.md5)")
     }
     
+    // use the md5 hash of the input string to produce a setgetgo random image
+    static func produceSetGetGoImageUrlFromString(string: String) -> NSURL? {
+        return NSURL(string: "https://randomimage.setgetgo.com/get.php?key=\(string.md5)&height=256&width=256&type=png")
+    }
+    
     struct DateKit {
         
         static let Epoch = NSDate(timeIntervalSince1970: 0)

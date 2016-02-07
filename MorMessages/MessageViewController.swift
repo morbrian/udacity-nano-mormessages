@@ -202,9 +202,11 @@ class MessageViewController: UIViewController {
         if let sections = self.fetchedResultsController.sections
             where sections.count == 1 {
                 let section = sections[0]
-                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: section.numberOfObjects - 1, inSection: 0),
-                    atScrollPosition: UITableViewScrollPosition.Bottom,
-                    animated: false)
+                if section.numberOfObjects > 0 {
+                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: section.numberOfObjects - 1, inSection: 0),
+                        atScrollPosition: UITableViewScrollPosition.Bottom,
+                        animated: false)
+                }
         }
     }
     // similar to "Newest" but not constrained by already downloaded dates

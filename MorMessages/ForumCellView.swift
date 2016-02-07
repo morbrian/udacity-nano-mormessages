@@ -8,9 +8,11 @@
 
 import UIKit
 
-class ForumCellView: TaskCancelingCollectionViewCell {
+class ForumCellView:UICollectionViewCell {
     
-    @IBOutlet weak var idLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView?
+    
+    @IBOutlet weak var avatarView: UIImageView?
     
     @IBOutlet weak var title: UILabel!
     
@@ -19,6 +21,17 @@ class ForumCellView: TaskCancelingCollectionViewCell {
             // TODO: this is not showing the desired effect, may need to embed in containing view.
             activityIndicator?.layer.cornerRadius = 8.0
             activityIndicator?.layer.borderColor = UIColor.lightGrayColor().CGColor
+        }
+    }
+    
+    var tasksToCancelifCellIsReused: [NSURLSessionTask]? {
+        
+        didSet {
+            if let tasksToCancel = oldValue {
+                for task in tasksToCancel {
+                    task.cancel()
+                }
+            }
         }
     }
     
@@ -34,46 +47,62 @@ class ForumCellView: TaskCancelingCollectionViewCell {
     
     func configureCellWithForum(forum: Forum) {
         title.text = forum.title
-        if let id = forum.id {
-            idLabel.text = String(id)
+        
+        configureImageView(avatarView, urlString: forum.ownerImageUrlString, proposedImage: forum.ownerImage) { image in
+            forum.ownerImage = image
+            if self.forum?.ownerImageUrlString == forum.ownerImageUrlString {
+                self.avatarView?.image = image
+            }
         }
-        // Set the Image
-        if forum.imageUrl == nil || forum.imageUrl!.isEmpty {
-            imageView!.image = UIImage(named: Constants.ForumNoImage)
-        } else if forum.forumImage != nil {
-            imageView!.image = forum.forumImage
+        
+        configureImageView(imageView, urlString: forum.imageUrl, proposedImage: forum.forumImage) { image in
+            forum.forumImage = image
+            if self.forum?.imageUrl == forum.imageUrl {
+                self.imageView!.image = image
+            }
+        }
+    }
+    
+    private func configureImageView(imageView: UIImageView?, urlString: String?,
+        proposedImage: UIImage?, dataSpecificAction: (image: UIImage) -> Void) {
+        if let image = proposedImage {
+            imageView?.image = image
         } else {
-            // This is the interesting case. The movie has an image name, but it is not downloaded yet.
-            
-            self.activityIndicator?.startAnimating()
-            let handler = {(data: NSData?, error: NSError?) in
+            imageView?.image =  UIImage(named: Constants.ForumFetchingImage)
+            fetchImage(urlString) { image in
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityIndicator?.stopAnimating()
+                    if let image = image {
+                        dataSpecificAction(image: image)
+                    } else {
+                        imageView?.image = UIImage(named: Constants.ForumNoImage)
+                    }
                 }
+            }
+        }
+    }
+    
+    private func fetchImage(imageUrlString: String?, completionHandler: (image: UIImage?) -> Void) {
+        // Set the Image
+        if imageUrlString == nil || imageUrlString!.isEmpty {
+            completionHandler(image: nil)
+        } else {
+            // has an image name, but it is not downloaded yet.
+            let handler = {(data: NSData?, error: NSError?) in
                 if error != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.imageView!.image = UIImage(named: Constants.ForumNoImage)
-                    }
+                    completionHandler(image: nil)
                 } else if let data = data {
-                    // Craete the image
-                    let image = UIImage(data: data)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        // update the model, so that the informatino gets cached
-                        forum.forumImage = image
-                        if self.forum?.imageUrl == forum.imageUrl {
-                            self.imageView!.image = image
-                        }
-                    }
+                    completionHandler(image: UIImage(data: data))
                 }
-                
             }
             
-            imageView!.image =  UIImage(named: Constants.ForumFetchingImage)
             // Start the task that will eventually download the image
-            if let task = WebClient().taskForImageUrlString(forum.imageUrl, completionHandler: handler) {
-                taskToCancelifCellIsReused = task
+
+            self.activityIndicator?.startAnimating()
+            if let task = WebClient().taskForImageUrlString(imageUrlString, completionHandler: handler) {
+                tasksToCancelifCellIsReused?.append(task)
             } else {
-                taskToCancelifCellIsReused = nil
+                tasksToCancelifCellIsReused = nil
                 self.activityIndicator?.stopAnimating()
             }
             

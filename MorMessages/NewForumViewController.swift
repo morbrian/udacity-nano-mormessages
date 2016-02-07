@@ -105,7 +105,7 @@ class NewForumViewController: UIViewController {
             urlString = forumImageUrlTextField.text
         } else if let text = sender.text {
             forumImageUrlTextField.text = ""
-            if let url = ToolKit.produceRobohashUrlFromString(text) {
+            if let url = ToolKit.produceSetGetGoImageUrlFromString(text) {
                 urlString = url.absoluteString
                 forumImageUrlTextField.text = urlString
             }
@@ -114,23 +114,30 @@ class NewForumViewController: UIViewController {
             forumImagePreview.image = storedImage
         } else {
             forumImagePreview.image = UIImage(named: Constants.ForumFetchingImage)
-            networkActivity(true)
             dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) {
-                if let urlString = urlString,
-                    url = NSURL(string: urlString),
-                    data = NSData(contentsOfURL: url) {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.networkActivity(false)
-                        let newImage = UIImage(data: data)
-                        if let storedImageUrl = self.storedImageUrl {
-                            // remove the old value so we don't build up a store of unused images
-                            // while the user is still editing the tite
-                            WebClient.Caches.imageCache.storeImage(nil, withIdentifier: storedImageUrl)
+                if let urlString = urlString {
+                        let unsafeClient = WebClient()
+                        self.networkActivity(true)
+                        unsafeClient.taskForImageUrlString(urlString) { imageData, error in
+                            dispatch_async(dispatch_get_main_queue(), {
+                                self.networkActivity(false)
+                                if let data = imageData {
+                                    let newImage = UIImage(data: data)
+                                    if let storedImageUrl = self.storedImageUrl {
+                                        // remove the old value so we don't build up a store of unused images
+                                        // while the user is still editing the tite
+                                        WebClient.Caches.imageCache.storeImage(nil, withIdentifier: storedImageUrl)
+                                    }
+                                    self.storedImageUrl = urlString
+                                    WebClient.Caches.imageCache.storeImage(newImage, withIdentifier: urlString)
+                                    self.forumImagePreview.image = newImage
+                                }
+                            })
                         }
-                        self.storedImageUrl = urlString
-                        WebClient.Caches.imageCache.storeImage(newImage, withIdentifier: urlString)
-                        self.forumImagePreview.image = newImage
-                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.networkActivity(false)
+                    }
                 }
             }
         }
