@@ -39,7 +39,6 @@
 		4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CF81C5355D10057D44A /* ForumViewController.swift */; };
 		4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */; };
 		4E913CFE1C5433840057D44A /* ForumCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFD1C5433840057D44A /* ForumCellView.swift */; };
-		4E913D001C5433B80057D44A /* TaskCancelingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */; };
 		4E913D021C543DD30057D44A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913D011C543DD30057D44A /* ImageCache.swift */; };
 		4E933DD61C5C57C90003FEFC /* TaskCancelingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E933DD51C5C57C90003FEFC /* TaskCancelingTableViewCell.swift */; };
 		4E933DD81C5C5B630003FEFC /* MessageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E933DD71C5C5B630003FEFC /* MessageCellView.swift */; };
@@ -104,7 +103,6 @@
 		4E913CF81C5355D10057D44A /* ForumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumViewController.swift; sourceTree = "<group>"; };
 		4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseStatus.swift; sourceTree = "<group>"; };
 		4E913CFD1C5433840057D44A /* ForumCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumCellView.swift; sourceTree = "<group>"; };
-		4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCancelingCollectionViewCell.swift; sourceTree = "<group>"; };
 		4E913D011C543DD30057D44A /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		4E933DD51C5C57C90003FEFC /* TaskCancelingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCancelingTableViewCell.swift; sourceTree = "<group>"; };
 		4E933DD71C5C5B630003FEFC /* MessageCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCellView.swift; sourceTree = "<group>"; };
@@ -270,7 +268,6 @@
 			isa = PBXGroup;
 			children = (
 				4E913CFD1C5433840057D44A /* ForumCellView.swift */,
-				4E913CFF1C5433B80057D44A /* TaskCancelingCollectionViewCell.swift */,
 				4E933DD51C5C57C90003FEFC /* TaskCancelingTableViewCell.swift */,
 				4E933DD71C5C5B630003FEFC /* MessageCellView.swift */,
 				4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */,
@@ -421,7 +418,6 @@
 				4E913CF51C532CAA0057D44A /* UserInfo.swift in Sources */,
 				4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */,
 				4E30D0801C63DE8D002786DA /* RefreshItem.swift in Sources */,
-				4E913D001C5433B80057D44A /* TaskCancelingCollectionViewCell.swift in Sources */,
 				4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */,
 				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
