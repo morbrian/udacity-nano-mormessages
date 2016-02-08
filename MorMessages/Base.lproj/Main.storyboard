@@ -284,28 +284,29 @@
                                                         <constraint firstAttribute="width" constant="1" id="KMf-8L-czI"/>
                                                     </constraints>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRY-U8-6Ux" customClass="UIBorderLabel" customModule="MorMessages" customModuleProvider="target">
-                                                    <rect key="frame" x="510" y="36" width="42" height="21"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="message" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WQc-Xg-ayf">
+                                                    <rect key="frame" x="484" y="31" width="68" height="33"/>
                                                     <color key="backgroundColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
+                                                </textView>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="RRY-U8-6Ux" secondAttribute="trailing" id="1Iz-CF-lm7"/>
                                                 <constraint firstItem="RL2-cO-Z2s" firstAttribute="top" secondItem="3ho-CK-hom" secondAttribute="topMargin" id="2GM-ui-FsE"/>
                                                 <constraint firstItem="RL2-cO-Z2s" firstAttribute="leading" secondItem="Geg-Za-aDQ" secondAttribute="trailing" id="2yp-vj-Lxp"/>
                                                 <constraint firstItem="Geg-Za-aDQ" firstAttribute="centerY" secondItem="3ho-CK-hom" secondAttribute="centerY" id="4Mt-br-fnR"/>
                                                 <constraint firstItem="Geg-Za-aDQ" firstAttribute="centerX" secondItem="3ho-CK-hom" secondAttribute="centerX" id="CDR-z8-sww"/>
-                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="RRY-U8-6Ux" secondAttribute="bottom" id="Iu3-cD-EWv"/>
+                                                <constraint firstItem="WQc-Xg-ayf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xQR-0p-v6j" secondAttribute="trailing" id="HFP-03-jEI"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="RL2-cO-Z2s" secondAttribute="trailing" id="J8O-zD-iVW"/>
-                                                <constraint firstItem="RRY-U8-6Ux" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3ho-CK-hom" secondAttribute="topMargin" id="RPf-WK-THN"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="WQc-Xg-ayf" secondAttribute="bottom" id="WIW-Ml-Py3"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="RL2-cO-Z2s" secondAttribute="bottom" id="Zrv-Ru-HWc"/>
-                                                <constraint firstItem="RRY-U8-6Ux" firstAttribute="centerY" secondItem="3ho-CK-hom" secondAttribute="centerY" id="bSg-0R-Xz5"/>
-                                                <constraint firstItem="RRY-U8-6Ux" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xQR-0p-v6j" secondAttribute="trailing" id="fU1-8U-fa8"/>
+                                                <constraint firstItem="WQc-Xg-ayf" firstAttribute="centerY" secondItem="3ho-CK-hom" secondAttribute="centerY" id="ddR-tu-wgc"/>
+                                                <constraint firstItem="WQc-Xg-ayf" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3ho-CK-hom" secondAttribute="topMargin" id="mLs-Ua-kGe"/>
                                                 <constraint firstItem="RL2-cO-Z2s" firstAttribute="leading" secondItem="3ho-CK-hom" secondAttribute="leadingMargin" id="oRB-ZN-a0l"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="WQc-Xg-ayf" secondAttribute="trailing" id="ozb-Ij-RS1"/>
                                                 <constraint firstItem="RL2-cO-Z2s" firstAttribute="leading" secondItem="Geg-Za-aDQ" secondAttribute="trailing" id="vvm-IM-WjV"/>
                                                 <constraint firstItem="Geg-Za-aDQ" firstAttribute="leading" secondItem="RL2-cO-Z2s" secondAttribute="trailing" id="w7M-Iv-5dq"/>
                                             </constraints>
@@ -319,7 +320,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="contentLabel" destination="RRY-U8-6Ux" id="7bb-4d-Ga6"/>
+                                            <outlet property="contentTextView" destination="WQc-Xg-ayf" id="HVJ-dC-bBD"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCellViewLeftIdentifier" id="joa-0t-RiN" customClass="MessageCellView" customModule="MorMessages" customModuleProvider="target">
@@ -355,32 +356,32 @@
                                                         <constraint firstAttribute="width" constant="1" id="yuu-F2-wwC"/>
                                                     </constraints>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ycd-5i-HJp" customClass="UIBorderLabel" customModule="MorMessages" customModuleProvider="target">
-                                                    <rect key="frame" x="8" y="37" width="42" height="21"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="message" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPl-bn-33s">
+                                                    <rect key="frame" x="8" y="31" width="68" height="33"/>
                                                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
+                                                </textView>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="ycd-5i-HJp" secondAttribute="bottom" id="EH3-zE-Cab"/>
+                                                <constraint firstItem="5vO-ce-Rzh" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iPl-bn-33s" secondAttribute="trailing" id="37J-wK-Sxu"/>
+                                                <constraint firstItem="iPl-bn-33s" firstAttribute="leading" secondItem="C2d-1J-d7Z" secondAttribute="leadingMargin" id="DJM-wA-Cgd"/>
                                                 <constraint firstItem="NG5-Se-vcT" firstAttribute="centerY" secondItem="C2d-1J-d7Z" secondAttribute="centerY" id="Eef-gN-iAQ"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="DX5-oV-JZE" secondAttribute="bottom" id="JPV-Ca-eWX"/>
-                                                <constraint firstItem="ycd-5i-HJp" firstAttribute="top" relation="greaterThanOrEqual" secondItem="C2d-1J-d7Z" secondAttribute="topMargin" id="MEx-hQ-47d"/>
-                                                <constraint firstItem="ycd-5i-HJp" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5vO-ce-Rzh" secondAttribute="trailing" priority="750" id="PoD-tz-X19"/>
+                                                <constraint firstItem="iPl-bn-33s" firstAttribute="top" relation="greaterThanOrEqual" secondItem="C2d-1J-d7Z" secondAttribute="topMargin" id="Vh4-pV-iNV"/>
+                                                <constraint firstItem="iPl-bn-33s" firstAttribute="centerY" secondItem="C2d-1J-d7Z" secondAttribute="centerY" id="b8F-Pv-eOE"/>
                                                 <constraint firstItem="NG5-Se-vcT" firstAttribute="centerX" secondItem="C2d-1J-d7Z" secondAttribute="centerX" id="cVU-oR-Ft2"/>
-                                                <constraint firstItem="ycd-5i-HJp" firstAttribute="leading" secondItem="C2d-1J-d7Z" secondAttribute="leadingMargin" id="dLc-B7-IBS"/>
                                                 <constraint firstItem="DX5-oV-JZE" firstAttribute="top" secondItem="C2d-1J-d7Z" secondAttribute="topMargin" id="gaJ-Nt-pyn"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="DX5-oV-JZE" secondAttribute="trailing" id="ogj-HV-OaZ"/>
-                                                <constraint firstItem="ycd-5i-HJp" firstAttribute="centerY" secondItem="C2d-1J-d7Z" secondAttribute="centerY" id="qSr-fD-gsb"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="iPl-bn-33s" secondAttribute="bottom" id="vQT-es-QKa"/>
                                                 <constraint firstItem="DX5-oV-JZE" firstAttribute="leading" secondItem="NG5-Se-vcT" secondAttribute="trailing" id="ykT-Kk-Tu3"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="contentLabel" destination="ycd-5i-HJp" id="55l-pd-MwU"/>
+                                            <outlet property="contentTextView" destination="iPl-bn-33s" id="5O7-7Q-3f2"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

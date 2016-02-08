@@ -10,15 +10,14 @@ import UIKit
 
 class MessageCellView: TaskCancelingTableViewCell {
 
-    
-    @IBOutlet weak var contentLabel: UIBorderLabel!
+    @IBOutlet weak var contentTextView: UITextView!
     
     var message: Message? {
         didSet {
             if let message = message {
                 configureCellWithMessage(message)
             } else {
-                contentLabel.text = nil
+                contentTextView.text = nil
             }
         }
     }
@@ -26,17 +25,11 @@ class MessageCellView: TaskCancelingTableViewCell {
     // MARK: - Configure Cell
     
     func configureCellWithMessage(message: Message) {
-        contentLabel.text = message.text
-        contentLabel.layer.masksToBounds = true
-        contentLabel.layer.cornerRadius = 8.0
-        contentLabel.topInset = 6
-        contentLabel.bottomInset = 6
-        contentLabel.leftInset = 10
-        contentLabel.rightInset = 10
         
-//        contentLabel.sizeToFit()
-//        let size = contentLabel.frame.size
-//        contentLabel.sizeThatFits(CGSize(width: size.width + 20, height: size.height + 12))
+        if let contentTextView = contentTextView {
+            contentTextView.text = message.text
+            contentTextView.layer.cornerRadius = 8.0
+        }
     }
     
     
