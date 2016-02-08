@@ -306,10 +306,19 @@ extension MessageViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView,
         cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-            let CellIdentifier = Constants.MessageCellViewIdentifier
             let message = fetchedResultsController.objectAtIndexPath(indexPath) as! Message
-            let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as! MessageCellView
-            cell.configureCellWithMessage(message)
+            
+            var reuseIdentifier: String?
+            if let identity = manager.currentUser?.identity,
+                createdBy = message.createdBy
+                    where identity == createdBy {
+                        reuseIdentifier = Constants.MessageCellViewRightIdentifier
+            } else {
+                reuseIdentifier = Constants.MessageCellViewLeftIdentifier
+            }
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier!) as! MessageCellView
+            cell.message = message
             return cell
     }
     
