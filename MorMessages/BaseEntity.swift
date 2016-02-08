@@ -89,11 +89,11 @@ class BaseEntity: NSManagedObject {
     // returns a simple key : value pair suitable to be the field of a json object
     class func stringForSingleKey(key: String, andValue value: AnyObject?) -> String? {
         if let typedValue = value as? String {
-            return "\"\(key)\":\"\(typedValue)\""
+            return "\"\(key)\":\(typedValue.jsonEscaped)"
         } else if let typedValue = value as? Int {
             return "\"\(key)\":\(typedValue)"
         } else if let typedValue = value as? NSDate {
-            return "\"\(key)\":\"\(ToolKit.DateKit.DateFormatter.stringFromDate(typedValue))\""
+            return "\"\(key)\":\(ToolKit.DateKit.DateFormatter.stringFromDate(typedValue).jsonEscaped)"
         } else {
             return nil
         }

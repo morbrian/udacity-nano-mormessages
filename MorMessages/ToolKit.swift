@@ -126,4 +126,22 @@ extension String  {
         
         return String(format: hash as String)
     }
+    
+    var jsonEscaped: String! {
+        let value = self
+            .stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
+            .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+            .stringByReplacingOccurrencesOfString("\r", withString: "\\r")
+            .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        return "\"\(value)\""
+    }
+    
+    var jsonUnescaped: String! {
+        let value = self.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "\""))
+        return value
+            .stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
+            .stringByReplacingOccurrencesOfString("\\r", withString: "\r")
+            .stringByReplacingOccurrencesOfString("\\n", withString: "\n")
+            .stringByReplacingOccurrencesOfString("\\\\", withString: "\\")
+    }
 }

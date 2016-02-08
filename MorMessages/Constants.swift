@@ -27,6 +27,7 @@ struct Constants {
     static let AddForumSegue = "AddForumSegue"
     static let AddMessageSegue = "AddMessageSegue"
     static let ForumCellViewIdentifier = "ForumCellViewIdentifier"
+    static let DetailsCellViewIdentifier = "DetailsCellViewIdentifier"
     static let MessageCellViewIdentifier = "MessageCellViewIdentifier"
     static let ShowDetailsSegue = "ShowDetailsSegue"
     
