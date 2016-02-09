@@ -76,6 +76,10 @@ class MessageViewController: UIViewController {
         }
     }
     
+    override func viewWillLayoutSubviews() {
+        updateRefreshViewLayout()
+    }
+    
     // MARK: Keyboard Handling
     
     // shift the bottom bar view up if text field being edited will be obstructed
@@ -114,11 +118,17 @@ class MessageViewController: UIViewController {
     // figure out the best height for the activity spinner area
     private func produceRefreshViewWithHeight(spinnerAreaHeight: CGFloat) -> RefreshView {
         let refreshViewHeight = view.bounds.height
-        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: CGRectGetWidth(view.bounds), height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: tableView)
+        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: tableView)
         refreshView.translatesAutoresizingMaskIntoConstraints = false
         refreshView.delegate = self
         tableView.insertSubview(refreshView, atIndex: 0)
         return refreshView
+    }
+    
+    private func updateRefreshViewLayout() {
+        let refreshViewHeight = view.bounds.height
+        topRefreshView.frame = CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight)
+        topRefreshView.updateLayout()
     }
 
     // return a button with details label
