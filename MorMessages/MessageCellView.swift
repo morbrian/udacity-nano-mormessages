@@ -10,7 +10,13 @@ import UIKit
 
 class MessageCellView: TaskCancelingTableViewCell {
 
-    @IBOutlet weak var contentTextView: UITextView!
+    @IBOutlet weak var contentTextView: UITextView! {
+        didSet {
+            if contentTextView != nil {
+                contentTextView.layer.cornerRadius = 8.0
+            }
+        }
+    }
     
     var message: Message? {
         didSet {
@@ -28,7 +34,6 @@ class MessageCellView: TaskCancelingTableViewCell {
         
         if let contentTextView = contentTextView {
             contentTextView.text = message.text
-            contentTextView.layer.cornerRadius = 8.0
         }
     }
     
