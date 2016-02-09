@@ -45,6 +45,8 @@ class MessageViewController: UIViewController {
             navigationBar.translucent = false
             topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
         }
+        self.tableView.rowHeight = UITableViewAutomaticDimension;
+        self.tableView.estimatedRowHeight = 44;
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -302,7 +304,7 @@ class MessageViewController: UIViewController {
 // MARK: - UITableViewDelegate
 
 extension MessageViewController: UITableViewDelegate {
-    // placeholder
+   //placeholder
 }
 
 // MARK: - TableViewDataSource

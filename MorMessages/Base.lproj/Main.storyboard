@@ -616,10 +616,10 @@
             </objects>
             <point key="canvasLocation" x="2808" y="792"/>
         </scene>
-        <!--New Forum View Controller-->
+        <!--New Forum-->
         <scene sceneID="LUg-fn-wSf">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" id="jNU-dd-fvx" customClass="NewForumViewController" customModule="MorMessages" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="New Forum" extendedLayoutIncludesOpaqueBars="YES" id="jNU-dd-fvx" customClass="NewForumViewController" customModule="MorMessages" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mIr-Nx-RE4"/>
                         <viewControllerLayoutGuide type="bottom" id="Dik-4h-zyv"/>
