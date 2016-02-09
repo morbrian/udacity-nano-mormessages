@@ -45,6 +45,8 @@ class MessageViewController: UIViewController {
             navigationBar.translucent = false
             topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
         }
+        self.tableView.rowHeight = UITableViewAutomaticDimension;
+        self.tableView.estimatedRowHeight = 44;
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -74,6 +76,10 @@ class MessageViewController: UIViewController {
         if parent == nil {
             manager.unsubscribeFromForum(forum)
         }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        updateRefreshViewLayout()
     }
     
     // MARK: Keyboard Handling
@@ -114,11 +120,17 @@ class MessageViewController: UIViewController {
     // figure out the best height for the activity spinner area
     private func produceRefreshViewWithHeight(spinnerAreaHeight: CGFloat) -> RefreshView {
         let refreshViewHeight = view.bounds.height
-        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: CGRectGetWidth(view.bounds), height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: tableView)
+        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: tableView)
         refreshView.translatesAutoresizingMaskIntoConstraints = false
         refreshView.delegate = self
         tableView.insertSubview(refreshView, atIndex: 0)
         return refreshView
+    }
+    
+    private func updateRefreshViewLayout() {
+        let refreshViewHeight = view.bounds.height
+        topRefreshView.frame = CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight)
+        topRefreshView.updateLayout()
     }
 
     // return a button with details label
@@ -292,7 +304,7 @@ class MessageViewController: UIViewController {
 // MARK: - UITableViewDelegate
 
 extension MessageViewController: UITableViewDelegate {
-    // placeholder
+   //placeholder
 }
 
 // MARK: - TableViewDataSource
@@ -306,10 +318,19 @@ extension MessageViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView,
         cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-            let CellIdentifier = Constants.MessageCellViewIdentifier
             let message = fetchedResultsController.objectAtIndexPath(indexPath) as! Message
-            let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as! MessageCellView
-            cell.configureCellWithMessage(message)
+            
+            var reuseIdentifier: String?
+            if let identity = manager.currentUser?.identity,
+                createdBy = message.createdBy
+                    where identity == createdBy {
+                        reuseIdentifier = Constants.MessageCellViewRightIdentifier
+            } else {
+                reuseIdentifier = Constants.MessageCellViewLeftIdentifier
+            }
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier!) as! MessageCellView
+            cell.message = message
             return cell
     }
     

@@ -19,9 +19,6 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var createdByImageView: UIImageView!
     @IBOutlet weak var createdByUsernameLabel: UILabel!
     @IBOutlet weak var createdDateLabel: UILabel!
-    @IBOutlet weak var modifiedByImageView: UIImageView!
-    @IBOutlet weak var modifiedByUsernameLabel: UILabel!
-    @IBOutlet weak var modifiedDateLabel: UILabel!
     
     var manager: MorMessagesManager!
     var forum: Forum!
@@ -43,13 +40,6 @@ class DetailsViewController: UIViewController {
             createdDateLabel.text = "date unknown"
         }
         
-        modifiedByImageView.image = UIImage(named: Constants.ForumNoImage)
-        modifiedByUsernameLabel.text = forum.createdBy
-        if let modifiedTime = forum.modifiedTime {
-            modifiedDateLabel.text = ToolKit.DateKit.DateFormatter.stringFromDate(modifiedTime)
-        } else {
-            modifiedDateLabel.text = "date unknown"
-        }
     }
 
 }

@@ -45,6 +45,7 @@
 		4E9C388E1C546CB9002499C4 /* ToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388D1C546CB9002499C4 /* ToolKit.swift */; };
 		4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */; };
 		4EA6FDE91C67053300B99D7D /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */; };
+		4EA6FDEB1C68674F00B99D7D /* UIBorderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA6FDEA1C68674F00B99D7D /* UIBorderLabel.swift */; };
 		4EEA21BB1C5879C800DB0325 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -111,6 +112,7 @@
 		4E9C388D1C546CB9002499C4 /* ToolKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolKit.swift; sourceTree = "<group>"; };
 		4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewForumViewController.swift; sourceTree = "<group>"; };
 		4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		4EA6FDEA1C68674F00B99D7D /* UIBorderLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBorderLabel.swift; sourceTree = "<group>"; };
 		4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -260,9 +262,9 @@
 				4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */,
 				4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */,
 				4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */,
+				4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */,
 				4E913CF21C532C300057D44A /* MorMessagesManager.swift */,
 				4E913CF61C5338250057D44A /* Constants.swift */,
-				4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -276,6 +278,7 @@
 				4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */,
 				4E30D07D1C63DE6C002786DA /* RefreshView.swift */,
 				4E30D07F1C63DE8D002786DA /* RefreshItem.swift */,
+				4EA6FDEA1C68674F00B99D7D /* UIBorderLabel.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 				TargetAttributes = {
 					4E913C771C4CC4350057D44A = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = S6X628U2P5;
 					};
 					4E913C8E1C4CC4360057D44A = {
 						CreatedOnToolsVersion = 7.2;
@@ -421,6 +425,7 @@
 				4E913CF51C532CAA0057D44A /* UserInfo.swift in Sources */,
 				4E913CB21C4CC58D0057D44A /* Logger.swift in Sources */,
 				4E30D0801C63DE8D002786DA /* RefreshItem.swift in Sources */,
+				4EA6FDEB1C68674F00B99D7D /* UIBorderLabel.swift in Sources */,
 				4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */,
 				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
@@ -589,6 +594,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "Debug=1";
 				INFOPLIST_FILE = MorMessages/Info.plist;
@@ -596,6 +603,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = morbrian.MorMessages;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -603,6 +611,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = MorMessages/Info.plist;
@@ -610,6 +620,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = morbrian.MorMessages;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

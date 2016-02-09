@@ -49,6 +49,11 @@ class RefreshView: UIView {
         addSubview(refreshItem.view)
     }
     
+    func updateLayout() {
+        let viewCenter = CGPoint(x: bounds.size.width / 2, y: bounds.size.height - spinnerAreaHeight / 2)
+        self.refreshItem.view.center = viewCenter
+    }
+    
     func beginRefreshing() {
         isRefreshing = true
         refreshItem.activityInProgress = true

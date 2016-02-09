@@ -56,11 +56,17 @@ class ForumViewController: UIViewController {
     // figure out the best height for the activity spinner area
     private func produceRefreshViewWithHeight(spinnerAreaHeight: CGFloat) -> RefreshView {
         let refreshViewHeight = view.bounds.height
-        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: CGRectGetWidth(view.bounds), height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: collectionView)
+        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: collectionView)
         refreshView.translatesAutoresizingMaskIntoConstraints = false
         refreshView.delegate = self
         collectionView.insertSubview(refreshView, atIndex: 0)
         return refreshView
+    }
+    
+    private func updateRefreshViewLayout() {
+        let refreshViewHeight = view.bounds.height
+        topRefreshView.frame = CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight)
+        topRefreshView.updateLayout()
     }
     
     // return a button with appropriate label for the logout position on the navigation bar
@@ -113,6 +119,7 @@ class ForumViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         calculateCollectionCellSize()
+        updateRefreshViewLayout()
     }
     
     // calculates cell size based on cells-per-row for the current device orientation
