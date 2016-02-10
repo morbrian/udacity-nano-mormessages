@@ -50,6 +50,7 @@ class LoginViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         resetLoginStatusLabel()
+        navigationController?.navigationBar.hidden = true
         // register action if keyboard will show
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
