@@ -106,8 +106,12 @@ class MorMessagesManager {
         forumService.activateSubscription(subscription, completionHandler: completionHandler)
     }
     
-    func unsubscribeFromForum(forum: Forum) {
-        forumService.unsubscribeFromForum(forum)
+    func maintainActiveSubscription() {
+        forumService.maintainActiveSubscription()
+    }
+    
+    func unsubscribe(subscription: Subscription) {
+        forumService.unsubscribe(subscription)
     }
 
     // handles response after login attempt

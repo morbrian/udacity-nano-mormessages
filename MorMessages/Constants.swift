@@ -18,6 +18,8 @@ struct Constants {
     static let ForumNoImage = "ForumNoImage"
     static let ForumFetchingImage = "ForumFetchingImage"
     static let MorMessagesInverseImage = "MorMessagesInverseImage"
+    static let GreenCheckImage = "GreenCheckImage"
+    static let RedxImage = "RedxImage"
     
     // MARK: StoryBoard Identifiers
     
