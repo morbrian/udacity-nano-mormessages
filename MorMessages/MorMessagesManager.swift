@@ -92,8 +92,18 @@ class MorMessagesManager {
                 completionHandler: completionHandler)
     }
     
-    func subscribeToForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
-        forumService.subscribeToForum(forum, completionHandler: completionHandler)
+    func subscribeToForum(forum: Forum, completionHandler: (subscription: Subscription?, error: NSError?) -> Void) {
+        if let forumUuid = forum.uuid,
+            userIdentity = currentUser?.identity {
+            let subscription = Subscription(userIdentity: userIdentity, topicId: forumUuid)
+            forumService.createSubscription(subscription, completionHandler: completionHandler)
+        } else {
+            completionHandler(subscription: nil, error: nil)
+        }
+    }
+    
+    func activateSubscription(subscription: Subscription, completionHandler: (error: NSError?) -> Void) {
+        forumService.activateSubscription(subscription, completionHandler: completionHandler)
     }
     
     func unsubscribeFromForum(forum: Forum) {
