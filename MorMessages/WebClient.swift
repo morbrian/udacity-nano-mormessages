@@ -99,7 +99,12 @@ public class WebClient {
             
             if let response = response as? NSHTTPURLResponse
                 where response.statusCode >= 400 {
-                    let httpError = WebClient.errorWithMessage("unexpected http response (\(response.statusCode))", code: response.statusCode)
+                    var httpError: NSError?
+                    if response.statusCode == 401 || response.statusCode == 403 {
+                        httpError = WebClient.errorWithMessage("Authentication Failed", code: response.statusCode)
+                    } else {
+                        httpError = WebClient.errorWithMessage("unexpected http response (\(response.statusCode))", code: response.statusCode)
+                    }
                     completionHandler(jsonData: nil, error: httpError)
                     return
             }
