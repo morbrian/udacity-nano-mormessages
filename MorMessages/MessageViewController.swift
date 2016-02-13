@@ -54,10 +54,18 @@ class MessageViewController: UIViewController {
             Logger.info("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
-        manager.subscribeToForum(forum){ error in
-            Logger.error("Subscribe failed: \(error?.description)")
-        }
         fetchRecent(self.scrollToBottom)
+        manager.subscribeToForum(forum){ subscription, error in
+            if let subscription = subscription {
+                self.manager.activateSubscription(subscription) { error in
+                    if error != nil {
+                        Logger.error("Activation failed: \(error?.description)")
+                    }
+                }
+            } else {
+                Logger.error("Subscribe failed: \(error?.description)")
+            }
+        }
     }
     
     override func viewWillAppear(animated: Bool) {

@@ -46,6 +46,7 @@
 		4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */; };
 		4EA6FDE91C67053300B99D7D /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */; };
 		4EA6FDEB1C68674F00B99D7D /* UIBorderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA6FDEA1C68674F00B99D7D /* UIBorderLabel.swift */; };
+		4ECE42D51C6EFF6200131C04 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECE42D41C6EFF6200131C04 /* Subscription.swift */; };
 		4EEA21BB1C5879C800DB0325 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +114,7 @@
 		4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewForumViewController.swift; sourceTree = "<group>"; };
 		4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		4EA6FDEA1C68674F00B99D7D /* UIBorderLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBorderLabel.swift; sourceTree = "<group>"; };
+		4ECE42D41C6EFF6200131C04 /* Subscription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -250,6 +252,7 @@
 				4E913CE81C4DCCA00057D44A /* Message.swift */,
 				4E913CF41C532CAA0057D44A /* UserInfo.swift */,
 				4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */,
+				4ECE42D41C6EFF6200131C04 /* Subscription.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 				4E913CED1C4DCCA00057D44A /* Message+CoreDataProperties.swift in Sources */,
 				4E913CB81C4CC6730057D44A /* CoreDataStackManager.swift in Sources */,
 				4E30D07E1C63DE6C002786DA /* RefreshView.swift in Sources */,
+				4ECE42D51C6EFF6200131C04 /* Subscription.swift in Sources */,
 				4E913CEC1C4DCCA00057D44A /* BaseEntity.swift in Sources */,
 				4E32F7B91C5F1DC800ACA787 /* WebSocket.swift in Sources */,
 				4EEA21BB1C5879C800DB0325 /* MessageViewController.swift in Sources */,

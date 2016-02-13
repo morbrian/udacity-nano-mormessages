@@ -192,9 +192,34 @@ class ForumService {
         }
     }
     
-    func subscribeToForum(forum: Forum, completionHandler: (error: NSError?) -> Void) {
-        if let forumUuid = forum.uuid {
-            let request = NSMutableURLRequest(URL: NSURL(string:"\(ForumAction.ForumSocketUrl)/\(forumUuid)")!)
+    func createSubscription(subscription: Subscription, completionHandler: (subscription: Subscription?, error: NSError?) -> Void) {
+        if let request = webClient.createHttpRequestUsingMethod(WebClient.HttpPut,
+            forUrlString: ForumService.ForumAction.SubscriptionUrl,
+            includeHeaders: ForumService.StandardHeaders,
+            withBody: subscription.jsonData()) {
+                webClient.executeRequest(request) {
+                    jsonData, error in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if error != nil {
+                            completionHandler(subscription: nil, error: ForumService.errorForCode(.CreateFailed))
+                        } else if let jsonData = jsonData as? [String:AnyObject] {
+                            let newSubscription = Subscription(data: jsonData)
+                            completionHandler(subscription: newSubscription, error: nil)
+                        } else {
+                            completionHandler(subscription: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
+                        }
+                    }
+                }
+        } else {
+            Logger.error("failed to attempt request")
+            completionHandler(subscription: nil, error: ForumService.errorForCode(.FailedToMakeRequest))
+        }
+    }
+    
+    func activateSubscription(subscription: Subscription, completionHandler: (error: NSError?) -> Void) {
+        if let subscriptionId = subscription.subscriptionId,
+            subscriptionUrl = NSURL(string:ForumAction.SubscriptionSocketUrl(subscriptionId)) {
+            let request = NSMutableURLRequest(URL: subscriptionUrl)
             if let basicAuthCredentials = basicAuthCredentials {
                 request.addValue(basicAuthCredentials, forHTTPHeaderField: "Authorization")
             }
@@ -221,8 +246,11 @@ class ForumService {
                     Logger.info("WebSocket Received Unknown Thing: \(data)")
                 }
             }
+            webSocket!.event.error = { error in
+                Logger.error("error in websocket connection: \(error)")
+            }
             completionHandler(error: nil)
-            Logger.info("Completed Subscribe to Forum(\(forumUuid)) with URL: \(ForumAction.ForumSocketUrl)/\(forumUuid)")
+            Logger.info("Completed activation of subscription.")
         } else {
             Logger.error("unable to subscribe, specified forum has no 'id'")
             completionHandler(error: ForumService.errorForCode(.WebSocketSubscribeError))
@@ -271,12 +299,6 @@ class ForumService {
         }
     }
 
-    // Optional client functionality I may or may not implement:
-    //
-    //    ForumEntity getForumById(Long forumId);
-    //    ForumEntity modifyForum(ForumEntity forum);
-    //    void deleteForum(Long forumId);
-    //    MessageEntity getMessageById(Long messageId);
 }
 
 // MARK: - Constants
@@ -297,6 +319,10 @@ extension ForumService {
         static let LoginUrl = "\(AuthUrl)/login"
         static let WhoamiUrl = "\(AuthUrl)/whoami"
         static let LogoutUrl = "\(AuthUrl)/logout"
+        static let SubscriptionUrl = "\(BaseUrl)/subscription"
+        static func SubscriptionSocketUrl(subscriptionId: String) -> String {
+            return BaseSocketUrl + "/" + subscriptionId
+        }
         static let ForumUrl = "\(BaseUrl)/forum"
         static func MessageUrl(forumUuid: String) -> String {
             return ForumUrl + "/" + forumUuid + "/message"
@@ -327,6 +353,11 @@ extension ForumService {
         static let ModifiedTime = "modifiedTime"
         static let ModifiedBy = "modifiedByUid"
         static let Uuid = "uuid"
+        static let SubscriptionId = "subscriptionId"
+        static let UserIdentity = "userIdentity"
+        static let TopicId = "topicId"
+        static let ExpirationTime = "expirationTime"
+        static let Duration = "duration"
     }
     
     struct ForumJsonValue {
