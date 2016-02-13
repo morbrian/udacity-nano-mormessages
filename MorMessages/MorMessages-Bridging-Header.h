@@ -12,5 +12,8 @@
 // used to create the md5 hash for fetching Gravatar image
 #import <CommonCrypto/CommonDigest.h>
 
+// used to detect network status
+#import "Reachability.h"
+
 
 #endif /* MorMessages_Bridging_Header_h */

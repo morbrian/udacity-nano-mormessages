@@ -223,6 +223,12 @@ class ForumService {
             if let basicAuthCredentials = basicAuthCredentials {
                 request.addValue(basicAuthCredentials, forHTTPHeaderField: "Authorization")
             }
+            if let webSocket = webSocket {
+                // our simple client only supports one socket at a time
+                // because that's all we need for a single view controller
+                // in the messages application
+                webSocket.close()
+            }
             webSocket = WebSocket(request: request)
             webSocket!.allowSelfSignedSSL = true
             webSocket!.event.message = { data in
@@ -257,11 +263,34 @@ class ForumService {
         }
     }
     
-    func unsubscribeFromForum(forum: Forum) {
+    func maintainActiveSubscription() {
         if let webSocket = webSocket {
+            webSocket.open()
+        }
+    }
+    
+    func unsubscribe(subscription: Subscription) {
+        if let webSocket = webSocket {
+            
+            Logger.info("websocket will close")
             webSocket.close()
         }
+        Logger.info("websocket will be nil")
         webSocket = nil
+        if let subscriptionId = subscription.subscriptionId,
+            request = webClient.createHttpRequestUsingMethod(WebClient.HttpDelete,
+            forUrlString: ForumService.ForumAction.SubscriptionUrl(subscriptionId),
+            includeHeaders: ForumService.StandardHeaders) {
+                webClient.executeRequest(request) {
+                    jsonData, error in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        // there's not too much we can do, but the server will delete it eventually
+                        Logger.info("unsubscribe failed: url\(ForumService.ForumAction.SubscriptionUrl(subscriptionId))")
+                    }
+                }
+        } else {
+            Logger.error("failed to attempt unsubscribe request")
+        }
     }
     
     
@@ -305,8 +334,9 @@ class ForumService {
 
 extension ForumService {
     
-    static let BaseUrl = "https://mormessages.morbrian.com/mormessages/api/rest"
-    static let BaseSocketUrl = "wss://mormessages.morbrian.com/mormessages/api/websocket"
+    static let MorMessagesHostname = "mormessages.morbrian.com"
+    static let BaseUrl = "https://\(MorMessagesHostname)/mormessages/api/rest"
+    static let BaseSocketUrl = "wss://\(MorMessagesHostname)/mormessages/api/websocket"
     
     static let StandardHeaders: [String:String] = ["Content-Type":"application/json"]
     
@@ -320,6 +350,9 @@ extension ForumService {
         static let WhoamiUrl = "\(AuthUrl)/whoami"
         static let LogoutUrl = "\(AuthUrl)/logout"
         static let SubscriptionUrl = "\(BaseUrl)/subscription"
+        static func SubscriptionUrl(subscriptionId: String) -> String {
+            return "\(SubscriptionUrl)/\(subscriptionId)"
+        }
         static func SubscriptionSocketUrl(subscriptionId: String) -> String {
             return BaseSocketUrl + "/" + subscriptionId
         }

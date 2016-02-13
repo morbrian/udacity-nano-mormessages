@@ -16,6 +16,9 @@ class MessageViewController: UIViewController {
     @IBOutlet weak var bottomBarView: UIView!
     @IBOutlet weak var messageTextField: UITextField!
     
+    // layout hints
+    let EstimatedRowHeight: CGFloat = 44
+    
     // fetch controllers
     var fetchOffset = 0
     let ResultSize = 100
@@ -29,6 +32,9 @@ class MessageViewController: UIViewController {
     
     // Forum associated with this view
     var forum: Forum!
+    var subscription: Subscription?
+    var serviceReachability: Reachability!
+    var serviceReachabilityIndicator: UIBarButtonItem!
     
     var topRefreshView: RefreshView!
     
@@ -39,14 +45,23 @@ class MessageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        serviceReachability = Reachability(hostName: ForumService.MorMessagesHostname);
+        serviceReachability.startNotifier()
         navigationController?.navigationBar.tintColor = Constants.ThemeButtonTintColor
-        navigationItem.rightBarButtonItem = produceDetailsBarButtonItem()
+        serviceReachabilityIndicator = producesServiceReachabilityBarButtonItem()
+        navigationItem.rightBarButtonItems = [
+            produceDetailsBarButtonItem(),
+            serviceReachabilityIndicator
+        ]
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "networkReachabilityChanged:", name: kReachabilityChangedNotification, object: nil)
+        
         if let navigationBar = navigationController?.navigationBar {
             navigationBar.translucent = false
             topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
         }
         self.tableView.rowHeight = UITableViewAutomaticDimension;
-        self.tableView.estimatedRowHeight = 44;
+        self.tableView.estimatedRowHeight = EstimatedRowHeight;
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -54,27 +69,64 @@ class MessageViewController: UIViewController {
             Logger.info("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
+        
+
+    }
+    
+    func networkReachabilityChanged(notification: NSNotification) {
+        Logger.info("reachability changed")
+        if serviceReachability.currentReachabilityStatus() != NotReachable {
+            fetchRecent()
+            if let subscription = subscription {
+                self.activate(subscription)
+            } else {
+                self.subscribe()
+            }
+            serviceReachabilityIndicator.image = UIImage(named: Constants.GreenCheckImage)
+            serviceReachabilityIndicator.tintColor = UIColor.greenColor()
+        } else {
+            serviceReachabilityIndicator.image = UIImage(named: Constants.RedxImage)
+            serviceReachabilityIndicator.tintColor = UIColor.redColor()
+            
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // register action if keyboard will show
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        
+        Logger.info("view will appear");
         fetchRecent(self.scrollToBottom)
+        if let subscription = subscription {
+            self.activate(subscription)
+        } else {
+            self.subscribe()
+        }
+    }
+    
+    func subscribe() {
         manager.subscribeToForum(forum){ subscription, error in
             if let subscription = subscription {
-                self.manager.activateSubscription(subscription) { error in
-                    if error != nil {
-                        Logger.error("Activation failed: \(error?.description)")
-                    }
-                }
+                self.subscription = subscription
+                self.activate(subscription)
             } else {
                 Logger.error("Subscribe failed: \(error?.description)")
             }
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
-        // register action if keyboard will show
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    func activate(subscription: Subscription) {
+        self.manager.activateSubscription(subscription) { error in
+            if error != nil {
+                Logger.error("Activation failed: \(error?.description)")
+            }
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         // unregister keyboard actions when view not showing
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
@@ -82,7 +134,10 @@ class MessageViewController: UIViewController {
     
     override func willMoveToParentViewController(parent: UIViewController?) {
         if parent == nil {
-            manager.unsubscribeFromForum(forum)
+            NSNotificationCenter.defaultCenter().removeObserver(self, name: kReachabilityChangedNotification, object: nil)
+            if let subscription = subscription {
+                manager.unsubscribe(subscription)
+            }
         }
     }
     
@@ -142,9 +197,21 @@ class MessageViewController: UIViewController {
     }
 
     // return a button with details label
-    private func produceDetailsBarButtonItem() -> UIBarButtonItem? {
+    private func produceDetailsBarButtonItem() -> UIBarButtonItem {
         let button = UIBarButtonItem(title: "Details", style: UIBarButtonItemStyle.Plain, target: self, action: "forumDetailsAction:")
         applyThemeToButton(button)
+        return button
+    }
+    
+    private func producesServiceReachabilityBarButtonItem() -> UIBarButtonItem {
+        let stateImage = serviceReachability.currentReachabilityStatus() == NotReachable ?
+            UIImage(named: Constants.RedxImage) :
+            UIImage(named: Constants.GreenCheckImage)
+        let stateColor = serviceReachability.currentReachabilityStatus() == NotReachable ?
+            UIColor.redColor() :
+            UIColor.greenColor()
+        let button = UIBarButtonItem(image: stateImage, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+        button.tintColor = stateColor
         return button
     }
     
