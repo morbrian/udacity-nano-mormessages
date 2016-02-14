@@ -360,31 +360,67 @@
                                                             </constraints>
                                                         </view>
                                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="message" translatesAutoresizingMaskIntoConstraints="NO" id="iPl-bn-33s">
-                                                            <rect key="frame" x="16" y="31" width="67" height="33"/>
+                                                            <rect key="frame" x="40" y="30" width="67" height="33"/>
                                                             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                             <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
                                                         </textView>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="32" placeholderIntrinsicHeight="32" translatesAutoresizingMaskIntoConstraints="NO" id="nXh-C2-8u6">
+                                                            <rect key="frame" x="8" y="31" width="32" height="32"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="32" id="AQl-2Y-Azn"/>
+                                                                <constraint firstAttribute="height" constant="32" id="Kgg-Qv-D4M"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Nbo-9g-Qak">
+                                                            <rect key="frame" x="8" y="31" width="32" height="32"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="32" id="KDu-xq-0ab"/>
+                                                                <constraint firstAttribute="height" constant="32" id="nQ6-v2-1zX"/>
+                                                            </constraints>
+                                                        </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstItem="5vO-ce-Rzh" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iPl-bn-33s" secondAttribute="trailing" id="37J-wK-Sxu"/>
+                                                        <constraint firstItem="Nbo-9g-Qak" firstAttribute="leading" secondItem="C2d-1J-d7Z" secondAttribute="leadingMargin" id="45h-wy-7Yn"/>
+                                                        <constraint firstItem="Nbo-9g-Qak" firstAttribute="baseline" secondItem="nXh-C2-8u6" secondAttribute="baseline" id="7EZ-gw-1wy"/>
+                                                        <constraint firstItem="Nbo-9g-Qak" firstAttribute="centerY" secondItem="C2d-1J-d7Z" secondAttribute="centerY" id="CYw-in-XdW"/>
                                                         <constraint firstItem="iPl-bn-33s" firstAttribute="leading" secondItem="C2d-1J-d7Z" secondAttribute="leadingMargin" constant="8" id="DJM-wA-Cgd"/>
                                                         <constraint firstItem="NG5-Se-vcT" firstAttribute="centerY" secondItem="C2d-1J-d7Z" secondAttribute="centerY" id="Eef-gN-iAQ"/>
                                                         <constraint firstAttribute="bottomMargin" secondItem="DX5-oV-JZE" secondAttribute="bottom" id="JPV-Ca-eWX"/>
+                                                        <constraint firstItem="Nbo-9g-Qak" firstAttribute="width" secondItem="nXh-C2-8u6" secondAttribute="width" id="LG4-3E-bz2"/>
                                                         <constraint firstItem="iPl-bn-33s" firstAttribute="top" relation="greaterThanOrEqual" secondItem="C2d-1J-d7Z" secondAttribute="topMargin" id="Vh4-pV-iNV"/>
+                                                        <constraint firstItem="Nbo-9g-Qak" firstAttribute="leading" secondItem="C2d-1J-d7Z" secondAttribute="leadingMargin" id="VsV-H8-o1i"/>
+                                                        <constraint firstItem="Nbo-9g-Qak" firstAttribute="top" secondItem="nXh-C2-8u6" secondAttribute="top" id="WLe-wp-BzH"/>
                                                         <constraint firstItem="iPl-bn-33s" firstAttribute="centerY" secondItem="C2d-1J-d7Z" secondAttribute="centerY" id="b8F-Pv-eOE"/>
                                                         <constraint firstItem="NG5-Se-vcT" firstAttribute="centerX" secondItem="C2d-1J-d7Z" secondAttribute="centerX" id="cVU-oR-Ft2"/>
+                                                        <constraint firstItem="nXh-C2-8u6" firstAttribute="leading" secondItem="C2d-1J-d7Z" secondAttribute="leadingMargin" id="fVb-YY-vvz"/>
                                                         <constraint firstItem="DX5-oV-JZE" firstAttribute="top" secondItem="C2d-1J-d7Z" secondAttribute="topMargin" id="gaJ-Nt-pyn"/>
                                                         <constraint firstAttribute="trailingMargin" secondItem="DX5-oV-JZE" secondAttribute="trailing" id="ogj-HV-OaZ"/>
+                                                        <constraint firstItem="Nbo-9g-Qak" firstAttribute="height" secondItem="nXh-C2-8u6" secondAttribute="height" id="orP-L2-WP9"/>
+                                                        <constraint firstItem="nXh-C2-8u6" firstAttribute="centerY" secondItem="C2d-1J-d7Z" secondAttribute="centerY" id="qHF-lW-hix"/>
                                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="iPl-bn-33s" secondAttribute="bottom" id="vQT-es-QKa"/>
+                                                        <constraint firstItem="iPl-bn-33s" firstAttribute="leading" secondItem="nXh-C2-8u6" secondAttribute="trailing" id="w2c-dF-C7X"/>
                                                         <constraint firstItem="DX5-oV-JZE" firstAttribute="leading" secondItem="NG5-Se-vcT" secondAttribute="trailing" id="ykT-Kk-Tu3"/>
                                                     </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="45h-wy-7Yn"/>
+                                                            <exclude reference="7EZ-gw-1wy"/>
+                                                            <exclude reference="LG4-3E-bz2"/>
+                                                            <exclude reference="WLe-wp-BzH"/>
+                                                            <exclude reference="orP-L2-WP9"/>
+                                                            <exclude reference="DJM-wA-Cgd"/>
+                                                        </mask>
+                                                    </variation>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <connections>
+                                                    <outlet property="activityIndicator" destination="Nbo-9g-Qak" id="6L0-Uw-7BA"/>
+                                                    <outlet property="avatarImageView" destination="nXh-C2-8u6" id="rM6-ux-flX"/>
                                                     <outlet property="contentTextView" destination="iPl-bn-33s" id="5O7-7Q-3f2"/>
                                                 </connections>
                                             </tableViewCell>
