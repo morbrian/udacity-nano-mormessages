@@ -111,11 +111,6 @@ class LoginViewController: UIViewController {
         manager.authenticateByUsername(username!, withPassword: password!,
             completionHandler: handleAuthenticationResponse)
     }
-    
-    @IBAction func gotoAccountSignup(sender: UIButton) {
-        Logger.error("Sign up not implemented yet.")
-        //UIApplication.sharedApplication().openURL(NSURL(string: Constants.SignupUrlString)!)
-    }
 
     // MARK: Segue Transition
     
@@ -130,6 +125,7 @@ class LoginViewController: UIViewController {
             dataManager = sender as? MorMessagesManager {
                 destination.manager = dataManager
         } else {
+            // programmer error, could never happen in production
             Logger.error("Unrecognized Segue Destination Class For Segue: \(segue.identifier ?? nil)")
         }
     }

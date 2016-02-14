@@ -72,9 +72,6 @@ class SpinnerPanelView: UIView {
             self.activityInProgress = active
             self.hidden = !active
             UIApplication.sharedApplication().networkActivityIndicatorVisible = active
-            
-            Logger.info("Panel Center = \(self.center)")
-            Logger.info("Image Center = \(self.spinnerImageView.center)")
             if (active) {
                 self.animate()
             }

@@ -61,14 +61,4 @@ class Forum: BaseEntity {
         }
     }
     
-    func fetchMessageList(completionHandler: (() -> Void)? = nil) {
-        ForumService.sharedInstance().listMessagesInForum(self, offset: 0, resultSize: 5) { messages, error in
-            if let error = error {
-                Logger.error("Failed to get message list for forum: \(error)")
-            }
-            completionHandler?()
-        }
-    }
-
-    
 }
