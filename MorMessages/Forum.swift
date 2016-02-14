@@ -47,15 +47,7 @@ class Forum: BaseEntity {
         desc = state[ForumService.ForumJsonKey.Description] as? String
         imageUrl = state[ForumService.ForumJsonKey.ImageUrl] as? String
     }
-    
-    var ownerImageUrlString: String? {
-        if let createdBy = self.createdBy {
-            return ToolKit.produceRobohashUrlFromString(createdBy)?.absoluteString
-        } else {
-            return nil
-        }
-    }
-    
+       
     var forumImage: UIImage? {
         
         get {
@@ -65,19 +57,6 @@ class Forum: BaseEntity {
         set {
             if let imageUrl = imageUrl {
                 WebClient.Caches.imageCache.storeImage(newValue, withIdentifier: imageUrl)
-            }
-        }
-    }
-    
-    var ownerImage: UIImage? {
-        
-        get {
-            return WebClient.Caches.imageCache.imageWithIdentifier(ownerImageUrlString)
-        }
-        
-        set {
-            if let ownerImageUrlString = ownerImageUrlString {
-                WebClient.Caches.imageCache.storeImage(newValue, withIdentifier: ownerImageUrlString)
             }
         }
     }

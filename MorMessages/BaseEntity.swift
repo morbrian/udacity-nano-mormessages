@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 
 class BaseEntity: NSManagedObject {
@@ -114,4 +115,29 @@ class BaseEntity: NSManagedObject {
         return (jsonString as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
     }
     
+}
+
+// MARK: Data Specific Mappings to View Items
+
+extension BaseEntity {
+    var ownerImageUrlString: String? {
+        if let createdBy = self.createdBy {
+            return ToolKit.produceRobohashUrlFromString(createdBy)?.absoluteString
+        } else {
+            return nil
+        }
+    }
+    
+    var ownerImage: UIImage? {
+        
+        get {
+            return WebClient.Caches.imageCache.imageWithIdentifier(ownerImageUrlString)
+        }
+        
+        set {
+            if let ownerImageUrlString = ownerImageUrlString {
+                WebClient.Caches.imageCache.storeImage(newValue, withIdentifier: ownerImageUrlString)
+            }
+        }
+    }
 }
