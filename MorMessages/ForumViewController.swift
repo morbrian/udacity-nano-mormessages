@@ -45,7 +45,7 @@ class ForumViewController: UIViewController {
         do {
             try fetchedResultsController.performFetch()
         } catch _ {
-            Logger.info("fetchedResultsController fetch failed")
+            Logger.error("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
         fetchRecent()
@@ -110,9 +110,9 @@ class ForumViewController: UIViewController {
                 destination.forum = forum
                 destination.manager = self.manager
         } else {
+            // programmer error, should never happen in production
             Logger.error("Unrecognized Segue Destination Class For Segue: \(segue.identifier ?? nil)")
         }
-        
     }
     
     // MARK: Layout Helpers
@@ -193,8 +193,6 @@ class ForumViewController: UIViewController {
                 let afterCount = self.itemCount()
                 
                 self.fetchOffset += afterCount - beforeCount
-                Logger.info("Fetched count(\(afterCount - beforeCount)) items, setting offset(\(self.fetchOffset))")
-
                 completionHandler?()
             }
         }

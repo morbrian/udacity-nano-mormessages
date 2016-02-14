@@ -16,6 +16,7 @@ class MessageViewController: UIViewController {
     @IBOutlet weak var browserButton: UIButton!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextField: UITextField!
+    @IBOutlet weak var bottomBarView: UIView!
     
     // web browser views
     @IBOutlet weak var webBrowserPanel: UIView!
@@ -72,17 +73,16 @@ class MessageViewController: UIViewController {
         do {
             try fetchedResultsController.performFetch()
         } catch _ {
-            Logger.info("fetchedResultsController fetch failed")
+            Logger.error("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
         let tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
         view.addGestureRecognizer(tapRecognizer)
-        layoutBottomBar()
+        updateBottomBarLayout()
         searchBar.delegate = self
     }
     
     func networkReachabilityChanged(notification: NSNotification) {
-        Logger.info("reachability changed")
         if serviceReachability.currentReachabilityStatus() != NotReachable {
             fetchRecent()
             if let subscription = subscription {
@@ -104,8 +104,6 @@ class MessageViewController: UIViewController {
         // register action if keyboard will show
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-        
-        Logger.info("view will appear");
         fetchRecent(self.scrollToBottom)
         if let subscription = subscription {
             self.activate(subscription)
@@ -120,7 +118,9 @@ class MessageViewController: UIViewController {
                 self.subscription = subscription
                 self.activate(subscription)
             } else {
-                Logger.error("Subscribe failed: \(error?.description)")
+                ToolKit.showErrorAlert(viewController: self,
+                    title: "Forum Subscription",
+                    message: "Real time message updates are unavailable")
             }
         }
     }
@@ -129,6 +129,10 @@ class MessageViewController: UIViewController {
         self.manager.activateSubscription(subscription) { error in
             if error != nil {
                 Logger.error("Activation failed: \(error?.description)")
+                ToolKit.showErrorAlert(viewController: self,
+                    title: "Subscription Activation",
+                    message: "Real time message updates are unavailable")
+
             }
         }
     }
@@ -151,6 +155,7 @@ class MessageViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         updateRefreshViewLayout()
+        updateBottomBarLayout()
     }
     
     func endTextEditing() {
@@ -189,8 +194,7 @@ class MessageViewController: UIViewController {
     // return height of displayed keyboard
     private func getKeyboardHeight(notification: NSNotification) -> CGFloat {
         let userInfo = notification.userInfo
-        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        Logger.info("we think the keyboard height is: \(keyboardSize.CGRectValue().height)")
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
         return keyboardSize.CGRectValue().height
     }
     
@@ -248,30 +252,52 @@ class MessageViewController: UIViewController {
             destination.manager = manager
             destination.forum = forum
         } else {
+            // programmer bug, this should never happen in production
             Logger.error("Unrecognized Segue Destination Class For Segue: \(segue.identifier ?? nil)")
         }
         
     }
     
-    func layoutBottomBar() {
+    func stringifyRect(rect: CGRect) -> String{
+        let output =
+        "[size (w:\(rect.size.width), h:\(rect.size.height))][origin (x:\(rect.origin.x), y:\(rect.origin.y))]"
+        
+        return output
+    }
+    
+    func stringifyView(view: UIView, label: String) -> String {
+        let output =
+        "[\(label)]\n"
+        + "[frame]\(stringifyRect(view.frame))\n"
+        + "[bound]\(stringifyRect(view.bounds))\n"
+        "\n"
+        
+        return output
+    }
+    
+    func printRelevantViews(tag: String) {
+        print("==== \(tag) start ===\n")
+        print(stringifyView(contentView, label: "contentView"))
+        print(stringifyView(bottomBarView, label: "bottomBarView"))
+        print(stringifyView(browserButton, label: "browserButton"))
+        print(stringifyView(messageTextField, label: "messageTextField"))
+        print(stringifyView(sendButton, label: "sendButton"))
+        print("==== \(tag) end ===\n")
+    }
+    
+    func updateBottomBarLayout() {
         let sendable = messageTextField.text != ""
+        //printRelevantViews("entering-sendable(\(sendable))")
         if sendable {
-            if sendButton.hidden {
-                messageTextField.frame.size.width -= sendButton.frame.size.width
-            }
             sendButton.hidden = false
-            sendButton.enabled = true
         } else {
-            if !sendButton.hidden {
-                messageTextField.frame.size.width += sendButton.frame.size.width
-            }
             sendButton.hidden = true
-            sendButton.enabled = false
         }
+        //printRelevantViews("exiting-sendable(\(sendable))")
     }
     
     @IBAction func editingChanged(sender: UITextField) {
-        layoutBottomBar()
+        updateBottomBarLayout()
     }
     
     @IBAction func sendMessageOnEnter(sender: UITextField) {
@@ -294,7 +320,7 @@ class MessageViewController: UIViewController {
                     self.messageTextField.enabled = true
                     if message != "" {
                         self.messageTextField.text = ""
-                        self.layoutBottomBar()
+                        self.updateBottomBarLayout()
                     } else if let error = error {
                         ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: error.localizedDescription)
                     } else {
@@ -302,7 +328,7 @@ class MessageViewController: UIViewController {
                     }
                 }
         } else {
-            // the send button should be disabled, so this should never happen
+            // the send button should be disabled, so this should never happen in production
             Logger.error("cannot send message, forum.id or message text is nil")
         }
     }
@@ -365,11 +391,7 @@ class MessageViewController: UIViewController {
             dispatch_async(dispatch_get_main_queue()) {
                 self.networkActivity(false)
                 let afterCount = self.itemCount()
-                
                 self.fetchOffset += afterCount - beforeCount
-                Logger.info("BEFORE(\(beforeCount)), AFTER(\(afterCount))")
-                Logger.info("Fetched count(\(afterCount - beforeCount)) items, setting offset(\(self.fetchOffset))")
-
                 completionHandler?()
             }
         }
@@ -544,9 +566,10 @@ extension MessageViewController {
     
     @IBAction func useCurrentWebPage(sender: UIBarButtonItem) {
         messageTextField.text = webView.request?.URL?.absoluteString
+        contentView.hidden = false
         webBrowserPanel.hidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        layoutBottomBar()
+        updateBottomBarLayout()
     }
     
     @IBAction func showWebView(sender: UIButton) {
@@ -558,6 +581,7 @@ extension MessageViewController {
         }
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         webBrowserPanel.hidden = false
+        contentView.hidden = true
         webBrowserPanel.setNeedsLayout()
     }
     

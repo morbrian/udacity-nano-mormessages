@@ -179,7 +179,6 @@ class ForumService {
                         if let jsonArray = jsonData as? [[String:AnyObject]] {
                             // parse each message and produce an array of only valid Forum objects
                             let messages = jsonArray.map(Message.produceWithState).filter({$0 != nil}).map({$0!})
-                            Logger.info("Requesed resultSize(\(resultSize)), Received(\(messages.count))")
                             completionHandler(messages: messages, error: nil)
                         } else {
                             completionHandler(messages: nil, error: ForumService.errorForCode(.UnexpectedResponseData))
@@ -239,24 +238,23 @@ class ForumService {
                     let (jsonData, parsingError): (AnyObject?, NSError?) =
                     self.webClient.parseJsonFromData(textData)
                     
-                    if let parsingError = parsingError {
-                        Logger.debug(parsingError.description)
+                    if parsingError != nil {
                         return
                     }
-                    if let jsonData = jsonData as? [String:AnyObject],
-                        let textMessage = Message.produceWithState(jsonData) {
-                            Logger.info("given state(\(jsonData))")
-                            Logger.info("processed message(\(textMessage))")
+                    if let jsonData = jsonData as? [String:AnyObject]
+                        where Message.produceWithState(jsonData) != nil {
+                            // success, but nothing more to do
+                    } else {
+                        Logger.error("Recieved message cannot be understood")
                     }
                 } else {
-                    Logger.info("WebSocket Received Unknown Thing: \(data)")
+                    Logger.error("WebSocket Received Unknown Thing: \(data)")
                 }
             }
             webSocket!.event.error = { error in
                 Logger.error("error in websocket connection: \(error)")
             }
             completionHandler(error: nil)
-            Logger.info("Completed activation of subscription.")
         } else {
             Logger.error("unable to subscribe, specified forum has no 'id'")
             completionHandler(error: ForumService.errorForCode(.WebSocketSubscribeError))
@@ -271,11 +269,8 @@ class ForumService {
     
     func unsubscribe(subscription: Subscription) {
         if let webSocket = webSocket {
-            
-            Logger.info("websocket will close")
             webSocket.close()
         }
-        Logger.info("websocket will be nil")
         webSocket = nil
         if let subscriptionId = subscription.subscriptionId,
             request = webClient.createHttpRequestUsingMethod(WebClient.HttpDelete,
@@ -283,9 +278,9 @@ class ForumService {
             includeHeaders: ForumService.StandardHeaders) {
                 webClient.executeRequest(request) {
                     jsonData, error in
-                    dispatch_async(dispatch_get_main_queue()) {
-                        // there's not too much we can do, but the server will delete it eventually
-                        Logger.info("unsubscribe failed: url\(ForumService.ForumAction.SubscriptionUrl(subscriptionId))")
+                    if let error = error {
+                        // there's nothing we can do, but the server will purge it after expiration
+                        Logger.error("unsubscribe failed(\(error.localizedDescription))")
                     }
                 }
         } else {
