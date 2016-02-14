@@ -8,7 +8,18 @@
 
 import UIKit
 
-class MessageCellView: TaskCancelingTableViewCell {
+class MessageCellView: UICollectionViewCell {
+    
+    var imageName: String = ""
+    
+    var taskToCancelifCellIsReused: NSURLSessionTask? {
+        
+        didSet {
+            if let taskToCancel = oldValue {
+                taskToCancel.cancel()
+            }
+        }
+    }
 
     @IBOutlet weak var contentTextView: UITextView! {
         didSet {
@@ -37,6 +48,28 @@ class MessageCellView: TaskCancelingTableViewCell {
         }
     }
     
-    
+    //
+    // with help from:
+    // http://stackoverflow.com/questions/25895311/uicollectionview-self-sizing-cells-with-auto-layout
+    //
+    override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let superAttributes = super.preferredLayoutAttributesFittingAttributes(layoutAttributes)
+        if let attr: UICollectionViewLayoutAttributes = superAttributes.copy() as? UICollectionViewLayoutAttributes {
+            var newFrame = attr.frame
+            self.frame = newFrame
+            
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+            
+            let desiredHeight: CGFloat = self.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+            newFrame.size.height = desiredHeight
+            attr.frame = newFrame
+            
+            return attr
+        } else {
+            Logger.error("Failed to calculate preferred layout because we don't know the attribute type")
+            return superAttributes
+        }
+    }
     
 }

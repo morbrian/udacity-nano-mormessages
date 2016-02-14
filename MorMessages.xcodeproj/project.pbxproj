@@ -41,7 +41,6 @@
 		4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */; };
 		4E913CFE1C5433840057D44A /* ForumCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913CFD1C5433840057D44A /* ForumCellView.swift */; };
 		4E913D021C543DD30057D44A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913D011C543DD30057D44A /* ImageCache.swift */; };
-		4E933DD61C5C57C90003FEFC /* TaskCancelingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E933DD51C5C57C90003FEFC /* TaskCancelingTableViewCell.swift */; };
 		4E933DD81C5C5B630003FEFC /* MessageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E933DD71C5C5B630003FEFC /* MessageCellView.swift */; };
 		4E9C388E1C546CB9002499C4 /* ToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388D1C546CB9002499C4 /* ToolKit.swift */; };
 		4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */; };
@@ -110,7 +109,6 @@
 		4E913CFA1C53EBA00057D44A /* ResponseStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseStatus.swift; sourceTree = "<group>"; };
 		4E913CFD1C5433840057D44A /* ForumCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForumCellView.swift; sourceTree = "<group>"; };
 		4E913D011C543DD30057D44A /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
-		4E933DD51C5C57C90003FEFC /* TaskCancelingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCancelingTableViewCell.swift; sourceTree = "<group>"; };
 		4E933DD71C5C5B630003FEFC /* MessageCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCellView.swift; sourceTree = "<group>"; };
 		4E9C388C1C546C8C002499C4 /* MorMessages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MorMessages-Bridging-Header.h"; sourceTree = "<group>"; };
 		4E9C388D1C546CB9002499C4 /* ToolKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolKit.swift; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 			isa = PBXGroup;
 			children = (
 				4E913CFD1C5433840057D44A /* ForumCellView.swift */,
-				4E933DD51C5C57C90003FEFC /* TaskCancelingTableViewCell.swift */,
 				4E933DD71C5C5B630003FEFC /* MessageCellView.swift */,
 				4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */,
 				4E30D07D1C63DE6C002786DA /* RefreshView.swift */,
@@ -425,7 +422,6 @@
 			files = (
 				4E913D021C543DD30057D44A /* ImageCache.swift in Sources */,
 				4E9C38901C556E5C002499C4 /* NewForumViewController.swift in Sources */,
-				4E933DD61C5C57C90003FEFC /* TaskCancelingTableViewCell.swift in Sources */,
 				4E913CE91C4DCCA00057D44A /* Forum+CoreDataProperties.swift in Sources */,
 				4E913CEB1C4DCCA00057D44A /* BaseEntity+CoreDataProperties.swift in Sources */,
 				4E913CF11C532A4F0057D44A /* LoginViewController.swift in Sources */,

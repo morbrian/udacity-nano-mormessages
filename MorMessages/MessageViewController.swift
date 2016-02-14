@@ -11,13 +11,19 @@ import CoreData
 
 class MessageViewController: UIViewController {
     
-    @IBOutlet weak var browserButton: UIButton!
+    let CollectionCellsPerRowLandscape = 1
+    let CollectionCellsPerRowPortrait = 1
     
-    @IBOutlet weak var bottomBarView: UIView!
+    // CODE: set as 2 in IB, not sure how to reference that value in code, so keep this in sync
+    let CollectionCellSpacing = 2
+    
+    @IBOutlet weak var browserButton: UIButton!
     @IBOutlet weak var messageTextField: UITextField!
     
+    @IBOutlet weak var contentView: UIView!
+    
     // layout hints
-    let EstimatedRowHeight: CGFloat = 44
+    let EstimatedCellHeight: CGFloat = 44
     
     // fetch controllers
     var fetchOffset = 0
@@ -25,10 +31,12 @@ class MessageViewController: UIViewController {
     let PreFetchTrigger = 50
     var insertedIndexPath: NSIndexPath?
     
+    var context: NSManagedObjectContext!
+    
     // central data management object
     var manager: MorMessagesManager!
-    @IBOutlet weak var tableView: UITableView!
-    var context: NSManagedObjectContext!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
     // Forum associated with this view
     var forum: Forum!
@@ -60,8 +68,6 @@ class MessageViewController: UIViewController {
             navigationBar.translucent = false
             topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
         }
-        self.tableView.rowHeight = UITableViewAutomaticDimension;
-        self.tableView.estimatedRowHeight = EstimatedRowHeight;
         context = CoreDataStackManager.sharedInstance().managedObjectContext
         do {
             try fetchedResultsController.performFetch()
@@ -69,8 +75,6 @@ class MessageViewController: UIViewController {
             Logger.info("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
-        
-
     }
     
     func networkReachabilityChanged(notification: NSNotification) {
@@ -141,23 +145,51 @@ class MessageViewController: UIViewController {
         }
     }
     
+    // MARK: Layout Helpers
+    
     override func viewWillLayoutSubviews() {
+        calculateCollectionCellSize()
         updateRefreshViewLayout()
+        flowLayout.estimatedItemSize = CGSize(width: collectionView.frame.width, height: EstimatedCellHeight)
+    }
+    
+    // calculates cell size based on cells-per-row for the current device orientation
+    private func calculateCollectionCellSize() {
+        if let collectionView = collectionView {
+            let width = collectionView.frame.width / CGFloat(collectionCellCountPerRow) - CGFloat(CollectionCellSpacing)
+            let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+            layout?.itemSize = CGSize(width: width, height: width)
+        }
+    }
+    
+    private var defaultCount: Int?
+    private var collectionCellCountPerRow: Int {
+        let orientation = UIDevice.currentDevice().orientation
+        switch orientation {
+        case .LandscapeLeft, .LandscapeRight:
+            defaultCount = CollectionCellsPerRowLandscape
+            return CollectionCellsPerRowLandscape
+        case .Portrait:
+            defaultCount = CollectionCellsPerRowPortrait
+            return CollectionCellsPerRowPortrait
+        default:
+            return defaultCount ?? CollectionCellsPerRowPortrait
+        }
     }
     
     // MARK: Keyboard Handling
     
     // shift the bottom bar view up if text field being edited will be obstructed
     func keyboardWillShow(notification: NSNotification) {
-        let senderOrigin =  view.convertPoint(bottomBarView.bounds.origin, fromView: bottomBarView)
-        let bottomOfCurrentlyEditedItem =  senderOrigin.y + bottomBarView.bounds.height
+        let senderOrigin =  view.convertPoint(contentView.bounds.origin, fromView: contentView)
+        let bottomOfCurrentlyEditedItem =  senderOrigin.y + contentView.bounds.height
         if viewShiftDistance == nil {
             let keyboardHeight = getKeyboardHeight(notification)
             let topOfKeyboard = view.bounds.maxY - keyboardHeight
             // we only need to move the view if the keyboard will cover up the login button and text fields
             if topOfKeyboard < bottomOfCurrentlyEditedItem {
                     viewShiftDistance = bottomOfCurrentlyEditedItem - topOfKeyboard
-                    self.bottomBarView.bounds.offsetInPlace(dx: 0.0, dy: viewShiftDistance!)
+                    self.contentView.bounds.offsetInPlace(dx: 0.0, dy: viewShiftDistance!)
             }
         }
     }
@@ -165,7 +197,7 @@ class MessageViewController: UIViewController {
     // if bottom textfield just completed editing, shift the view back down
     func keyboardWillHide(notification: NSNotification) {
         if let shiftDistance = viewShiftDistance {
-            self.bottomBarView.bounds.offsetInPlace(dx: 0.0, dy: -shiftDistance)
+            self.contentView.bounds.offsetInPlace(dx: 0.0, dy: -shiftDistance)
             viewShiftDistance = nil
         }
     }
@@ -183,10 +215,10 @@ class MessageViewController: UIViewController {
     // figure out the best height for the activity spinner area
     private func produceRefreshViewWithHeight(spinnerAreaHeight: CGFloat) -> RefreshView {
         let refreshViewHeight = view.bounds.height
-        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: tableView)
+        let refreshView = RefreshView(frame: CGRect(x: 0, y: -refreshViewHeight, width: view.bounds.width, height: refreshViewHeight), spinnerAreaHeight: spinnerAreaHeight, scrollView: collectionView)
         refreshView.translatesAutoresizingMaskIntoConstraints = false
         refreshView.delegate = self
-        tableView.insertSubview(refreshView, atIndex: 0)
+        collectionView.insertSubview(refreshView, atIndex: 0)
         return refreshView
     }
     
@@ -302,12 +334,13 @@ class MessageViewController: UIViewController {
             where sections.count == 1 {
                 let section = sections[0]
                 if section.numberOfObjects > 0 {
-                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: section.numberOfObjects - 1, inSection: 0),
-                        atScrollPosition: UITableViewScrollPosition.Bottom,
-                        animated: false)
+                    
+                    self.collectionView.scrollToItemAtIndexPath(
+                        NSIndexPath(forItem: section.numberOfObjects - 1, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Bottom, animated: false)
                 }
         }
     }
+    
     // similar to "Newest" but not constrained by already downloaded dates
     func fetchRecent(completionHandler: (() -> Void)? = nil) {
         fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
@@ -376,52 +409,65 @@ class MessageViewController: UIViewController {
    
 }
 
-// MARK: - UITableViewDelegate
+// MARK: - UICollectionViewDelegate
 
-extension MessageViewController: UITableViewDelegate {
-   //placeholder
+extension MessageViewController: UICollectionViewDelegate {
+//    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+//        if indexPath.item == itemCount() - PreFetchTrigger {
+//            fetchOlder()
+//        }
+//    }
+//    func collectionView(collectionView: UICollectionView,
+//        layout collectionViewLayout: UICollectionViewLayout,
+//        sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+//            
+//            
+//    }
+//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+//        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? MessageCellView {
+//            cell.contentTextView.sizeToFit()
+//            let size = CGSize(width: cell.frame.width, height: cell.frame.size.height + cell.contentTextView.frame.size.height)
+//            Logger.info("first option")
+//            return size
+//        } else {
+//            Logger.info("second option")
+//            return CGSize(width: collectionView.frame.width, height: 0)
+//        }
+//    }
 }
 
-// MARK: - TableViewDataSource
 
-extension MessageViewController: UITableViewDataSource {
+// MARK: - UICollectionViewDataSource
+
+extension MessageViewController: UICollectionViewDataSource {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionInfo = self.fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
     
-    func tableView(tableView: UITableView,
-        cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func collectionView(collectionView: UICollectionView,
+        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
             let message = fetchedResultsController.objectAtIndexPath(indexPath) as! Message
             
             var reuseIdentifier: String?
             if let identity = manager.currentUser?.identity,
                 createdBy = message.createdBy
-                    where identity == createdBy {
-                        reuseIdentifier = Constants.MessageCellViewRightIdentifier
+                where identity == createdBy {
+                    reuseIdentifier = Constants.MessageCellViewRightIdentifier
             } else {
                 reuseIdentifier = Constants.MessageCellViewLeftIdentifier
             }
             
-            let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier!) as! MessageCellView
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier!, forIndexPath: indexPath) as! MessageCellView
             cell.message = message
             return cell
     }
-    
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.None;
-    }
-    
 }
 
 // MARK: - Fetched Results Controller Delegate
 
 extension MessageViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        self.tableView.beginUpdates()
-    }
-
     func controller(controller: NSFetchedResultsController,
         didChangeSection sectionInfo: NSFetchedResultsSectionInfo,
         atIndex sectionIndex: Int,
@@ -429,16 +475,20 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
             
             switch type {
             case .Insert:
-                self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+                self.collectionView.insertSections(NSIndexSet(index: sectionIndex))
                 
             case .Delete:
-                self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+                self.collectionView.deleteSections(NSIndexSet(index: sectionIndex))
                 
             default:
                 return
             }
     }
-
+    
+    //
+    // This is the most interesting method. Take particular note of way the that newIndexPath
+    // parameter gets unwrapped and put into an array literal: [newIndexPath!]
+    //
     func controller(controller: NSFetchedResultsController,
         didChangeObject anObject: AnyObject,
         atIndexPath indexPath: NSIndexPath?,
@@ -447,37 +497,42 @@ extension MessageViewController: NSFetchedResultsControllerDelegate {
             
             switch type {
             case .Insert:
-                if let newIndexPath = newIndexPath {
-                    self.tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
-                    insertedIndexPath = newIndexPath
+                if let index = newIndexPath {
+                    collectionView.insertItemsAtIndexPaths([index])
+                    insertedIndexPath = index
                 }
                 
             case .Delete:
-                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+                if let index = indexPath {
+                    collectionView.deleteItemsAtIndexPaths([index])
+                }
                 
             case .Update:
                 if let indexPath = indexPath,
-                    cell = tableView.cellForRowAtIndexPath(indexPath) as? MessageCellView,
+                    cell = collectionView.cellForItemAtIndexPath(indexPath) as? MessageCellView,
                     message = controller.objectAtIndexPath(indexPath) as? Message {
                         cell.configureCellWithMessage(message)
-                    }
+                }
                 
             case .Move:
-                if let indexPath = indexPath {
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                }
-                if let newIndexPath = newIndexPath {
-                    tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
+                if let indexPath = indexPath, newIndexPath = newIndexPath {
+                    collectionView.deleteItemsAtIndexPaths([indexPath])
+                    collectionView.insertItemsAtIndexPaths([newIndexPath])
                 }
             }
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        self.tableView.endUpdates()
         if let indexPath = insertedIndexPath {
-           tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            self.collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Bottom, animated: false)
             insertedIndexPath = nil
         }
+        
+//        self.tableView.endUpdates()
+//        if let indexPath = insertedIndexPath {
+//           tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+//            insertedIndexPath = nil
+//        }
     }
 
 }
