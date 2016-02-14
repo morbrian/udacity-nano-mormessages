@@ -17,7 +17,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginStatusLabel: UILabel!
     @IBOutlet weak var loginButton: UIButton!
-    //@IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     
     // central data management object

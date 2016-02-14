@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4E0EE02B1C572F1700B2AA0A /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */; };
 		4E30D07C1C63DDF0002786DA /* SpinnerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */; };
 		4E30D07E1C63DE6C002786DA /* RefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30D07D1C63DE6C002786DA /* RefreshView.swift */; };
 		4E30D0801C63DE8D002786DA /* RefreshItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30D07F1C63DE8D002786DA /* RefreshItem.swift */; };
@@ -68,7 +67,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageViewController.swift; sourceTree = "<group>"; };
 		4E30D07B1C63DDF0002786DA /* SpinnerPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerPanelView.swift; sourceTree = "<group>"; };
 		4E30D07D1C63DE6C002786DA /* RefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshView.swift; sourceTree = "<group>"; };
 		4E30D07F1C63DE8D002786DA /* RefreshItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshItem.swift; sourceTree = "<group>"; };
@@ -267,7 +265,6 @@
 				4E913CF81C5355D10057D44A /* ForumViewController.swift */,
 				4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */,
 				4EEA21BA1C5879C800DB0325 /* MessageViewController.swift */,
-				4E0EE02A1C572F1700B2AA0A /* NewMessageViewController.swift */,
 				4EA6FDE81C67053300B99D7D /* DetailsViewController.swift */,
 				4E913CF21C532C300057D44A /* MorMessagesManager.swift */,
 				4E913CF61C5338250057D44A /* Constants.swift */,
@@ -442,7 +439,6 @@
 				4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */,
 				4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */,
 				4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */,
-				4E0EE02B1C572F1700B2AA0A /* NewMessageViewController.swift in Sources */,
 				4E933DD81C5C5B630003FEFC /* MessageCellView.swift in Sources */,
 				4EA6FDE91C67053300B99D7D /* DetailsViewController.swift in Sources */,
 				4E913CFE1C5433840057D44A /* ForumCellView.swift in Sources */,

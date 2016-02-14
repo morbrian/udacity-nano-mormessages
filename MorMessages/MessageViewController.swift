@@ -11,11 +11,16 @@ import CoreData
 
 class MessageViewController: UIViewController {
     
-    
+    // message views
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var browserButton: UIButton!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextField: UITextField!
+    
+    // web browser views
+    @IBOutlet weak var webBrowserPanel: UIView!
+    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     // layout hints
     let EstimatedRowHeight: CGFloat = 44
@@ -73,6 +78,7 @@ class MessageViewController: UIViewController {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
         view.addGestureRecognizer(tapRecognizer)
         layoutBottomBar()
+        searchBar.delegate = self
     }
     
     func networkReachabilityChanged(notification: NSNotification) {
@@ -529,5 +535,56 @@ extension MessageViewController: UIScrollViewDelegate {
 extension MessageViewController: RefreshViewDelegate {
     func refreshViewDidRefresh(refreshView: RefreshView) {
         fetchOlder(refreshView.endRefreshing)
+    }
+}
+
+// MARK: - Web Browser
+
+extension MessageViewController {
+    
+    @IBAction func useCurrentWebPage(sender: UIBarButtonItem) {
+        messageTextField.text = webView.request?.URL?.absoluteString
+        webBrowserPanel.hidden = true
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        layoutBottomBar()
+    }
+    
+    @IBAction func showWebView(sender: UIButton) {
+        messageTextField.endEditing(false)
+        if let urlText = messageTextField.text {
+            webView.loadRequest(produceRequestForText(urlText))
+        } else {
+            webView.loadRequest(produceRequestForText("cool things"))
+        }
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        webBrowserPanel.hidden = false
+        webBrowserPanel.setNeedsLayout()
+    }
+    
+    private func produceRequestForText(textString: String) -> NSURLRequest {
+        
+        if let validUrl = ToolKit.produceValidUrlFromString(textString),
+            request = WebClient().createHttpRequestUsingMethod(WebClient.HttpGet, forUrlString: validUrl.absoluteString) {
+                return request
+        } else if let searchUrl = ToolKit.produceBingUrlFromSearchString(textString),
+            request = WebClient().createHttpRequestUsingMethod(WebClient.HttpGet, forUrlString: searchUrl.absoluteString) {
+                return request
+        } else {
+            let request = WebClient().createHttpRequestUsingMethod(WebClient.HttpGet,
+                forUrlString: "https://images.google.com")
+            return request!
+        }
+    }
+}
+
+// MARK: - UISearchBarDelegate
+
+extension MessageViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        if let searchText = searchBar.text {
+            let request = produceRequestForText(searchText)
+            webView.loadRequest(request)
+        }
     }
 }
