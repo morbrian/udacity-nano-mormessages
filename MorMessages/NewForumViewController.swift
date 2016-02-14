@@ -51,6 +51,10 @@ class NewForumViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
     
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
+    
     // MARK: Keyboard Handling
     
     @IBAction func beginEditTextfield(sender: UITextField) {
