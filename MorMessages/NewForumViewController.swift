@@ -99,7 +99,6 @@ class NewForumViewController: UIViewController {
     private func getKeyboardHeight(notification: NSNotification) -> CGFloat {
         let userInfo = notification.userInfo
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        Logger.info("we think the keyboard height is: \(keyboardSize.CGRectValue().height)")
         return keyboardSize.CGRectValue().height
     }
 
@@ -145,8 +144,6 @@ class NewForumViewController: UIViewController {
                 }
             }
         }
-        
-        
     }
     
     // MARK: Gestures

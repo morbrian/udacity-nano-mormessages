@@ -433,12 +433,8 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qnk-B9-snf" userLabel="Bottom Bar">
                                         <rect key="frame" x="0.0" y="492" width="600" height="44"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sju-QU-9qA">
-                                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            </view>
                                             <textField opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Message" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gWR-PY-7eQ">
-                                                <rect key="frame" x="59" y="7" width="521" height="30"/>
+                                                <rect key="frame" x="59" y="7" width="477" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
@@ -448,6 +444,9 @@
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hAa-nJ-ng8" userLabel="Browser">
                                                 <rect key="frame" x="20" y="6" width="31" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="31" id="oSB-kz-Yf9"/>
+                                                </constraints>
                                                 <state key="normal" title="Web">
                                                     <color key="titleColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
@@ -455,8 +454,11 @@
                                                     <action selector="showWebView:" destination="9Bl-fT-yug" eventType="touchUpInside" id="5Pg-w4-jVV"/>
                                                 </connections>
                                             </button>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2NT-Vt-Pu7">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2NT-Vt-Pu7">
                                                 <rect key="frame" x="544" y="7" width="36" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="36" id="rVo-ne-fa8"/>
+                                                </constraints>
                                                 <state key="normal" title="Send">
                                                     <color key="titleColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
@@ -468,24 +470,28 @@
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="2NT-Vt-Pu7" secondAttribute="trailing" constant="20" symbolic="YES" id="550-e1-RPj"/>
-                                            <constraint firstAttribute="trailing" secondItem="gWR-PY-7eQ" secondAttribute="trailing" priority="750" constant="20" symbolic="YES" id="Dxr-is-luo"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="gWR-PY-7eQ" secondAttribute="trailing" priority="750" constant="20" symbolic="YES" id="Dxr-is-luo"/>
+                                            <constraint firstItem="2NT-Vt-Pu7" firstAttribute="leading" secondItem="gWR-PY-7eQ" secondAttribute="trailing" constant="8" symbolic="YES" id="ENB-x0-PAj"/>
                                             <constraint firstItem="hAa-nJ-ng8" firstAttribute="leading" secondItem="Qnk-B9-snf" secondAttribute="leading" constant="20" symbolic="YES" id="HS0-WZ-oLA"/>
                                             <constraint firstItem="gWR-PY-7eQ" firstAttribute="centerY" secondItem="Qnk-B9-snf" secondAttribute="centerY" id="O5o-rd-sFd"/>
                                             <constraint firstAttribute="bottom" secondItem="hAa-nJ-ng8" secondAttribute="bottom" constant="8" id="VKw-8D-gld"/>
                                             <constraint firstAttribute="height" constant="44" id="VVZ-Cf-7Mn"/>
                                             <constraint firstItem="gWR-PY-7eQ" firstAttribute="leading" secondItem="hAa-nJ-ng8" secondAttribute="trailing" constant="8" symbolic="YES" id="W00-YP-nK2"/>
-                                            <constraint firstItem="sju-QU-9qA" firstAttribute="top" secondItem="Qnk-B9-snf" secondAttribute="top" id="fKG-rd-Cm1"/>
-                                            <constraint firstItem="sju-QU-9qA" firstAttribute="leading" secondItem="Qnk-B9-snf" secondAttribute="leading" id="lu8-sW-J2V"/>
+                                            <constraint firstItem="2NT-Vt-Pu7" firstAttribute="leading" secondItem="gWR-PY-7eQ" secondAttribute="trailing" constant="8" symbolic="YES" id="btu-0D-6cf"/>
+                                            <constraint firstItem="2NT-Vt-Pu7" firstAttribute="leading" secondItem="gWR-PY-7eQ" secondAttribute="trailing" constant="8" symbolic="YES" id="dnt-Um-fAL"/>
                                             <constraint firstItem="2NT-Vt-Pu7" firstAttribute="centerY" secondItem="Qnk-B9-snf" secondAttribute="centerY" id="mZr-va-H0Y"/>
                                             <constraint firstItem="2NT-Vt-Pu7" firstAttribute="leading" secondItem="gWR-PY-7eQ" secondAttribute="trailing" constant="8" symbolic="YES" id="n13-Ce-CiX"/>
                                             <constraint firstAttribute="trailing" secondItem="gWR-PY-7eQ" secondAttribute="trailing" constant="20" symbolic="YES" id="rMd-GG-Xto"/>
-                                            <constraint firstAttribute="bottom" secondItem="sju-QU-9qA" secondAttribute="bottom" id="swa-5V-1KX"/>
-                                            <constraint firstAttribute="trailing" secondItem="sju-QU-9qA" secondAttribute="trailing" id="yFR-19-xFO"/>
+                                            <constraint firstItem="2NT-Vt-Pu7" firstAttribute="leading" relation="lessThanOrEqual" secondItem="gWR-PY-7eQ" secondAttribute="trailing" constant="8" symbolic="YES" id="yVb-uF-sIj"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="Dxr-is-luo"/>
                                                 <exclude reference="rMd-GG-Xto"/>
+                                                <exclude reference="btu-0D-6cf"/>
+                                                <exclude reference="dnt-Um-fAL"/>
                                                 <exclude reference="n13-Ce-CiX"/>
+                                                <exclude reference="yVb-uF-sIj"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -574,6 +580,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="bottomBarView" destination="Qnk-B9-snf" id="MEl-Vz-onp"/>
                         <outlet property="browserButton" destination="hAa-nJ-ng8" id="7RJ-4c-tVP"/>
                         <outlet property="contentView" destination="f4Q-Th-lM0" id="mif-bk-lqP"/>
                         <outlet property="messageTextField" destination="gWR-PY-7eQ" id="jhD-Z6-Sde"/>
