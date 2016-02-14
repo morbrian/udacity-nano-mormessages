@@ -11,9 +11,10 @@ import CoreData
 
 class MessageViewController: UIViewController {
     
-    @IBOutlet weak var browserButton: UIButton!
     
-    @IBOutlet weak var bottomBarView: UIView!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var browserButton: UIButton!
+    @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextField: UITextField!
     
     // layout hints
@@ -69,8 +70,9 @@ class MessageViewController: UIViewController {
             Logger.info("fetchedResultsController fetch failed")
         }
         fetchedResultsController.delegate = self
-        
-
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
+        view.addGestureRecognizer(tapRecognizer)
+        layoutBottomBar()
     }
     
     func networkReachabilityChanged(notification: NSNotification) {
@@ -145,19 +147,27 @@ class MessageViewController: UIViewController {
         updateRefreshViewLayout()
     }
     
+    func endTextEditing() {
+        messageTextField?.endEditing(false)
+    }
+    
+    func handleTap(sender: UIGestureRecognizer) {
+        endTextEditing()
+    }
+    
     // MARK: Keyboard Handling
     
     // shift the bottom bar view up if text field being edited will be obstructed
     func keyboardWillShow(notification: NSNotification) {
-        let senderOrigin =  view.convertPoint(bottomBarView.bounds.origin, fromView: bottomBarView)
-        let bottomOfCurrentlyEditedItem =  senderOrigin.y + bottomBarView.bounds.height
+        let senderOrigin =  view.convertPoint(contentView.bounds.origin, fromView: contentView)
+        let bottomOfCurrentlyEditedItem =  senderOrigin.y + contentView.bounds.height
         if viewShiftDistance == nil {
             let keyboardHeight = getKeyboardHeight(notification)
             let topOfKeyboard = view.bounds.maxY - keyboardHeight
             // we only need to move the view if the keyboard will cover up the login button and text fields
             if topOfKeyboard < bottomOfCurrentlyEditedItem {
                     viewShiftDistance = bottomOfCurrentlyEditedItem - topOfKeyboard
-                    self.bottomBarView.bounds.offsetInPlace(dx: 0.0, dy: viewShiftDistance!)
+                    self.contentView.bounds.offsetInPlace(dx: 0.0, dy: viewShiftDistance!)
             }
         }
     }
@@ -165,7 +175,7 @@ class MessageViewController: UIViewController {
     // if bottom textfield just completed editing, shift the view back down
     func keyboardWillHide(notification: NSNotification) {
         if let shiftDistance = viewShiftDistance {
-            self.bottomBarView.bounds.offsetInPlace(dx: 0.0, dy: -shiftDistance)
+            self.contentView.bounds.offsetInPlace(dx: 0.0, dy: -shiftDistance)
             viewShiftDistance = nil
         }
     }
@@ -237,8 +247,25 @@ class MessageViewController: UIViewController {
         
     }
     
+    func layoutBottomBar() {
+        let sendable = messageTextField.text != ""
+        if sendable {
+            if sendButton.hidden {
+                messageTextField.frame.size.width -= sendButton.frame.size.width
+            }
+            sendButton.hidden = false
+            sendButton.enabled = true
+        } else {
+            if !sendButton.hidden {
+                messageTextField.frame.size.width += sendButton.frame.size.width
+            }
+            sendButton.hidden = true
+            sendButton.enabled = false
+        }
+    }
+    
     @IBAction func editingChanged(sender: UITextField) {
-        // placeholder
+        layoutBottomBar()
     }
     
     @IBAction func sendMessageOnEnter(sender: UITextField) {
@@ -246,7 +273,9 @@ class MessageViewController: UIViewController {
     }
     
     @IBAction func sendMessageAction(sender: UIButton) {
-        sendMessage()
+        if messageTextField.text != "" {
+            sendMessage()
+        }
     }
     
     func sendMessage() {
@@ -257,8 +286,9 @@ class MessageViewController: UIViewController {
                 self.manager.createMessageWithText(text, inForum: forumUuid) { message, error in
                     self.networkActivity(false)
                     self.messageTextField.enabled = true
-                    if message != nil {
-                        self.messageTextField.text = nil
+                    if message != "" {
+                        self.messageTextField.text = ""
+                        self.layoutBottomBar()
                     } else if let error = error {
                         ToolKit.showErrorAlert(viewController: self, title: "Send Failed", message: error.localizedDescription)
                     } else {
