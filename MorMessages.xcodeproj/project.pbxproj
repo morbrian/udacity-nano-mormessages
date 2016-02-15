@@ -74,6 +74,7 @@
 		4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4E3523B71C6FAF8300C328EF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		4E3523B81C6FAF8300C328EF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		4E3523BA1C71777600C328EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4E913C781C4CC4350057D44A /* MorMessages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MorMessages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E913C7B1C4CC4360057D44A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E913C801C4CC4360057D44A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -157,6 +158,7 @@
 		4E913C6F1C4CC4350057D44A = {
 			isa = PBXGroup;
 			children = (
+				4E3523BA1C71777600C328EF /* README.md */,
 				4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */,
 				4E913C7A1C4CC4360057D44A /* MorMessages */,
 				4E913C921C4CC4360057D44A /* MorMessagesTests */,

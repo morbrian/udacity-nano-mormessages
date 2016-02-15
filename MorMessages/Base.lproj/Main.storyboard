@@ -913,15 +913,6 @@
                                         <exclude reference="klp-ue-VEf"/>
                                         <exclude reference="vpc-HY-hrr"/>
                                         <exclude reference="Sih-Cs-XKj"/>
-                                        <exclude reference="87K-3P-iCH"/>
-                                        <exclude reference="Kdo-uD-QJW"/>
-                                        <exclude reference="Kft-Pl-OSL"/>
-                                        <exclude reference="LTS-RF-oGK"/>
-                                        <exclude reference="Rag-bo-ge5"/>
-                                        <exclude reference="dAP-8q-Jg9"/>
-                                        <exclude reference="hUc-TT-XEQ"/>
-                                        <exclude reference="trm-do-NiK"/>
-                                        <exclude reference="zl9-eK-dPa"/>
                                         <exclude reference="1Bs-K6-v74"/>
                                         <exclude reference="8mU-nb-J7C"/>
                                         <exclude reference="ADM-rS-BBs"/>
@@ -931,6 +922,15 @@
                                         <exclude reference="M7Z-gk-18F"/>
                                         <exclude reference="W9L-3b-Gb9"/>
                                         <exclude reference="wzJ-kd-psK"/>
+                                        <exclude reference="87K-3P-iCH"/>
+                                        <exclude reference="Kdo-uD-QJW"/>
+                                        <exclude reference="Kft-Pl-OSL"/>
+                                        <exclude reference="LTS-RF-oGK"/>
+                                        <exclude reference="Rag-bo-ge5"/>
+                                        <exclude reference="dAP-8q-Jg9"/>
+                                        <exclude reference="hUc-TT-XEQ"/>
+                                        <exclude reference="trm-do-NiK"/>
+                                        <exclude reference="zl9-eK-dPa"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact">
@@ -940,11 +940,6 @@
                                         <include reference="klp-ue-VEf"/>
                                         <exclude reference="tW4-rM-kXf"/>
                                         <exclude reference="pke-Eb-twz"/>
-                                        <include reference="LTS-RF-oGK"/>
-                                        <exclude reference="QNX-hW-tdC"/>
-                                        <exclude reference="hUc-TT-XEQ"/>
-                                        <exclude reference="tqV-aN-rFs"/>
-                                        <exclude reference="trm-do-NiK"/>
                                         <include reference="1Bs-K6-v74"/>
                                         <exclude reference="8mU-nb-J7C"/>
                                         <exclude reference="ADM-rS-BBs"/>
@@ -956,6 +951,11 @@
                                         <exclude reference="T0I-Uk-QOo"/>
                                         <include reference="W9L-3b-Gb9"/>
                                         <exclude reference="wzJ-kd-psK"/>
+                                        <include reference="LTS-RF-oGK"/>
+                                        <exclude reference="QNX-hW-tdC"/>
+                                        <exclude reference="hUc-TT-XEQ"/>
+                                        <exclude reference="tqV-aN-rFs"/>
+                                        <exclude reference="trm-do-NiK"/>
                                     </mask>
                                 </variation>
                             </view>
