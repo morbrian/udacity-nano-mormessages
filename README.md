@@ -1,5 +1,7 @@
 # MorMessages
 
+[![Build Status](https://travis-ci.org/morbrian/udacity-nano-mormessages.svg?branch=master)](https://travis-ci.org/morbrian/udacity-nano-mormessages)
+
 My final project submission for the Udacity *iOS Developer Nanodegree*, and the foundation for
 a fun hobby project to maintain and improve after that. One goal I had in building this 
 project was to create a sandbox environment to experiment with technologies supporting real-time 
