@@ -43,7 +43,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <!-- FOR TESTING ONLY -->
+    <!-- FOR PRE-PRODUCTION DEVELOPMENT ONLY -->
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSExceptionDomains</key>
@@ -67,14 +67,6 @@
 <!--                <string>TLSv1.2</string>-->
 <!--                <key>NSRequiresCertificateTransparency</key>-->
 <!--                <true/>-->
-            </dict>
-            <!-- Random Images -->
-            <key>randomimage.setgetgo.com</key>
-            <dict>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-                <key>NSExceptionAllowsInsecureHTTPLoads</key>
-                <true/>
             </dict>
         </dict>
 

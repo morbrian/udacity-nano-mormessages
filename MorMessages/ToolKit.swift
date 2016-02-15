@@ -65,10 +65,21 @@ class ToolKit {
     static func produceRobohashUrlFromString(string: String) -> NSURL? {
         return NSURL(string: "https://robohash.org/\(string.md5)")
     }
-    
-    // use the md5 hash of the input string to produce a setgetgo random image
-    static func produceSetGetGoImageUrlFromString(string: String) -> NSURL? {
-        return NSURL(string: "https://randomimage.setgetgo.com/get.php?key=\(string.md5)&height=256&width=256&type=png")
+
+    // use the md5 hash of the input string to produce a gravatar random image
+    // category descriptions from gravatar website
+    // identicon: a geometric pattern based on an email hash
+    // monsterid: a generated 'monster' with different colors, faces, etc
+    // wavatar: generated faces with differing features and backgrounds
+    // retro: awesome generated, 8-bit arcade-style pixelated faces
+    static let GravatarCategories = [ "identicon", "monsterid", "wavatar", "retro" ]
+    static func produceGravatarImageUrlFromString(string: String, withFallback: String? = nil) -> NSURL? {
+        var fallback = withFallback
+        if fallback == nil {
+            let index = Int(arc4random_uniform(UInt32(GravatarCategories.count)))
+            fallback = GravatarCategories[index]
+        }
+        return NSURL(string: "https://secure.gravatar.com/avatar/\(string.md5)?d=\(fallback!)")
     }
     
     struct DateKit {
