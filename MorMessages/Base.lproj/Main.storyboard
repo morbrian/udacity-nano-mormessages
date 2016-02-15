@@ -145,28 +145,28 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="0.99008162420000001" green="0.90006377660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" id="J62-0A-0Kg">
-                                    <size key="itemSize" width="208" height="174"/>
+                                    <size key="itemSize" width="208" height="208"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ForumCellViewIdentifier" id="KfG-Bj-YD3" customClass="ForumCellView" customModule="MorMessages" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="64" width="208" height="174"/>
+                                        <rect key="frame" x="0.0" y="64" width="208" height="208"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="208" height="174"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="208" height="208"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p9L-0p-ohi" userLabel="Forum Image">
-                                                    <rect key="frame" x="8" y="8" width="192" height="137"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="p9L-0p-ohi" userLabel="Forum Image">
+                                                    <rect key="frame" x="8" y="8" width="192" height="163"/>
                                                 </imageView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="S8S-6P-4k6">
-                                                    <rect key="frame" x="94" y="67" width="20" height="20"/>
+                                                    <rect key="frame" x="94" y="80" width="20" height="20"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </activityIndicatorView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RJp-4n-l84">
-                                                    <rect key="frame" x="8" y="145" width="192" height="21"/>
+                                                    <rect key="frame" x="8" y="179" width="192" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.51604372259999998" green="0.23142811660000001" blue="0.66132766009999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -190,7 +190,7 @@
                                             <constraint firstItem="RJp-4n-l84" firstAttribute="leading" secondItem="KfG-Bj-YD3" secondAttribute="leadingMargin" id="XDj-eF-4Yn"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="RJp-4n-l84" secondAttribute="bottom" id="XRE-CB-fi3"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="RJp-4n-l84" secondAttribute="trailing" id="bjZ-Sd-QS2"/>
-                                            <constraint firstItem="RJp-4n-l84" firstAttribute="top" secondItem="p9L-0p-ohi" secondAttribute="bottom" id="dfb-gw-OcJ"/>
+                                            <constraint firstItem="RJp-4n-l84" firstAttribute="top" secondItem="p9L-0p-ohi" secondAttribute="bottom" constant="8" symbolic="YES" id="dfb-gw-OcJ"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="p9L-0p-ohi" secondAttribute="trailing" id="mes-vE-a0S"/>
                                             <constraint firstItem="S8S-6P-4k6" firstAttribute="centerX" secondItem="p9L-0p-ohi" secondAttribute="centerX" id="pxb-ph-Km6"/>
                                             <constraint firstItem="S8S-6P-4k6" firstAttribute="centerY" secondItem="KfG-Bj-YD3" secondAttribute="centerY" id="wwi-cg-zBh"/>

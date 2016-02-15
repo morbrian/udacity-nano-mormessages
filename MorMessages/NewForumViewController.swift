@@ -51,10 +51,6 @@ class NewForumViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    override func shouldAutorotate() -> Bool {
-        return false
-    }
-    
     // MARK: Keyboard Handling
     
     @IBAction func beginEditTextfield(sender: UITextField) {
@@ -108,7 +104,7 @@ class NewForumViewController: UIViewController {
             urlString = forumImageUrlTextField.text
         } else if let text = sender.text {
             forumImageUrlTextField.text = ""
-            if let url = ToolKit.produceSetGetGoImageUrlFromString(text) {
+            if let url = ToolKit.produceGravatarImageUrlFromString(text) {
                 urlString = url.absoluteString
                 forumImageUrlTextField.text = urlString
             }
