@@ -1,4 +1,10 @@
 language: objective-c
 osx_image: xcode7.3
-xcode_project: MorMessages.xcodeproj
-xcode_scheme: MorMessages-Travis
+script:
+  xcodebuild
+  -project MorMessages.xcodeproj
+  -scheme MorMessages-Travis
+  build
+  ONLY_ACTIVE_ARCH=NO
+  CODE_SIGN_IDENTITY=""
+  CODE_SIGNING_REQUIRED=NO
