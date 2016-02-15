@@ -80,6 +80,7 @@ class MessageViewController: UIViewController {
         view.addGestureRecognizer(tapRecognizer)
         updateBottomBarLayout()
         searchBar.delegate = self
+        webView.delegate = self
     }
     
     func networkReachabilityChanged(notification: NSNotification) {
@@ -611,4 +612,23 @@ extension MessageViewController: UISearchBarDelegate {
             webView.loadRequest(request)
         }
     }
+}
+
+// MARK: - UIWebViewDelegate
+
+extension MessageViewController: UIWebViewDelegate {
+    
+    func webView(webView: UIWebView,
+        didFailLoadWithError error: NSError?) {
+            if let error = error {
+                ToolKit.showErrorAlert(viewController: self,
+                    title: "Cannot Load Page", message:
+                    error.localizedDescription)
+            } else {
+                ToolKit.showErrorAlert(viewController: self,
+                    title: "Cannot Load Page",
+                    message: "We are so sorry, we cannot load the page. Perhaps you could try another one? Probably best to double check your internet connection first too!")
+            }
+    }
+    
 }
