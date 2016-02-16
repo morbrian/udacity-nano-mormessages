@@ -16,24 +16,26 @@ class ForumViewController: UIViewController {
     
     // CODE: set as 2 in IB, not sure how to reference that value in code, so keep this in sync
     let CollectionCellSpacing = 2
-    
-    // fetch controllers
-    var fetchOffset = 0
-    let ResultSize = 100
-    let PreFetchTrigger = 50
 
     // central data management object
     var manager: MorMessagesManager!
     
     var topRefreshView: RefreshView!
     
+    var sortedResultsController: SortedResultsController<Forum>!
+    
     @IBOutlet weak var collectionView: UICollectionView!
-    var context: NSManagedObjectContext!
     
     // MARK: ViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        sortedResultsController = SortedResultsController(entityName: Forum.EntityName, ascending: false)
+        sortedResultsController.performFetch()
+        sortedResultsController.delegate = self
+        sortedResultsController.pagedRequestDelegate = self
+        sortedResultsController.fetchRecent()
+        
         navigationController?.navigationBar.hidden = false
         navigationItem.leftBarButtonItem = produceLogoutBarButtonItem()
         navigationItem.rightBarButtonItem = produceAddBarButtonItem()
@@ -41,14 +43,6 @@ class ForumViewController: UIViewController {
             navigationBar.translucent = false
             topRefreshView = produceRefreshViewWithHeight(navigationBar.bounds.height)
         }
-        context = CoreDataStackManager.sharedInstance().managedObjectContext
-        do {
-            try fetchedResultsController.performFetch()
-        } catch _ {
-            Logger.error("fetchedResultsController fetch failed")
-        }
-        fetchedResultsController.delegate = self
-        fetchRecent()
     }
     
     // MARK: Button and Sub-View Producers
@@ -131,30 +125,6 @@ class ForumViewController: UIViewController {
         }
     }
     
-    // MARK: - Core Data Convenience
-    
-    var sharedContext: NSManagedObjectContext {
-        return CoreDataStackManager.sharedInstance().managedObjectContext
-    }
-    
-    // Mark: - Fetched Results Controller
-    
-    lazy var fetchedResultsController: NSFetchedResultsController = {
-        
-        // Create the fetch request
-        let fetchRequest = NSFetchRequest(entityName: Forum.EntityName)
-        
-        // Add a sort descriptor. This enforces a sort order on the results that are generated
-        // In this case we want the events sored by id.
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modifiedTime", ascending: false)]
-        
-        // Create the Fetched Results Controller
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)
-        
-        // Return the fetched results controller. It will be the value of the lazy variable
-        return fetchedResultsController
-    } ()
-    
     private var defaultCount: Int?
     private var collectionCellCountPerRow: Int {
         let orientation = UIDevice.currentDevice().orientation
@@ -170,69 +140,20 @@ class ForumViewController: UIViewController {
         }
     }
     
-    // similar to "Newest" but not constrained by already downloaded dates
-    func fetchRecent(completionHandler: (() -> Void)? = nil) {
-        fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
-    }
-    
-    func fetchNewest(completionHandler: (() -> Void)? = nil) {
-        let greaterThan = storedRange().newest
-        fetchWithOffset(0, greaterThan: greaterThan, completionHandler: completionHandler)
-    }
-    
-    func fetchOlder(completionHandler: (() -> Void)? = nil) {
-        fetchWithOffset(fetchOffset, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
-    }
-    
-    func fetchWithOffset(fetchOffset: Int, greaterThan: NSDate, completionHandler: (() -> Void)? = nil) {
-        let beforeCount = itemCount()
-        networkActivity(true)
-        manager.listForums(offset: fetchOffset, resultSize: ResultSize, greaterThan: greaterThan) { forums, error in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.networkActivity(false)
-                let afterCount = self.itemCount()
-                
-                self.fetchOffset += afterCount - beforeCount
-                completionHandler?()
-            }
-        }
-    }
+}
 
-    func networkActivity(active: Bool, intrusive: Bool = true) {
-        dispatch_async(dispatch_get_main_queue()) {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = active
-        }
-    }
+// MARK: - PagedRequestDelegate
+
+extension ForumViewController: PageRequestDelegate {
     
-    func itemCount() -> Int {
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                return sections[0].numberOfObjects
-        }
-        return 0
-    }
-    
-    // return the first and last items that we already downloaded
-    func storedRange() -> (oldest: NSDate, newest: NSDate) {
-        var oldest = ToolKit.DateKit.Epoch
-        var newest = ToolKit.DateKit.Epoch
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                let section = sections[0]
-                if section.numberOfObjects > 0 {
-                    if let objects = section.objects,
-                        first = objects[0] as? Forum,
-                        last = objects[section.numberOfObjects - 1] as? Forum,
-                        firstId = last.modifiedTime,
-                        lastId = first.modifiedTime {
-                            oldest = firstId
-                            newest = lastId
-                    }
+    func pagedItems(offset offset: Int, resultSize: Int, greaterThan: NSDate,
+        completionHandler: (() -> Void)?) {
+            manager.listForums(offset: offset, resultSize: resultSize, greaterThan: greaterThan) { items, error in
+                dispatch_async(dispatch_get_main_queue()) {
+                    completionHandler?()
                 }
-        }
-        return (oldest, newest)
+            }
     }
-
 }
 
 // MARK: - UICollectionViewDelegate
@@ -240,14 +161,12 @@ class ForumViewController: UIViewController {
 extension ForumViewController: UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if let forum = fetchedResultsController.objectAtIndexPath(indexPath) as? Forum {
-            self.performSegueWithIdentifier(Constants.ShowMessageListSegue, sender: forum)
-        }
+            self.performSegueWithIdentifier(Constants.ShowMessageListSegue, sender: sortedResultsController.objectAtIndexPath(indexPath))
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.item == itemCount() - PreFetchTrigger {
-            fetchOlder()
+        if sortedResultsController.preFetchConditionFulfilledByIndex(indexPath.item) {
+            sortedResultsController.fetchOlder()
         }
     }
 }
@@ -257,15 +176,14 @@ extension ForumViewController: UICollectionViewDelegate {
 extension ForumViewController: UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
+        return sortedResultsController.numberOfObjectsInSection(section)
     }
     
     func collectionView(collectionView: UICollectionView,
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
             
             // Here is how to replace the actors array using objectAtIndexPath
-            let forum = fetchedResultsController.objectAtIndexPath(indexPath) as! Forum
+            let forum = sortedResultsController.objectAtIndexPath(indexPath)
             
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(Constants.ForumCellViewIdentifier, forIndexPath: indexPath) as! ForumCellView
             
@@ -334,7 +252,6 @@ extension ForumViewController:NSFetchedResultsControllerDelegate {
                 }
             }
     }
-    
 }
 
 // MARK: - UIScrollViewDelegate
@@ -353,6 +270,6 @@ extension ForumViewController: UIScrollViewDelegate {
 
 extension ForumViewController: RefreshViewDelegate {
     func refreshViewDidRefresh(refreshView: RefreshView) {
-        fetchNewest(refreshView.endRefreshing)
+        sortedResultsController.fetchNewest(refreshView.endRefreshing)
     }
 }

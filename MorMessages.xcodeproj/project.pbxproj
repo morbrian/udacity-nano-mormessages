@@ -13,6 +13,8 @@
 		4E32F7B91C5F1DC800ACA787 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E32F7B81C5F1DC800ACA787 /* WebSocket.swift */; };
 		4E32F7BB1C5F1F6F00ACA787 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E32F7BA1C5F1F6F00ACA787 /* libz.tbd */; };
 		4E3523B91C6FAF8300C328EF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3523B81C6FAF8300C328EF /* Reachability.m */; };
+		4E3523C21C72ECF700C328EF /* SortedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3523C01C72ECF700C328EF /* SortedResultsController.swift */; };
+		4E3523C31C72ECF700C328EF /* PageRequestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3523C11C72ECF700C328EF /* PageRequestDelegate.swift */; };
 		4E913C7C1C4CC4360057D44A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C7B1C4CC4360057D44A /* AppDelegate.swift */; };
 		4E913C811C4CC4360057D44A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E913C7F1C4CC4360057D44A /* Main.storyboard */; };
 		4E913C841C4CC4360057D44A /* MorMessages.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4E913C821C4CC4360057D44A /* MorMessages.xcdatamodeld */; };
@@ -75,6 +77,8 @@
 		4E3523B71C6FAF8300C328EF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		4E3523B81C6FAF8300C328EF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		4E3523BA1C71777600C328EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4E3523C01C72ECF700C328EF /* SortedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortedResultsController.swift; sourceTree = "<group>"; };
+		4E3523C11C72ECF700C328EF /* PageRequestDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageRequestDelegate.swift; sourceTree = "<group>"; };
 		4E913C781C4CC4350057D44A /* MorMessages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MorMessages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E913C7B1C4CC4360057D44A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E913C801C4CC4360057D44A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -263,6 +267,8 @@
 		4E913CEF1C532A270057D44A /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				4E3523C01C72ECF700C328EF /* SortedResultsController.swift */,
+				4E3523C11C72ECF700C328EF /* PageRequestDelegate.swift */,
 				4E913CF01C532A4F0057D44A /* LoginViewController.swift */,
 				4E913CF81C5355D10057D44A /* ForumViewController.swift */,
 				4E9C388F1C556E5C002499C4 /* NewForumViewController.swift */,
@@ -440,6 +446,7 @@
 				4EEA21BB1C5879C800DB0325 /* MessageViewController.swift in Sources */,
 				4E913CF91C5355D10057D44A /* ForumViewController.swift in Sources */,
 				4E913CB51C4CC6340057D44A /* ForumService.swift in Sources */,
+				4E3523C31C72ECF700C328EF /* PageRequestDelegate.swift in Sources */,
 				4E913CFB1C53EBA00057D44A /* ResponseStatus.swift in Sources */,
 				4E933DD81C5C5B630003FEFC /* MessageCellView.swift in Sources */,
 				4EA6FDE91C67053300B99D7D /* DetailsViewController.swift in Sources */,
@@ -450,6 +457,7 @@
 				4E913CEA1C4DCCA00057D44A /* Forum.swift in Sources */,
 				4E913CEE1C4DCCA00057D44A /* Message.swift in Sources */,
 				4E913CF71C5338250057D44A /* Constants.swift in Sources */,
+				4E3523C21C72ECF700C328EF /* SortedResultsController.swift in Sources */,
 				4E9C388E1C546CB9002499C4 /* ToolKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
