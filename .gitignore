@@ -7,7 +7,6 @@
 *.log
 
 # rails specific
-*.sqlite3
 config/database.yml
 log/*
 tmp/*
@@ -63,7 +62,6 @@ jrebel.lic
 *.iml
 *.ipr
 *.iws
-.*.sw?
 .idea
 
 # paulp script
@@ -75,7 +73,6 @@ build/
 out/
 
 # UI build (Grunt/gulp)
-*.sw*
 .tmp
 node_modules
 bower_components
@@ -85,7 +82,3 @@ vendor
 card.config
 jssecacerts
 pkcs11.config
-
-scripts/**/*.csv
-scripts/**/*.json
-scripts/ruby/.ruby-version

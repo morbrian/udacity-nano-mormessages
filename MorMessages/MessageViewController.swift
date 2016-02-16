@@ -26,16 +26,13 @@ class MessageViewController: UIViewController {
     // layout hints
     let EstimatedRowHeight: CGFloat = 44
     
-    // fetch controllers
-    var fetchOffset = 0
-    let ResultSize = 100
-    let PreFetchTrigger = 50
     var insertedIndexPath: NSIndexPath?
     
     // central data management object
     var manager: MorMessagesManager!
     @IBOutlet weak var tableView: UITableView!
-    var context: NSManagedObjectContext!
+    
+    var sortedResultsController: SortedResultsController<Message>!
     
     // Forum associated with this view
     var forum: Forum!
@@ -54,6 +51,13 @@ class MessageViewController: UIViewController {
         super.viewDidLoad()
         serviceReachability = Reachability(hostName: ForumService.MorMessagesHostname);
         serviceReachability.startNotifier()
+        sortedResultsController = SortedResultsController(entityName: Message.EntityName,
+            ascending: true, predicate: NSPredicate(format: "forum = %@", self.forum))
+        sortedResultsController.performFetch()
+        sortedResultsController.delegate = self
+        sortedResultsController.pagedRequestDelegate = self
+        sortedResultsController.fetchRecent()
+        
         navigationController?.navigationBar.tintColor = Constants.ThemeButtonTintColor
         serviceReachabilityIndicator = producesServiceReachabilityBarButtonItem()
         navigationItem.rightBarButtonItems = [
@@ -69,13 +73,6 @@ class MessageViewController: UIViewController {
         }
         self.tableView.rowHeight = UITableViewAutomaticDimension;
         self.tableView.estimatedRowHeight = EstimatedRowHeight;
-        context = CoreDataStackManager.sharedInstance().managedObjectContext
-        do {
-            try fetchedResultsController.performFetch()
-        } catch _ {
-            Logger.error("fetchedResultsController fetch failed")
-        }
-        fetchedResultsController.delegate = self
         let tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
         view.addGestureRecognizer(tapRecognizer)
         updateBottomBarLayout()
@@ -85,7 +82,7 @@ class MessageViewController: UIViewController {
     
     func networkReachabilityChanged(notification: NSNotification) {
         if serviceReachability.currentReachabilityStatus() != NotReachable {
-            fetchRecent()
+            sortedResultsController.fetchRecent()
             if let subscription = subscription {
                 self.activate(subscription)
             } else {
@@ -105,7 +102,7 @@ class MessageViewController: UIViewController {
         // register action if keyboard will show
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-        fetchRecent(self.scrollToBottom)
+        sortedResultsController.fetchRecent(self.scrollToBottom)
         if let subscription = subscription {
             self.activate(subscription)
         } else {
@@ -317,7 +314,7 @@ class MessageViewController: UIViewController {
             forumUuid = forum.uuid {
                 self.messageTextField.enabled = false
                 self.manager.createMessageWithText(text, inForum: forumUuid) { message, error in
-                    self.networkActivity(false)
+                    self.sortedResultsController.networkActivity(false)
                     self.messageTextField.enabled = true
                     if message != "" {
                         self.messageTextField.text = ""
@@ -334,105 +331,30 @@ class MessageViewController: UIViewController {
         }
     }
     
-    // MARK: - Core Data Convenience
-    
-    var sharedContext: NSManagedObjectContext {
-        return CoreDataStackManager.sharedInstance().managedObjectContext
-    }
-    
-    // Mark: - Fetched Results Controller
-    
-    lazy var fetchedResultsController: NSFetchedResultsController = {
-        
-        // Create the fetch request
-        let fetchRequest = NSFetchRequest(entityName: Message.EntityName)
-        
-        // Add a sort descriptor. This enforces a sort order on the results that are generated
-        // In this case we want the events sorted by id.
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modifiedTime", ascending: true)]
-        
-        fetchRequest.predicate = NSPredicate(format: "forum = %@", self.forum)
-        
-        // Create the Fetched Results Controller
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)
-        
-        // Return the fetched results controller. It will be the value of the lazy variable
-        return fetchedResultsController
-    } ()
-    
+
     func scrollToBottom() {
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                let section = sections[0]
-                if section.numberOfObjects > 0 {
-                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: section.numberOfObjects - 1, inSection: 0),
-                        atScrollPosition: UITableViewScrollPosition.Bottom,
-                        animated: false)
-                }
+        let itemCount = sortedResultsController.numberOfObjectsInSection(0)
+        if itemCount > 0 {
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: itemCount - 1, inSection: 0),
+                atScrollPosition: UITableViewScrollPosition.Bottom,
+                animated: false)
         }
     }
-    // similar to "Newest" but not constrained by already downloaded dates
-    func fetchRecent(completionHandler: (() -> Void)? = nil) {
-        fetchWithOffset(0, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
-    }
     
-    func fetchNewest(completionHandler: (() -> Void)? = nil) {
-        let greaterThan = storedRange().newest
-        fetchWithOffset(0, greaterThan: greaterThan, completionHandler: completionHandler)
-    }
+}
+
+// MARK: - PagedRequestDelegate
+
+extension MessageViewController: PageRequestDelegate {
     
-    func fetchOlder(completionHandler: (() -> Void)? = nil) {
-        fetchWithOffset(fetchOffset, greaterThan: ToolKit.DateKit.Epoch, completionHandler: completionHandler)
-    }
-    
-    func fetchWithOffset(fetchOffset: Int, greaterThan: NSDate, completionHandler: (() -> Void)? = nil) {
-        let beforeCount = itemCount()
-        networkActivity(true)
-        manager.listMessagesInForum(forum, offset: fetchOffset, resultSize: ResultSize, greaterThan: greaterThan) { messages, error in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.networkActivity(false)
-                let afterCount = self.itemCount()
-                self.fetchOffset += afterCount - beforeCount
-                completionHandler?()
+    func pagedItems(offset offset: Int, resultSize: Int, greaterThan: NSDate,
+        completionHandler: (() -> Void)?) {
+            manager.listMessagesInForum(forum, offset: offset, resultSize: resultSize, greaterThan: greaterThan) { messages, error in
+                dispatch_async(dispatch_get_main_queue()) {
+                    completionHandler?()
+                }
             }
-        }
     }
-    
-    func networkActivity(active: Bool, intrusive: Bool = true) {
-        dispatch_async(dispatch_get_main_queue()) {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = active
-        }
-    }
-    
-    func itemCount() -> Int {
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                return sections[0].numberOfObjects
-        }
-        return 0
-    }
-    
-    // return the first and last items that we already downloaded
-    func storedRange() -> (oldest: NSDate, newest: NSDate) {
-        var oldest = ToolKit.DateKit.Epoch
-        var newest = ToolKit.DateKit.Epoch
-        if let sections = self.fetchedResultsController.sections
-            where sections.count == 1 {
-                let section = sections[0]
-                if section.numberOfObjects > 0 {
-                    if let objects = section.objects,
-                        first = objects[0] as? Message,
-                        last = objects[section.numberOfObjects - 1] as? Message,
-                        firstId = last.modifiedTime,
-                        lastId = first.modifiedTime {
-                            oldest = lastId
-                            newest = firstId
-                    }
-                }
-        }
-        return (oldest, newest)
-    }
-   
 }
 
 // MARK: - UITableViewDelegate
@@ -446,14 +368,12 @@ extension MessageViewController: UITableViewDelegate {
 extension MessageViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
+        return sortedResultsController.numberOfObjectsInSection(section)
     }
     
     func tableView(tableView: UITableView,
         cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-            let message = fetchedResultsController.objectAtIndexPath(indexPath) as! Message
-            
+            let message = sortedResultsController.objectAtIndexPath(indexPath)
             var reuseIdentifier: String?
             if let identity = manager.currentUser?.identity,
                 createdBy = message.createdBy
@@ -557,7 +477,7 @@ extension MessageViewController: UIScrollViewDelegate {
 
 extension MessageViewController: RefreshViewDelegate {
     func refreshViewDidRefresh(refreshView: RefreshView) {
-        fetchOlder(refreshView.endRefreshing)
+        sortedResultsController.fetchOlder(refreshView.endRefreshing)
     }
 }
 
